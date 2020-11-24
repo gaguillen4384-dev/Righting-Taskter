@@ -29,5 +29,7 @@ namespace ProjectManager
         /// </summary>  
         /// <returns>The project ID</returns>
         Task<string> EditProject(ProjectDTO project);
+
+        //TODO: Interface with the engine here
     }
 }

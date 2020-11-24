@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManager", "TaskterManager\ProjectManager.csproj", "{F7E8EF12-845E-4DB7-9AC9-A6F268FE6722}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoriesEngine", "StoriesEngine\StoriesEngine.csproj", "{94DE32AD-5158-462C-A491-EF47D35BA2B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoriesEngine", "StoriesEngine\StoriesEngine.csproj", "{94DE32AD-5158-462C-A491-EF47D35BA2B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectAccess", "ProjectAccess\ProjectAccess.csproj", "{FC60C11C-E59D-4903-805A-8EE377D64A59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectAccess", "ProjectAccess\ProjectAccess.csproj", "{FC60C11C-E59D-4903-805A-8EE377D64A59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoriesAccess", "StoriesAccess\StoriesAccess.csproj", "{FF9F1323-8A05-4AFC-AFAA-17434CD4C323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoriesAccess", "StoriesAccess\StoriesAccess.csproj", "{FF9F1323-8A05-4AFC-AFAA-17434CD4C323}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Managers", "Managers", "{578761C5-CF3D-4542-830D-CEC561963A1F}"
 EndProject
@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResourceAccess", "ResourceA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{035D5A2C-3B45-45C9-902E-6123BC8B0417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskMasterClient.UWP", "TaskMasterClient\TaskMasterClient.UWP\TaskMasterClient.UWP.csproj", "{6D915E04-A74A-490D-A99D-340242F8E6FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskMasterMobileClient.UWP", "TaskMasterClient\TaskMasterClient.UWP\TaskMasterMobileClient.UWP.csproj", "{6D915E04-A74A-490D-A99D-340242F8E6FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskMasterClient", "TaskMasterClient\TaskMasterClient\TaskMasterClient.csproj", "{0BDD3C00-79B9-4B81-96B7-8283E0DAB5DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskMasterMobileClient", "TaskMasterClient\TaskMasterClient\TaskMasterMobileClient.csproj", "{0BDD3C00-79B9-4B81-96B7-8283E0DAB5DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
