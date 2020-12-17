@@ -1,6 +1,6 @@
 ﻿namespace ProjectManager
 {
-    public class ProjectDTO
+    public class StoriesAccessProxy
     {
     }
 }

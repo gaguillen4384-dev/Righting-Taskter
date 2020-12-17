@@ -1,4 +1,4 @@
-﻿namespace StoriesEngine.Proxies
+﻿namespace StoriesEngine
 {
     public interface IStoriesAccessProxy
     {

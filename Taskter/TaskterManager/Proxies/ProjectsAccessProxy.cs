@@ -1,6 +1,6 @@
 ﻿namespace ProjectManager
 {
-    public interface IStoryEngineProxy
+    public class ProjectsAccessProxy
     {
     }
 }

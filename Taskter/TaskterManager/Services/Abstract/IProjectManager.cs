@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Utilities.Domain;
 
 namespace ProjectManager
 {
@@ -8,28 +9,38 @@ namespace ProjectManager
     /// </summary>
     public interface IProjectManager
     {
+        #region Project Management
+      
         /// <summary>
         /// Creates a project.
         /// </summary>
         /// <returns>The project ID</returns>
-        Task<string> CreateProject(ProjectDTO project);
+        Task<string> CreateProject(ProjectRequest project);
 
         /// <summary>
-        /// Get ALL a project.
+        /// Get All projects.
         /// </summary>
-        Task<IList<ProjectDTO>> GetProjects();
+        Task<IList<ProjectResponse>> GetProjects();
 
         /// <summary>
         /// Get a project.
         /// </summary>
-        Task<ProjectDTO> GetProject(string id);
+        Task<ProjectResponse> GetProject(string projectAcronym);
 
         /// <summary>
         /// Edit Project: atomic operations on the project stories and project own metadata.
         /// </summary>  
         /// <returns>The project ID</returns>
-        Task<string> EditProject(ProjectDTO project);
+        Task<string> EditProject(ProjectRequest project);
 
+        #endregion
+
+        #region Project Management
+       
         //TODO: Interface with the engine here
+        // StoryRequest needs to be a parameter
+        Task CreateStory(string projectAcronym);
+        
+        #endregion
     }
 }

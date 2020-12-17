@@ -1,4 +1,4 @@
-﻿namespace ProjectManager.Proxies
+﻿namespace ProjectManager
 {
     public class StoryEngineProxy : IStoryEngineProxy
     {
