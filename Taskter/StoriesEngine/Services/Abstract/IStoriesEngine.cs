@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Utilities.Domain;
 
 namespace StoriesEngine
 {
@@ -12,7 +13,7 @@ namespace StoriesEngine
         /// Creates a story.
         /// </summary>
         /// <returns>The story ID</returns>
-        Task<string> CreateStory(StoryDTO story);
+        Task<string> CreateStory(StoryRequest story);
 
         /// <summary>
         /// Get ALL stories ids of a project.
@@ -22,12 +23,12 @@ namespace StoriesEngine
         /// <summary>
         /// Get a project.
         /// </summary>
-        Task<StoryDTO> GetStory(string id);
+        Task<StoryResponse> GetStory(string projectId, string storyIdentifier);
 
         /// <summary>
         /// Edit Story: atomic operations on the lines of story and story own metadata.
         /// </summary>  
         /// <returns>The story ID</returns>
-        Task<StoryDTO> EditStory(StoryDTO story);
+        Task<StoryResponse> EditStory(StoryRequest story);
     }
 }

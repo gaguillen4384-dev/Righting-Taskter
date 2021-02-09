@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Utilities.Domain;
 
 namespace ProjectManager
@@ -6,14 +7,19 @@ namespace ProjectManager
     public interface IStoriesAccessProxy
     {
         /// <summary>
-        /// Retrieves a single project based on project acronym.
+        /// Retrieves a single project for the given project.
         /// </summary>
-        Task<ProjectResponse> GetSingleStory(string projectAcronym, string storyIdentifier);
+        Task<StoryResponse> GetSingleStory(string projectAcronym, string storyIdentifier);
 
         /// <summary>
-        /// To 
+        /// Retrieves all stories for the given project.
         /// </summary>
-        Task<ProjectResponse> GetProjectStories(ProjectRequest projectRequest);
+        Task<IEnumerable<StoryResponse>> GetProjectStories(string projectAcronym);
 
+
+        /// <summary>
+        /// Creates a story for the given project.
+        /// </summary>
+        Task<StoryResponse> CreateStory(string projectAcronym, StoryRequest storyRequest);
     }
 }
