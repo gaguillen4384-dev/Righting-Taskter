@@ -6,4 +6,8 @@
     <RootNamespace>Utilities.Domain</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LiteDbDriver\LiteDbDriver\LiteDbDriver.csproj" />
+  </ItemGroup>
+
 </Project>

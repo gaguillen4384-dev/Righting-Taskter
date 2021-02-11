@@ -10,9 +10,9 @@ namespace ProjectManager
     public class StoriesAccessProxy : IStoriesAccessProxy
     {
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccessProxy.CreateStory(string, StoryRequest)">
+        /// Concrete implementation of <see cref="IStoriesAccessProxy.CreateStory(string, StoryCreationRequest)">
         /// </summary>
-        public Task<StoryResponse> CreateStory(string projectAcronym, StoryRequest storyRequest)
+        public Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest)
         {
             throw new System.NotImplementedException();
         }

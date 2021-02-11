@@ -13,7 +13,7 @@ namespace StoriesEngine
         /// Creates a story.
         /// </summary>
         /// <returns>The story ID</returns>
-        Task<string> CreateStory(StoryRequest story);
+        Task<string> CreateStory(StoryCreationRequest story);
 
         /// <summary>
         /// Get ALL stories ids of a project.
@@ -29,6 +29,6 @@ namespace StoriesEngine
         /// Edit Story: atomic operations on the lines of story and story own metadata.
         /// </summary>  
         /// <returns>The story ID</returns>
-        Task<StoryResponse> EditStory(StoryRequest story);
+        Task<StoryResponse> EditStory(StoryCreationRequest story);
     }
 }

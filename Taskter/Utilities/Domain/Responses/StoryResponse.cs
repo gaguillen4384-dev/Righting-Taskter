@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Utilities.Domain
 {
@@ -17,12 +18,12 @@ namespace Utilities.Domain
         /// <summary>
         /// The number of the story in the project its on. Sequential.
         /// </summary>
-        public string StoryNumber { get; set; } = string.Empty;
+        public int StoryNumber { get; set; } = 0;
 
         /// <summary>
         /// The content of the story.
         /// </summary>
-        public string Details { get; set; } = string.Empty;
+        public IEnumerable<StoryDetail> Details { get; set; } = new List<StoryDetail>();
 
         /// <summary>
         /// The date the story got created.
@@ -42,16 +43,12 @@ namespace Utilities.Domain
         /// <summary>
         /// A flag indicating completion of the story.
         /// </summary>
-        public bool Completed { get; set; } = false;
+        public bool IsCompleted { get; set; } = false;
 
         /// <summary>
         /// A flag indicating if the story its recurrant.
         /// </summary>
-        public bool Recurrant { get; set; } = false;
+        public bool IsRecurrant { get; set; } = false;
 
-        /// <summary>
-        /// A counter of Pomodoros acted for this story.
-        /// </summary>
-        public int PcCounter { get; set; } = 0;
     }
 }

@@ -1,11 +1,12 @@
-﻿using LiteDbDriver;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Utilities.Domain;
 
-namespace StoriesAccessComponent
+namespace Utilities.Domain
 {
-    public class Story : BaseDocument
+    /// <summary>
+    /// The request to create a story.
+    /// </summary>
+    public class StoryCreationRequest
     {
         /// <summary>
         /// The name of the story.
@@ -18,24 +19,9 @@ namespace StoriesAccessComponent
         public string ProjectAcronym { get; set; } = string.Empty;
 
         /// <summary>
-        /// The number of the story in the project its on. Sequential.
-        /// </summary>
-        public int StoryNumber { get; set; } = 0;
-
-        /// <summary>
         /// The content of the story.
         /// </summary>
         public IEnumerable<StoryDetail> Details { get; set; } = new List<StoryDetail>();
-
-        /// <summary>
-        /// The date the story got completed.
-        /// </summary>
-        public DateTime? DateCompleted { get; set; } = null;
-
-        /// <summary>
-        /// A flag indicating completion of the story.
-        /// </summary>
-        public bool IsCompleted { get; set; } = false;
 
         /// <summary>
         /// A flag indicating if the story its recurrant.

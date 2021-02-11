@@ -1,68 +1,138 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using LiteDB;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Domain;
 
-namespace StoriesAccess.Repositories
+namespace StoriesAccessComponent.Repositories
 {
     /// <summary>
     /// Concrete implementation of <see cref="IStoriesAccess"/>
     /// </summary>
     public class StoriesAccess : IStoriesAccess
     {
-        //TODO: Implement with Mongo
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.CreateStory(string, StoryRequest)">
+        /// Concrete implementation of <see cref="IStoriesAccess.CreateStory(string, StoryCreationRequest)">
         /// </summary>
-        public Task<StoryResponse> CreateStory(string projectAcronym, StoryRequest storyRequest)
+        public async Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest)
         {
-            // this should join with a joint table where the table has the latest number for the story
-            throw new System.NotImplementedException();
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\Stories.db"))
+            {
+                // this creates or gets collection
+                var storiesCollection = db.GetCollection<Story>("Stories");
+
+                // Map from request to story
+                var story = StoriesRepositoryMapper.MapToStory(storyRequest);
+
+                var latestStoryNumber = GetLatestStoryNumberForProject(projectAcronym);
+
+                story.StoryNumber = latestStoryNumber++;
+
+                storiesCollection.Insert(story);
+
+                // Index Document on name property
+                storiesCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
+
+                return StoriesRepositoryMapper.MapToStoryResponse(story);
+            }
         }
 
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.GetProjectStories(string)">
         /// </summary>
-        public Task<IEnumerable<StoryResponse>> GetProjectStories(string projectAcronym)
+        public async Task<IEnumerable<StoryResponse>> GetProjectStories(string projectAcronym)
         {
-            throw new System.NotImplementedException();
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\Stories.db"))
+            {
+                // this creates or gets collection
+                var storiesCollection = db.GetCollection<Story>("Stories");
+
+                // This needs to be generic in a driver.
+                var result = storiesCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
+
+                // use mapper to return what its needed.
+                return StoriesRepositoryMapper.MapToStoriesResponse(result);
+            }
         }
 
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.GetSingleStory(string, string)">
+        /// Concrete implementation of <see cref="IStoriesAccess.GetSingleStory(string, int)">
         /// </summary>
-        public Task<StoryResponse> GetSingleStory(string projectAcronym, string storyNumber)
+        public async Task<StoryResponse> GetSingleStory(string projectAcronym, int storyNumber)
         {
-            using (var connection = new SqliteConnection("Data Source=Stories.db"))
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\Stories.db"))
             {
-                connection.Open();
+                // this creates or gets collection
+                var storiesCollection = db.GetCollection<Story>("Stories");
 
+                // This needs to be generic in a driver.
+                var result = storiesCollection.Find(Query.And(
+                    Query.EQ("ProjectAcronym", projectAcronym),
+                    Query.EQ("StoryNumber", storyNumber)));
 
-                var command = connection.CreateCommand();
-                command.CommandText =
-                    @"
-                    SELECT Story
-                    FROM Stories
-                    WHERE Project = $projectAcronym
-                    AND StoryNumber = $storyNumber
-                    ";
-                command.Parameters.AddWithValue("$projectAcronym", projectAcronym);
-                command.Parameters.AddWithValue("$storyNumber", storyNumber);
-                command.ExecuteNonQuery();
-                using (var reader = command.ExecuteReader())
-                {
-                    // TODO the PcCount comes from a seperate db ( a joint table K-V of storyid and pccount)
-                    while (reader.Read())
-                    {
-                        // TODO: integrate the mapper
-                       // send it to mapper.
-                       // return a storyresponse
-                    }
-                }
+                var listResult = result.ToList();
+
+                // use mapper to return what its needed.
+                return StoriesRepositoryMapper.MapToStoryResponse(listResult.FirstOrDefault());
             }
-
-            return null;
         }
+
+        #region NumbersAccess for story access.
+        /// <summary>
+        /// This retrieves a K-V that stores the last number of the project.
+        /// </summary>
+        private int GetLatestStoryNumberForProject(string projectAcronym)
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            {
+                // this creates or gets collection
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumber>("ProjectsStoryNumber");
+
+                // This needs to be generic in a driver.
+                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
+
+                var projectNumber = result.FirstOrDefault();
+
+                if (projectNumber == null) 
+                {
+                    return 0;
+                }
+
+                // use mapper to return what its needed.
+                return projectNumber.LatestStoryNumber;
+            }
+        }
+
+        /// <summary>
+        /// This creates K-V that stores the last number of the project.
+        /// </summary>
+        // TODO: THis belongs at the ProjectAccess 
+        private void CreateProjectStoryNumber(string projectAcronym)
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            {
+                // this creates or gets collection
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumber>("ProjectsStoryNumber");
+
+                var projectNumber = new ProjectsStoryNumber()
+                {
+                    ProjectAcronym = projectAcronym,
+                    LatestStoryNumber = 1
+                };
+
+                projectNumberCollection.Insert(projectNumber);
+
+                // Index Document on name property
+                projectNumberCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
+            }
+        }
+
+        #endregion
     }
 }

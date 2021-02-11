@@ -20,6 +20,6 @@ namespace ProjectManager
         /// <summary>
         /// Creates a story for the given project.
         /// </summary>
-        Task<StoryResponse> CreateStory(string projectAcronym, StoryRequest storyRequest);
+        Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest);
     }
 }
