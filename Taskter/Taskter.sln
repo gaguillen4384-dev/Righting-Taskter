@@ -27,9 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicesTests", "Tests\Proj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{61BCFE0D-1855-4FB8-8F3C-99CA2E29FA6F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Utilities\Domain\Domain.csproj", "{C76C382E-D9AF-4151-B719-67216DA3EB8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taskter.Domain", "Utilities\Domain\Taskter.Domain.csproj", "{C76C382E-D9AF-4151-B719-67216DA3EB8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteDbDriver", "Utilities\LiteDbDriver\LiteDbDriver\LiteDbDriver.csproj", "{76051C1C-4C52-4723-B512-D88BB500AA76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteDbDriver", "Utilities\LiteDbDriver\LiteDbDriver\LiteDbDriver.csproj", "{76051C1C-4C52-4723-B512-D88BB500AA76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

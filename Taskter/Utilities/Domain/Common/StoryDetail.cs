@@ -1,4 +1,4 @@
-﻿namespace Utilities.Domain
+﻿namespace Utilities.Taskter.Domain
 {
     public class StoryDetail
     {

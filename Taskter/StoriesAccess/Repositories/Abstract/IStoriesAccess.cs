@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Utilities.Domain;
+using Utilities.Taskter.Domain;
 
-namespace StoriesAccessComponent.Repositories
+namespace StoriesAccessComponent
 {
     public interface IStoriesAccess
     {
@@ -21,6 +21,8 @@ namespace StoriesAccessComponent.Repositories
         /// </summary>
         Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest);
 
-        // TODO: Need an update function that automates the completion and update information at the resouceaccess
+        // TODO: Need an update function that automates the completion of a story and update information at the resouceaccess.
+
+        // TODO: need a delete function.
     }
 }

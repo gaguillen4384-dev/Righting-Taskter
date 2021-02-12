@@ -1,7 +1,7 @@
 ﻿using LiteDbDriver;
 using System;
 using System.Collections.Generic;
-using Utilities.Domain;
+using Utilities.Taskter.Domain;
 
 namespace StoriesAccessComponent
 {

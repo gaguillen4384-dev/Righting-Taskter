@@ -1,10 +1,11 @@
 ﻿using LiteDB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Domain;
+using Utilities.Taskter.Domain;
 
-namespace StoriesAccessComponent.Repositories
+namespace StoriesAccessComponent
 {
     /// <summary>
     /// Concrete implementation of <see cref="IStoriesAccess"/>
@@ -23,7 +24,7 @@ namespace StoriesAccessComponent.Repositories
                 var storiesCollection = db.GetCollection<Story>("Stories");
 
                 // Map from request to story
-                var story = StoriesRepositoryMapper.MapToStory(storyRequest);
+                var story = StoriesRepositoryMapper.MapCreationRequestToStory(storyRequest);
 
                 var latestStoryNumber = GetLatestStoryNumberForProject(projectAcronym);
 
@@ -32,7 +33,7 @@ namespace StoriesAccessComponent.Repositories
                 storiesCollection.Insert(story);
 
                 // Index Document on name property
-                storiesCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
+                storiesCollection.EnsureIndex(storyx => storyx.ProjectAcronym);
 
                 return StoriesRepositoryMapper.MapToStoryResponse(story);
             }

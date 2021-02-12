@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Utilities.Domain
+namespace Utilities.Taskter.Domain
 {
     /// <summary>
     /// The request to create a story.

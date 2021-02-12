@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utilities\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Utilities\Domain\Taskter.Domain.csproj" />
   </ItemGroup>
 
 </Project>

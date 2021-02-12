@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utilities\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Utilities\Domain\Taskter.Domain.csproj" />
     <ProjectReference Include="..\Utilities\LiteDbDriver\LiteDbDriver\LiteDbDriver.csproj" />
   </ItemGroup>
 

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Utilities.Domain</AssemblyName>
-    <RootNamespace>Utilities.Domain</RootNamespace>
+    <AssemblyName>Utilities.Taskter.Domain</AssemblyName>
+    <RootNamespace>Utilities.Taskter.Domain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

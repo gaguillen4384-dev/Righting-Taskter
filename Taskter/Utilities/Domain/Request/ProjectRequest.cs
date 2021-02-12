@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Utilities.Domain
+namespace Utilities.Taskter.Domain
 {
     public class ProjectRequest
     {

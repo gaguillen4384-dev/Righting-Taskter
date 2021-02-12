@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Utilities.Domain;
+using Utilities.Taskter.Domain;
 
 namespace StoriesAccessComponent
 {
@@ -15,7 +15,18 @@ namespace StoriesAccessComponent
         /// </summary>
         public static StoryResponse MapToStoryResponse(Story story) 
         {
-            throw new NotImplementedException();
+            return new StoryResponse()
+            {
+               Name = story.Name,
+               ProjectAcronymName = story.ProjectAcronym,
+               StoryNumber = story.StoryNumber,
+               Details = story.Details,
+               DateCompleted = story.DateCompleted.GetValueOrDefault(),
+               IsCompleted = story.IsCompleted,
+               IsRecurrant = story.IsRecurrant,
+               DateCreated = story.DateCreated,
+               DateUpdated = story.DateUpdated
+            };
         }
 
         /// <summary>
@@ -23,15 +34,28 @@ namespace StoriesAccessComponent
         /// </summary>
         public static IEnumerable<StoryResponse> MapToStoriesResponse(IEnumerable<Story> stories)
         {
-            throw new NotImplementedException();
+            var storyResponses = new List<StoryResponse>();
+
+            foreach (var story in stories) 
+            {
+                storyResponses.Add(MapToStoryResponse(story));
+            }
+
+            return storyResponses;
         }
 
         /// <summary>
         /// Returns a Story object from Story Creation Request.
         /// </summary>
-        public static Story MapToStory(StoryCreationRequest storyRequest) 
+        public static Story MapCreationRequestToStory(StoryCreationRequest storyRequest) 
         {
-            throw new NotImplementedException();
+            return new Story()
+            {
+                Name = storyRequest.Name,
+                ProjectAcronym = storyRequest.ProjectAcronym,
+                Details = storyRequest.Details,
+                IsRecurrant = storyRequest.IsRecurrant
+            };
         }
 
         /// <summary>

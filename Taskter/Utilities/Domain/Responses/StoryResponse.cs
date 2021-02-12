@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Utilities.Domain
+namespace Utilities.Taskter.Domain
 {
     public class StoryResponse
     {
