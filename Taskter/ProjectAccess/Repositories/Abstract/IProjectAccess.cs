@@ -1,6 +1,6 @@
 ﻿namespace ProjectAccess.Repositories 
 { 
-    interface IProjectAccess
+    public interface IProjectAccess
     {
     }
 }

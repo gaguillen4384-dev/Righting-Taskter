@@ -23,6 +23,9 @@ namespace StoriesAccessComponent
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<Story>("Stories");
 
+                // Index Document on name property
+                storiesCollection.EnsureIndex(storyx => storyx.ProjectAcronym);
+
                 // Map from request to story
                 var story = StoriesRepositoryMapper.MapCreationRequestToStory(storyRequest);
 
@@ -32,8 +35,7 @@ namespace StoriesAccessComponent
 
                 storiesCollection.Insert(story);
 
-                // Index Document on name property
-                storiesCollection.EnsureIndex(storyx => storyx.ProjectAcronym);
+                UpdateLatestStoryNumberForProject(projectAcronym);
 
                 return StoriesRepositoryMapper.MapToStoryResponse(story);
             }
@@ -92,7 +94,7 @@ namespace StoriesAccessComponent
             using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumber>("ProjectsStoryNumber");
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumber");
 
                 // This needs to be generic in a driver.
                 var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
@@ -104,33 +106,35 @@ namespace StoriesAccessComponent
                     return 0;
                 }
 
-                // use mapper to return what its needed.
                 return projectNumber.LatestStoryNumber;
             }
         }
 
+
+        // TODO: need to update the latest number
         /// <summary>
-        /// This creates K-V that stores the last number of the project.
+        /// This retrieves a K-V that stores the last number of the project.
         /// </summary>
-        // TODO: THis belongs at the ProjectAccess 
-        private void CreateProjectStoryNumber(string projectAcronym)
+        private void UpdateLatestStoryNumberForProject(string projectAcronym)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumber>("ProjectsStoryNumber");
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumber");
 
-                var projectNumber = new ProjectsStoryNumber()
+                // This needs to be generic in a driver.
+                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
+
+                var projectNumber = result.FirstOrDefault();
+
+                projectNumber.DateUpdated = DateTime.UtcNow;
+                projectNumber.LatestStoryNumber++;
+
+                if (!projectNumberCollection.Update(projectNumber))
                 {
-                    ProjectAcronym = projectAcronym,
-                    LatestStoryNumber = 1
-                };
-
-                projectNumberCollection.Insert(projectNumber);
-
-                // Index Document on name property
-                projectNumberCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
+                    throw new KeyNotFoundException("The project could not be found.");
+                }
             }
         }
 
