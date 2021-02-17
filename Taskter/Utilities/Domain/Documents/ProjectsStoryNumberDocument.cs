@@ -1,6 +1,6 @@
 ﻿using LiteDbDriver;
 
-namespace Utilities.Taskter.Domain
+namespace Utilities.Taskter.Domain.Document
 {
     public class ProjectsStoryNumberDocument : BaseDocument
     {

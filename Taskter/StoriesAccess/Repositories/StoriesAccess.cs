@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
+using Utilities.Taskter.Domain.Document;
 
 namespace StoriesAccessComponent
 {
@@ -85,6 +86,7 @@ namespace StoriesAccessComponent
         }
 
         #region NumbersAccess for story access.
+
         /// <summary>
         /// This retrieves a K-V that stores the last number of the project.
         /// </summary>
@@ -109,7 +111,6 @@ namespace StoriesAccessComponent
                 return projectNumber.LatestStoryNumber;
             }
         }
-
 
         // TODO: need to update the latest number
         /// <summary>

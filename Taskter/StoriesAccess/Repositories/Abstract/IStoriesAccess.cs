@@ -7,7 +7,7 @@ namespace StoriesAccessComponent
     public interface IStoriesAccess
     {
         /// <summary>
-        /// Retrieves a single project for the given project.
+        /// Retrieves a single story for the given project.
         /// </summary>
         Task<StoryResponse> GetSingleStory(string projectAcronym, int storyNumber);
 
