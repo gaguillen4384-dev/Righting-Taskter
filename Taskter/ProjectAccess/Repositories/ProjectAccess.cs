@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
-using Utilities.Taskter.Domain.Document;
+using Utilities.Taskter.Domain.Documents;
 
 namespace ProjectAccessComponent
 {
@@ -42,13 +42,13 @@ namespace ProjectAccessComponent
         /// <summary>
         /// This creates K-V that stores the last number of the project.
         /// </summary>
-        private void CreateProjectStoryNumber(string projectAcronym)
+        private async Task CreateProjectStoryNumber(string projectAcronym)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumber");
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
 
                 // Index Document on name property
                 projectNumberCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);

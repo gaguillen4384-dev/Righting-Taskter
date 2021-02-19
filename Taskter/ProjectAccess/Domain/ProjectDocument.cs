@@ -2,7 +2,7 @@
 
 namespace ProjectAccessComponent
 {
-    public class Project : BaseDocument
+    public class ProjectDocument : BaseDocument
     {
     }
 }

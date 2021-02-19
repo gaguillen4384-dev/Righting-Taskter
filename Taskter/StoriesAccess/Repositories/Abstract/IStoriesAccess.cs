@@ -4,6 +4,9 @@ using Utilities.Taskter.Domain;
 
 namespace StoriesAccessComponent
 {
+    /// <summary>
+    /// Responsible for acting on the story resource.
+    /// </summary>
     public interface IStoriesAccess
     {
         /// <summary>
@@ -21,8 +24,15 @@ namespace StoriesAccessComponent
         /// </summary>
         Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest);
 
-        // TODO: Need an update function that automates the completion of a story and update information at the resouceaccess.
+        /// <summary>
+        /// Updates a specific story for the given project.
+        /// </summary>
+        Task<StoryResponse> UpdateStory(string projectAcronym, int storyNumber, StoryUpdateRequest storyRequest);
 
-        // TODO: need a delete function.
+        /// <summary>
+        /// Deletes a specific story for the given project.
+        /// </summary>
+        Task<StoryResponse> DeleteStory(string projectAcronym, int storyNumber);
+
     }
 }

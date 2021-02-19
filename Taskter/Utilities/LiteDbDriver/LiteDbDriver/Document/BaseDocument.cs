@@ -6,9 +6,9 @@ namespace LiteDbDriver
     public class BaseDocument
     {
         /// <summary>
-        /// The unique identifier for the object.
+        /// The unique identifier for the object. Can only be retrieved, not set.
         /// </summary>
-        public ObjectId _id = ObjectId.NewObjectId();
+        public ObjectId _id { get; } = ObjectId.NewObjectId();
 
         /// <summary>
         /// The date the object got created.

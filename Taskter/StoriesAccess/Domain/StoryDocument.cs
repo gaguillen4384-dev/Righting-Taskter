@@ -5,17 +5,12 @@ using Utilities.Taskter.Domain;
 
 namespace StoriesAccessComponent
 {
-    public class Story : BaseDocument
+    public class StoryDocument : BaseDocument
     {
         /// <summary>
         /// The name of the story.
         /// </summary>
         public string Name { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The Acronym of the project.
-        /// </summary>
-        public string ProjectAcronym { get; set; } = string.Empty;
 
         /// <summary>
         /// The number of the story in the project its on. Sequential.
