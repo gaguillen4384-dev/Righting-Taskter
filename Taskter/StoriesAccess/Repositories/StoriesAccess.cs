@@ -56,7 +56,6 @@ namespace StoriesAccessComponent
 
         }
 
-
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.GetSingleStory(string, int)">
         /// </summary>
@@ -81,20 +80,55 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.UpdateStory(string, int, StoryUpdateRequest)">
         /// </summary>
-        public Task<StoryResponse> UpdateStory(string projectAcronym, int storyNumber, StoryUpdateRequest storyRequest)
+        public async Task<StoryResponse> UpdateStory(string projectAcronym, int storyNumber, StoryUpdateRequest storyRequest)
         {
             // TODO: Need an update function that automates the completion of a story and update information at the resouceaccess.
+            using (var db = new LiteDatabase(@"\Stories.db"))
+            {
+                // this creates or gets collection
+                var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-            throw new NotImplementedException();
+                // Use story Reference to get ID
+                var storyId = await GetSingleStoryId(projectAcronym, storyNumber);
+
+                var story = storiesCollection.FindById(storyId);
+
+                // with the story, map the new updated fields
+                var storyUpdated = StoriesRepositoryMapper.UpdateStoryPropertiesFromRequest(story, storyRequest);
+
+                var updated = storiesCollection.Update(storyUpdated);
+
+                // return a null object if failed to update.
+                if (!updated)
+                    return StoriesRepositoryMapper.MapToEmptyStoryResponse();
+
+                // use mapper to return what its needed.
+                return StoriesRepositoryMapper.MapToStoryResponse(storyUpdated, projectAcronym);
+            }
         }
 
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.DeleteStory(string, int)">
         /// </summary>
-        public Task<StoryResponse> DeleteStory(string projectAcronym, int storyNumber)
+        public async Task<bool> DeleteStory(string projectAcronym, int storyNumber)
         {
-            // TODO: Need to delete from story db and storyrefence.
-            throw new NotImplementedException();
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\Stories.db"))
+            {
+                // this creates or gets collection
+                var storiesCollection = db.GetCollection<StoryDocument>("Stories");
+
+                // Use story Reference to get ID
+                var storyId = await GetSingleStoryId(projectAcronym, storyNumber);
+
+                if (!storiesCollection.Delete(storyId))
+                    return false;
+
+                if (!DeleteReferenceForStory(storyId))
+                    return false;
+
+                return true;
+            }
         }
 
         #region Private Methods
@@ -123,6 +157,7 @@ namespace StoriesAccessComponent
             }
             return listResult;
         }
+
 
         #endregion
 
@@ -266,6 +301,25 @@ namespace StoriesAccessComponent
                 };
 
                 storiesReferenceCollection.Insert(storyReference);
+            }
+        }
+
+        /// <summary>
+        /// Creates the story Reference
+        /// </summary>
+        // TODO: I dont want to be passing db specific types into method.
+        private bool DeleteReferenceForStory(string storyId)
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            {
+                // this creates or gets collection
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+
+                if (!storiesReferenceCollection.Delete(storyId))
+                    return false;
+
+                return true;
             }
         }
 

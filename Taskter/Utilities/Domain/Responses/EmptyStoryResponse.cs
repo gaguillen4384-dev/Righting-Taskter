@@ -5,5 +5,6 @@
     /// </summary>
     public class EmptyStoryResponse : StoryResponse
     {
+        // TODO : Implement null object pattern 
     }
 }

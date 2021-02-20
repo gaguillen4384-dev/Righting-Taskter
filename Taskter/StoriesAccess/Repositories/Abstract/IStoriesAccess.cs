@@ -32,7 +32,7 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Deletes a specific story for the given project.
         /// </summary>
-        Task<StoryResponse> DeleteStory(string projectAcronym, int storyNumber);
+        Task<bool> DeleteStory(string projectAcronym, int storyNumber);
 
     }
 }

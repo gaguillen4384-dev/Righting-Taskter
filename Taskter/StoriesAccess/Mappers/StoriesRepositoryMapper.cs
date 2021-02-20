@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Utilities.Taskter.Domain;
 
 namespace StoriesAccessComponent
@@ -60,11 +61,62 @@ namespace StoriesAccessComponent
         }
 
         /// <summary>
-        /// Returns a Story object from Story Update Request.
+        /// Returns given Story with updated properties from a Story Update Request.
         /// </summary>
-        public static StoryDocument MapUpdateRequestToStory(StoryUpdateRequest storyRequest)
+        public static StoryDocument UpdateStoryPropertiesFromRequest(StoryDocument story, StoryUpdateRequest storyUpdate)
         {
-            throw new NotImplementedException();
+
+            story.Name = IsStoryNameUpdated(storyUpdate) ? storyUpdate.Name : story.Name;
+            story.Details = IsDetailsUpdated(storyUpdate) ? storyUpdate.Details : story.Details;
+            story.IsRecurrant = IsStoryRecurrantStatusUpdated(storyUpdate) ? storyUpdate.IsRecurrant : story.IsRecurrant;
+
+            // if is recurrant set then it cannot be completed
+            if (!story.IsRecurrant)
+                story.IsCompleted = IsStoryCompletedUpdated(storyUpdate) ? storyUpdate.IsCompleted : story.IsCompleted;
+
+            return story;
+        }
+
+        /// <summary>
+        /// Returns an empty Story Response.
+        /// </summary>
+        public static StoryResponse MapToEmptyStoryResponse()
+        {
+            return new EmptyStoryResponse();
+        }
+
+        private static bool IsStoryNameUpdated(StoryUpdateRequest storyUpdate)
+        {
+            return !string.IsNullOrWhiteSpace(storyUpdate.Name);
+        }
+
+        private static bool IsDetailsUpdated(StoryUpdateRequest storyUpdate)
+        {
+            var storyDetails = storyUpdate.Details;
+            if (storyDetails == null)
+                return false;
+
+            if (!storyDetails.Any())
+                return false;
+
+            return true;
+        }
+
+        private static bool IsStoryCompletedUpdated(StoryUpdateRequest storyUpdate)
+        {
+            // if is recurrant set then it cannot be completed
+            if (storyUpdate.IsCompleted)
+                return true;
+
+            return false;
+        }
+
+        private static bool IsStoryRecurrantStatusUpdated(StoryUpdateRequest storyUpdate)
+        {
+            if (storyUpdate.IsRecurrant)
+                return true;
+
+            return false;
         }
     }
 }
