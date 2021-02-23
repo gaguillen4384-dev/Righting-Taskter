@@ -21,7 +21,7 @@ namespace ProjectAccessComponent
         /// </summary>
         Task<ProjectResponse> CreateProject(ProjectCreationRequest projectRequest);
 
-        // TODO: Delete project
+        // TODO: Delete project, should it delete projectreference and all subsequent story references?
         // TODO: update project metadata
 
 

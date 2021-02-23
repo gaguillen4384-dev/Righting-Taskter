@@ -69,6 +69,7 @@ namespace StoriesAccessComponent
             story.Name = IsStoryNameUpdated(storyUpdate) ? storyUpdate.Name : story.Name;
             story.Details = IsDetailsUpdated(storyUpdate) ? storyUpdate.Details : story.Details;
             story.IsRecurrant = IsStoryRecurrantStatusUpdated(storyUpdate) ? storyUpdate.IsRecurrant : story.IsRecurrant;
+            story.DateUpdated = DateTime.UtcNow;
 
             // if is recurrant set then it cannot be completed
             if (!story.IsRecurrant)

@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
@@ -36,6 +37,10 @@ namespace ProjectAccessComponent
             throw new System.NotImplementedException();
         }
 
+        #region Private Methods
+
+
+        #endregion
 
         #region StoryNumber Access
 
@@ -60,6 +65,60 @@ namespace ProjectAccessComponent
                 };
 
                 projectNumberCollection.Insert(projectNumber);
+            }
+        }
+
+        #endregion
+
+        #region StoryReferenceAccess
+
+        /// <summary>
+        /// Create a project reference.
+        /// </summary>
+        // TODO: Should I pass the objectId as string and parse it to the objectID
+        private async Task CreateProjectReference(string projectAcronym, ObjectId projectId) 
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            {
+                // this creates or gets collection
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+
+                storiesReferenceCollection.EnsureIndex(reference => reference.ProjectAcronym);
+
+                var storyReference = new StoryReferenceDocument()
+                {
+                    ProjectAcronym = projectAcronym,
+                    ProjectId = projectId
+                };
+
+                storiesReferenceCollection.Insert(storyReference);
+
+                // TODO: What to do if insert fails?
+            }
+        }
+
+        /// <summary>
+        /// Updates a project reference.
+        /// </summary>
+        private async Task UpdateProjectStoriesReference(string updateProjectAcronym, ObjectId projectId)
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            {
+                // this creates or gets collection
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+
+                var projectStories = storiesReferenceCollection.Find(Query.EQ("ProjectId", projectId));
+
+                // TODO: send it to a mapper
+                foreach (var storyReference in projectStories) 
+                {
+                    storyReference.DateUpdated = DateTime.UtcNow;
+                    storyReference.ProjectAcronym = updateProjectAcronym;
+                }
+
+                storiesReferenceCollection.Update(projectStories);
             }
         }
 

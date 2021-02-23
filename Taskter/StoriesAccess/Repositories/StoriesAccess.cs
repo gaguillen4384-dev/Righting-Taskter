@@ -281,7 +281,7 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Creates the story Reference
         /// </summary>
-        // TODO: I dont want to be passing db specific types into method.
+        // TODO: I dont want to be passing db specific types into method. I could pass in a string a map it to objectID
         private void CreateReferenceForProjectAndStory(string projectAcronym, int storyNumber, ObjectId storyId, ObjectId projectId)
         {
             /// TODO: the path got to be configure for each db.
@@ -301,13 +301,14 @@ namespace StoriesAccessComponent
                 };
 
                 storiesReferenceCollection.Insert(storyReference);
+
+                // TODO: What to do if insert fails?
             }
         }
 
         /// <summary>
         /// Creates the story Reference
         /// </summary>
-        // TODO: I dont want to be passing db specific types into method.
         private bool DeleteReferenceForStory(string storyId)
         {
             /// TODO: the path got to be configure for each db.
@@ -316,10 +317,30 @@ namespace StoriesAccessComponent
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
 
-                if (!storiesReferenceCollection.Delete(storyId))
+                var storyObjectID = GetSingleStoryReferenceId(storyId).Result;
+
+                if (!storiesReferenceCollection.Delete(storyObjectID))
                     return false;
 
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Get the story reference ID, ONLY USE FOR STORYREFERENCE ACCESS.
+        /// </summary>
+        private async Task<string> GetSingleStoryReferenceId(string storyId)
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            {
+                // this creates or gets collection
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+
+                // This needs to be generic in a driver.
+                var result = storiesReferenceCollection.FindOne(Query.EQ("StoryId", storyId));
+
+                return result._id.ToString();
             }
         }
 
