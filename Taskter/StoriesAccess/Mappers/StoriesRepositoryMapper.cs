@@ -8,7 +8,6 @@ namespace StoriesAccessComponent
     /// <summary>
     /// Responsible for mapping Stories to stories reponses.
     /// </summary>
-    // TODO: this needs to be a automapper thing.
     public static class StoriesRepositoryMapper
     {
         /// <summary>

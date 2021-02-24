@@ -15,26 +15,60 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IProjectAccess.CreateProject(string, ProjectCreationRequest)"/>
         /// </summary>
-        public Task<ProjectResponse> CreateProject(ProjectCreationRequest projectRequest)
+        public async Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest)
         {
-            // create a storynumber as part of the project creation.
-            throw new System.NotImplementedException();
+            using (var db = new LiteDatabase(@"\Projects.db"))
+            {
+                // this creates or gets collection
+                var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
+
+                var projectDocument = ProjectRepositoryMapper.MapToProjectDocumentFromRequest(projectRequest);
+
+                // TODO: what to do if it fails?
+                projectsCollection.Insert(projectDocument);
+                await CreateProjectStoryNumber(projectDocument.ProjectAcronym);
+                await CreateProjectReference(projectDocument.ProjectAcronym, projectDocument._id.ToString());
+
+                // use mapper to return what its needed.
+                return ProjectRepositoryMapper.MapToProjectResponse(projectDocument);
+            }
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectAccess.GetProjects(string)"/>
+        /// Concrete implementation of <see cref="IProjectAccess.OpenProjects(string)"/>
         /// </summary>
-        public Task<IEnumerable<ProjectResponse>> GetProjects(string projectAcronym)
+        public async Task<IEnumerable<ProjectResponse>> OpenProjects()
         {
-            throw new System.NotImplementedException();
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\Projects.db"))
+            {
+                // this creates or gets collection
+                var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
+
+                // TODO: if users become a thing then this needs change.
+                var result = projectsCollection.Find(Query.All());
+
+                // use mapper to return what its needed.
+                return ProjectRepositoryMapper.MapToProjectsResponse(result);
+            }
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectAccess.GetSingleProject(string)"/>
+        /// Concrete implementation of <see cref="IProjectAccess.OpenProject(string)"/>
         /// </summary>
-        public Task<ProjectResponse> GetSingleProject(string projectAcronym)
+        public async Task<ProjectResponse> OpenProject(string projectAcronym)
         {
-            throw new System.NotImplementedException();
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\Projects.db"))
+            {
+                // this creates or gets collection
+                var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
+
+                var result = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                // use mapper to return what its needed.
+                return ProjectRepositoryMapper.MapToProjectResponse(result);
+            }
         }
 
         #region Private Methods
@@ -61,7 +95,7 @@ namespace ProjectAccessComponent
                 var projectNumber = new ProjectsStoryNumberDocument()
                 {
                     ProjectAcronym = projectAcronym,
-                    LatestStoryNumber = 1
+                    LatestStoryNumber = 0
                 };
 
                 projectNumberCollection.Insert(projectNumber);
@@ -76,7 +110,7 @@ namespace ProjectAccessComponent
         /// Create a project reference.
         /// </summary>
         // TODO: Should I pass the objectId as string and parse it to the objectID
-        private async Task CreateProjectReference(string projectAcronym, ObjectId projectId) 
+        private async Task CreateProjectReference(string projectAcronym, string projectId) 
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\StoryReference.db"))
@@ -86,10 +120,12 @@ namespace ProjectAccessComponent
 
                 storiesReferenceCollection.EnsureIndex(reference => reference.ProjectAcronym);
 
+                var projectDBId = new ObjectId(projectId);
+
                 var storyReference = new StoryReferenceDocument()
                 {
                     ProjectAcronym = projectAcronym,
-                    ProjectId = projectId
+                    ProjectId = projectDBId
                 };
 
                 storiesReferenceCollection.Insert(storyReference);

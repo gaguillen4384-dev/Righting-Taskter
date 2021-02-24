@@ -14,9 +14,9 @@ namespace StoriesAccessComponent
     public class StoriesAccess : IStoriesAccess
     {
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.CreateStory(string, StoryCreationRequest)">
+        /// Concrete implementation of <see cref="IStoriesAccess.StartStory(string, StoryCreationRequest)">
         /// </summary>
-        public async Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest)
+        public async Task<StoryResponse> StartStory(string projectAcronym, StoryCreationRequest storyRequest)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\Stories.db"))
@@ -43,9 +43,9 @@ namespace StoriesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.GetProjectStories(string)">
+        /// Concrete implementation of <see cref="IStoriesAccess.ReadStoriesForAProject(string)">
         /// </summary>
-        public async Task<IEnumerable<StoryResponse>> GetProjectStories(string projectAcronym)
+        public async Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym)
         {
             // use stories ID list, filter to find all stories
             var listOfStoriesID = await GetProjectStoriesIds(projectAcronym);
@@ -57,9 +57,9 @@ namespace StoriesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.GetSingleStory(string, int)">
+        /// Concrete implementation of <see cref="IStoriesAccess.ReadStory(string, int)">
         /// </summary>
-        public async Task<StoryResponse> GetSingleStory(string projectAcronym, int storyNumber)
+        public async Task<StoryResponse> ReadStory(string projectAcronym, int storyNumber)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\Stories.db"))
@@ -108,9 +108,9 @@ namespace StoriesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.DeleteStory(string, int)">
+        /// Concrete implementation of <see cref="IStoriesAccess.RemoveStory(string, int)">
         /// </summary>
-        public async Task<bool> DeleteStory(string projectAcronym, int storyNumber)
+        public async Task<bool> RemoveStory(string projectAcronym, int storyNumber)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\Stories.db"))

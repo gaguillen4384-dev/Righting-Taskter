@@ -7,22 +7,23 @@ namespace StoriesAccessComponent
     /// <summary>
     /// Responsible for acting on the story resource.
     /// </summary>
+    // TODO: Make it more about Actions instead of CRUD
     public interface IStoriesAccess
     {
         /// <summary>
         /// Retrieves a single story for the given project.
         /// </summary>
-        Task<StoryResponse> GetSingleStory(string projectAcronym, int storyNumber);
+        Task<StoryResponse> ReadStory(string projectAcronym, int storyNumber);
 
         /// <summary>
         /// Retrieves all stories for the given project.
         /// </summary>
-        Task<IEnumerable<StoryResponse>> GetProjectStories(string projectAcronym);
+        Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym);
 
         /// <summary>
         /// Creates a story for the given project.
         /// </summary>
-        Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest);
+        Task<StoryResponse> StartStory(string projectAcronym, StoryCreationRequest storyRequest);
 
         /// <summary>
         /// Updates a specific story for the given project.
@@ -32,7 +33,7 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Deletes a specific story for the given project.
         /// </summary>
-        Task<bool> DeleteStory(string projectAcronym, int storyNumber);
+        Task<bool> RemoveStory(string projectAcronym, int storyNumber);
 
     }
 }

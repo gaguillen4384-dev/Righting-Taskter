@@ -9,17 +9,17 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Retrieves a single project.
         /// </summary>
-        Task<ProjectResponse> GetSingleProject(string projectAcronym);
+        Task<ProjectResponse> OpenProject(string projectAcronym);
 
         /// <summary>
         /// Retrieves all projects.
         /// </summary>
-        Task<IEnumerable<ProjectResponse>> GetProjects(string projectAcronym);
+        Task<IEnumerable<ProjectResponse>> OpenProjects();
 
         /// <summary>
         /// Creates a project.
         /// </summary>
-        Task<ProjectResponse> CreateProject(ProjectCreationRequest projectRequest);
+        Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest);
 
         // TODO: Delete project, should it delete projectreference and all subsequent story references?
         // TODO: update project metadata
