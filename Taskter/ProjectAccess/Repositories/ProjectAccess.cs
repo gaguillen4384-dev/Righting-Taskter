@@ -1,6 +1,7 @@
 ﻿using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
 using Utilities.Taskter.Domain.Documents;
@@ -10,6 +11,7 @@ namespace ProjectAccessComponent
     /// <summary>
     /// Concrete implementation of <see cref="IProjectAccess"/>
     /// </summary>
+    // TODO: if users become a thing then this needs change.
     public class ProjectAccess : IProjectAccess
     {
         /// <summary>
@@ -22,15 +24,20 @@ namespace ProjectAccessComponent
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
 
-                var projectDocument = ProjectRepositoryMapper.MapToProjectDocumentFromRequest(projectRequest);
+                // Unlike stories, project own their own reference.
+                projectsCollection.EnsureIndex(projectx => projectx.ProjectAcronym);
+
+                var projectDocument = ProjectRepositoryMapper.MapToProjectDocumentFromCreationRequest(projectRequest);
 
                 // TODO: what to do if it fails?
                 projectsCollection.Insert(projectDocument);
-                await CreateProjectStoryNumber(projectDocument.ProjectAcronym);
+                var projectDetailsDocument = await CreateProjectDetails(projectDocument.ProjectAcronym);
                 await CreateProjectReference(projectDocument.ProjectAcronym, projectDocument._id.ToString());
 
+                var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
+
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectResponse(projectDocument);
+                return ProjectRepositoryMapper.MapToProjectResponse(projectDocument, projectDetails);
             }
         }
 
@@ -45,11 +52,12 @@ namespace ProjectAccessComponent
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
 
-                // TODO: if users become a thing then this needs change.
-                var result = projectsCollection.Find(Query.All());
+                var projects = projectsCollection.Find(Query.All());
+
+                var projectsDetails = await GetProjectsNumbersDetails();
 
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectsResponse(result);
+                return ProjectRepositoryMapper.MapToProjectsResponse(projects, projectsDetails);
             }
         }
 
@@ -64,11 +72,30 @@ namespace ProjectAccessComponent
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
 
-                var result = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+                var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                // Get project numbers details
+                var projectDetails = await GetProjectNumberDetails(projectAcronym);
 
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectResponse(result);
+                return ProjectRepositoryMapper.MapToProjectResponse(project, projectDetails);
             }
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectAccess.RemoveStory(string)"/>
+        /// </summary>
+        public Task<bool> RemoveStory(string projectAcronym)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectAccess.UpdateProject(ProjectUpdateRequest, string)"/>
+        /// </summary>
+        public Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym)
+        {
+            throw new NotImplementedException();
         }
 
         #region Private Methods
@@ -79,9 +106,9 @@ namespace ProjectAccessComponent
         #region StoryNumber Access
 
         /// <summary>
-        /// This creates K-V that stores the last number of the project.
+        /// This creates a refence that stores the last number of the project.
         /// </summary>
-        private async Task CreateProjectStoryNumber(string projectAcronym)
+        private async Task<ProjectsStoryNumberDocument> CreateProjectDetails(string projectAcronym)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
@@ -94,13 +121,53 @@ namespace ProjectAccessComponent
 
                 var projectNumber = new ProjectsStoryNumberDocument()
                 {
-                    ProjectAcronym = projectAcronym,
-                    LatestStoryNumber = 0
+                    ProjectAcronym = projectAcronym
                 };
 
                 projectNumberCollection.Insert(projectNumber);
+
+                return projectNumber;
             }
         }
+
+        private async Task<ProjectNumbersDetails> GetProjectNumberDetails(string projectAcronym) 
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            {
+                // this creates or gets collection
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+
+                // This needs to be generic in a driver.
+                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
+
+                var projectNumber = result.FirstOrDefault();
+
+                if (projectNumber == null)
+                {
+                    return ProjectRepositoryMapper.MapToEmptyProjectNumbersDetails();
+                }
+
+                return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectNumber);
+            }
+        }
+
+        private async Task<IEnumerable<ProjectNumbersDetails>> GetProjectsNumbersDetails()
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            {
+                // this creates or gets collection
+                var projectsCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+
+                // TODO: if users become a thing then this needs change.
+                var result = projectsCollection.Find(Query.All());
+
+                return ProjectRepositoryMapper.MapToProjectsNumbersDetails(result);
+            }
+        }
+
+        // TODO: Update projectacronym if needed.
 
         #endregion
 
@@ -157,7 +224,6 @@ namespace ProjectAccessComponent
                 storiesReferenceCollection.Update(projectStories);
             }
         }
-
         #endregion
     }
 }

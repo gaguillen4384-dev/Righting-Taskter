@@ -1,8 +1,6 @@
-﻿using LiteDbDriver;
-
-namespace Utilities.Taskter.Domain.Documents
+﻿namespace Utilities.Taskter.Domain
 {
-    public class ProjectsStoryNumberDocument : BaseDocument
+    public class ProjectNumbersDetails
     {
         /// <summary>
         /// The Acronym of the project.

@@ -21,9 +21,14 @@ namespace ProjectAccessComponent
         /// </summary>
         Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest);
 
-        // TODO: Delete project, should it delete projectreference and all subsequent story references?
-        // TODO: update project metadata
+        /// <summary>
+        /// Deletes a specific project and all the references.
+        /// </summary>
+        Task<bool> RemoveStory(string projectAcronym);
 
-
+        /// <summary>
+        /// Update a specific project and its references only if projectAcronym changed.
+        /// </summary>
+        Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym);
     }
 }

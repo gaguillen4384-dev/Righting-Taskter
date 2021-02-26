@@ -11,6 +11,7 @@ namespace StoriesAccessComponent
     /// <summary>
     /// Concrete implementation of <see cref="IStoriesAccess"/>
     /// </summary>
+    // TODO: if users become a thing then this needs change.
     public class StoriesAccess : IStoriesAccess
     {
         /// <summary>
@@ -98,6 +99,9 @@ namespace StoriesAccessComponent
 
                 var updated = storiesCollection.Update(storyUpdated);
 
+                if (storyUpdated.IsCompleted)
+                    UpdateStoryNumberForProject(projectAcronym, storyUpdated.IsCompleted);
+
                 // return a null object if failed to update.
                 if (!updated)
                     return StoriesRepositoryMapper.MapToEmptyStoryResponse();
@@ -139,7 +143,7 @@ namespace StoriesAccessComponent
 
             CreateReferenceForProjectAndStory(projectAcronym, storyNumber, storyId, projectId);
 
-            UpdateLatestStoryNumberForProject(projectAcronym);
+            UpdateStoryNumberForProject(projectAcronym);
         }
 
         private async Task<IEnumerable<StoryDocument>> GetProjectStoriesFromStoryIds(IEnumerable<string> storiesID)
@@ -191,7 +195,7 @@ namespace StoriesAccessComponent
         /// <summary>
         /// This retrieves a K-V that stores the last number of the project.
         /// </summary>
-        private void UpdateLatestStoryNumberForProject(string projectAcronym)
+        private void UpdateStoryNumberForProject(string projectAcronym, bool isCompleted = false)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
@@ -206,6 +210,13 @@ namespace StoriesAccessComponent
 
                 projectNumber.DateUpdated = DateTime.UtcNow;
                 projectNumber.LatestStoryNumber++;
+                projectNumber.NumberOfActiveStories++;
+
+                if (isCompleted) 
+                {
+                    projectNumber.NumberOfStoriesCompleted++;
+                    projectNumber.NumberOfActiveStories--;
+                }
 
                 if (!projectNumberCollection.Update(projectNumber))
                 {
