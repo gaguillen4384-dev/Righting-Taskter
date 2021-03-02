@@ -13,11 +13,5 @@ namespace Utilities.Taskter.Domain
         /// The project acronym, used as an identifier.
         /// </summary>
         public string ProjectAcronym = string.Empty;
-
-        /// <summary>
-        /// Latest story worked on in the project.
-        /// </summary>
-        // TODO: this might be more of a client thing or Manager.
-        public int LatestStoryNumberWorkedOn = 0;
     }
 }

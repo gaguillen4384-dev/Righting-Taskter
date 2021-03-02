@@ -1,7 +1,6 @@
 ﻿using LiteDB;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
 using Utilities.Taskter.Domain.Documents;
@@ -15,7 +14,7 @@ namespace ProjectAccessComponent
     public class ProjectAccess : IProjectAccess
     {
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectAccess.CreateProject(string, ProjectCreationRequest)"/>
+        /// Concrete implementation of <see cref="IProjectAccess.StartProject(ProjectCreationRequest)"/>
         /// </summary>
         public async Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest)
         {
@@ -42,7 +41,7 @@ namespace ProjectAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectAccess.OpenProjects(string)"/>
+        /// Concrete implementation of <see cref="IProjectAccess.OpenProjects()"/>
         /// </summary>
         public async Task<IEnumerable<ProjectResponse>> OpenProjects()
         {
@@ -85,21 +84,63 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IProjectAccess.RemoveStory(string)"/>
         /// </summary>
-        public Task<bool> RemoveStory(string projectAcronym)
+        public async Task<bool> RemoveStory(string projectAcronym)
         {
-            throw new NotImplementedException();
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\Projects.db"))
+            {
+                // this creates or gets collection
+                var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
+
+                var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                return projectsCollection.Delete(project._id);
+            }
         }
 
         /// <summary>
         /// Concrete implementation of <see cref="IProjectAccess.UpdateProject(ProjectUpdateRequest, string)"/>
         /// </summary>
-        public Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym)
+        public async Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym)
         {
-            throw new NotImplementedException();
+            // UPDATE reference, storynumbers, projectdetail if acronym changes
+            using (var db = new LiteDatabase(@"\Projects.db"))
+            {
+                // this creates or gets collection
+                var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
+
+                var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                // with the story, map the new updated fields
+                var projectUpdated = ProjectRepositoryMapper.MapToProjectDocumentFromUpdateRequest(project, projectRequest);
+
+                var updated = projectsCollection.Update(project);
+
+                ProjectNumbersDetails projectDetails = new EmptyProjectNumbersDetails();
+                if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest)) 
+                {
+                    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project._id.ToString());
+                    // return a null object if failed to update.
+                    if (projectDetails is EmptyProjectNumbersDetails)
+                        return ProjectRepositoryMapper.MapToEmptyProjectResponse();
+                }
+
+                // return a null object if failed to update.
+                if (!updated)
+                    return ProjectRepositoryMapper.MapToEmptyProjectResponse();
+
+                // use mapper to return what its needed.
+                return ProjectRepositoryMapper.MapToProjectResponse(project, projectDetails);
+            }
         }
 
         #region Private Methods
 
+        private async Task<ProjectNumbersDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
+        {
+            await UpdateProjectStoriesReferenceAcronym(updatedProjectAcronym, projectId);
+            return await UpdateProjectNumbersAcronym(projectAcronym, updatedProjectAcronym);
+        }
 
         #endregion
 
@@ -139,9 +180,7 @@ namespace ProjectAccessComponent
                 var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
 
                 // This needs to be generic in a driver.
-                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
-
-                var projectNumber = result.FirstOrDefault();
+                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
                 if (projectNumber == null)
                 {
@@ -167,7 +206,28 @@ namespace ProjectAccessComponent
             }
         }
 
-        // TODO: Update projectacronym if needed.
+        private async Task<ProjectNumbersDetails> UpdateProjectNumbersAcronym(string projectAcronym, string updatedProjectAcronym) 
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            {
+                // this creates or gets collection
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+
+                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                projectNumber.ProjectAcronym = updatedProjectAcronym;
+
+                var updated = projectNumberCollection.Update(projectNumber);
+                if (updated == false)
+                {
+                    return ProjectRepositoryMapper.MapToEmptyProjectNumbersDetails();
+                }
+
+                return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectNumber);
+            }
+
+        }
 
         #endregion
 
@@ -176,7 +236,6 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Create a project reference.
         /// </summary>
-        // TODO: Should I pass the objectId as string and parse it to the objectID
         private async Task CreateProjectReference(string projectAcronym, string projectId) 
         {
             /// TODO: the path got to be configure for each db.
@@ -204,7 +263,7 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Updates a project reference.
         /// </summary>
-        private async Task UpdateProjectStoriesReference(string updateProjectAcronym, ObjectId projectId)
+        private async Task UpdateProjectStoriesReferenceAcronym(string updateProjectAcronym, string projectId)
         {
             /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(@"\StoryReference.db"))
@@ -212,9 +271,9 @@ namespace ProjectAccessComponent
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
 
+                // TODO: might need to pass in a objectId
                 var projectStories = storiesReferenceCollection.Find(Query.EQ("ProjectId", projectId));
 
-                // TODO: send it to a mapper
                 foreach (var storyReference in projectStories) 
                 {
                     storyReference.DateUpdated = DateTime.UtcNow;

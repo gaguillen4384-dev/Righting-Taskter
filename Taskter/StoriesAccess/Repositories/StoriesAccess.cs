@@ -83,7 +83,6 @@ namespace StoriesAccessComponent
         /// </summary>
         public async Task<StoryResponse> UpdateStory(string projectAcronym, int storyNumber, StoryUpdateRequest storyRequest)
         {
-            // TODO: Need an update function that automates the completion of a story and update information at the resouceaccess.
             using (var db = new LiteDatabase(@"\Stories.db"))
             {
                 // this creates or gets collection

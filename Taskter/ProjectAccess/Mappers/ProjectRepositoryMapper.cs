@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Utilities.Taskter.Domain;
 using Utilities.Taskter.Domain.Documents;
@@ -52,16 +53,55 @@ namespace ProjectAccessComponent
             };
         }
 
-        public static ProjectDocument MapToProjectDocumentFromUpdateRequest(ProjectUpdateRequest projectRequest)
+        public static ProjectDocument MapToProjectDocumentFromUpdateRequest(ProjectDocument project, ProjectUpdateRequest projectRequest)
         {
-            return new ProjectDocument()
+            // map from the original project.
+            project.Name = IsProjectNameUpdated(projectRequest) ? projectRequest.Name : project.Name;
+            project.ProjectAcronym = IsProjectAcronymUpdated(projectRequest) ? projectRequest.ProjectAcronym : project.ProjectAcronym;
+            project.DateUpdated = DateTime.UtcNow;
+            project.LastWorkedOn = DateTime.UtcNow;
+
+            return project;
+        }
+
+        public static ProjectDocument MapToProjectDetailsFromUpdateRequest(ProjectDocument project, ProjectUpdateRequest projectRequest)
+        {
+            // map from the original project.
+            project.Name = IsProjectNameUpdated(projectRequest) ? projectRequest.Name : project.Name;
+            project.ProjectAcronym = IsProjectAcronymUpdated(projectRequest) ? projectRequest.ProjectAcronym : project.ProjectAcronym;
+            project.DateUpdated = DateTime.UtcNow;
+            project.LastWorkedOn = DateTime.UtcNow;
+
+            return project;
+        }
+
+        /// <summary>
+        /// Maps an empty project.
+        /// </summary>
+        public static ProjectResponse MapToEmptyProjectResponse()
+        {
+            return new EmptyProjectResponse()
             {
-                Name = projectRequest.Name,
-                ProjectAcronym = projectRequest.ProjectAcronym
             };
         }
 
+        /// <summary>
+        /// Assumes that the request has a projectAcronym if desired changed.
+        /// </summary>
+        public static bool IsProjectAcronymUpdated(ProjectUpdateRequest projectRequest)
+        {
+            return !string.IsNullOrWhiteSpace(projectRequest.ProjectAcronym);
+        }
+
         #region private methods
+
+        /// <summary>
+        /// Assumes that the request has a name if desired changed.
+        /// </summary>
+        private static bool IsProjectNameUpdated(ProjectUpdateRequest projectRequest) 
+        {
+            return !string.IsNullOrWhiteSpace(projectRequest.Name);
+        }
 
         /// <summary>
         /// Uses nested loops based on projectAcronym.
