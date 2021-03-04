@@ -23,7 +23,6 @@ namespace ProjectAccessComponent
                 DateCreated = project.DateCreated,
                 DateUpdated = project.DateUpdated,
                 ProjectAcronym = project.ProjectAcronym,
-                LatestStoryNumberWorkedOn = project.LatestStoryNumberWorkedOn,
                 NumberOfActiveStories = projectDetails.NumberOfActiveStories,
                 NumberOfCompletedStories = projectDetails.NumberOfStoriesCompleted
             };

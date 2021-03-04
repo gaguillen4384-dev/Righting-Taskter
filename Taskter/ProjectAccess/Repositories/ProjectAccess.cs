@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,12 +14,19 @@ namespace ProjectAccessComponent
     // TODO: if users become a thing then this needs change.
     public class ProjectAccess : IProjectAccess
     {
+        private ProjectResourceConfig _projectConnection;
+
+        public ProjectAccess(IOptions<ProjectResourceConfig> projectConnection) 
+        {
+            _projectConnection = projectConnection.Value;
+        }
         /// <summary>
         /// Concrete implementation of <see cref="IProjectAccess.StartProject(ProjectCreationRequest)"/>
         /// </summary>
         public async Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest)
         {
-            using (var db = new LiteDatabase(@"\Projects.db"))
+            // @"\Projects.db"
+            using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
@@ -46,7 +54,7 @@ namespace ProjectAccessComponent
         public async Task<IEnumerable<ProjectResponse>> OpenProjects()
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\Projects.db"))
+            using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
