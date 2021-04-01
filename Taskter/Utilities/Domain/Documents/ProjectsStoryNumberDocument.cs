@@ -1,4 +1,6 @@
-﻿using LiteDbDriver;
+﻿using LiteDB;
+using LiteDbDriver;
+using System;
 
 namespace Utilities.Taskter.Domain.Documents
 {
@@ -23,5 +25,9 @@ namespace Utilities.Taskter.Domain.Documents
         /// The number of active stories in the project.
         /// </summary>
         public int NumberOfActiveStories { get; set; } = 0;
+
+        [BsonCtor]
+        public ProjectsStoryNumberDocument() : base(ObjectId.NewObjectId(), DateTime.UtcNow, null) { }
+
     }
 }

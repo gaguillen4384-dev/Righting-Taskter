@@ -1,4 +1,5 @@
-﻿using LiteDbDriver;
+﻿using LiteDB;
+using LiteDbDriver;
 using System;
 
 namespace ProjectAccessComponent
@@ -8,16 +9,20 @@ namespace ProjectAccessComponent
         /// <summary>
         /// The name of the project.
         /// </summary>
-        public string Name = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Last date the project got worked on.
         /// </summary>
-        public DateTime LastWorkedOn = DateTime.UtcNow;
+        public DateTime LastWorkedOn { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// The project acronym, used as an identifier.
         /// </summary>
-        public string ProjectAcronym = string.Empty;
+        public string ProjectAcronym { get; set; } = string.Empty;
+        
+        [BsonCtor]
+        public ProjectDocument() :base(ObjectId.NewObjectId(), DateTime.UtcNow, null) { }
+
     }
 }

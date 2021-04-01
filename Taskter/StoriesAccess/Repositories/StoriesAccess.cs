@@ -26,7 +26,7 @@ namespace StoriesAccessComponent
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
                 // Index Document on name property
-                storiesCollection.EnsureIndex(storyx => storyx._id);
+                storiesCollection.EnsureIndex(storyx => storyx.ID);
 
                 // Map from request to story
                 var story = StoriesRepositoryMapper.MapCreationRequestToStory(storyRequest);
@@ -37,7 +37,7 @@ namespace StoriesAccessComponent
                 story.StoryNumber = storyNumber;
                 storiesCollection.Insert(story);
 
-                await UpdateStoryReferences(projectAcronym, storyNumber, story._id);
+                await UpdateStoryReferences(projectAcronym, storyNumber, story.ID);
 
                 return StoriesRepositoryMapper.MapToStoryResponse(story, projectAcronym);
             }
@@ -350,7 +350,7 @@ namespace StoriesAccessComponent
                 // This needs to be generic in a driver.
                 var result = storiesReferenceCollection.FindOne(Query.EQ("StoryId", storyId));
 
-                return result._id.ToString();
+                return result.ID.ToString();
             }
         }
 

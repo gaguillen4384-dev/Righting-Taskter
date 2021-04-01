@@ -1,5 +1,6 @@
 ﻿using LiteDB;
 using LiteDbDriver;
+using System;
 
 namespace Utilities.Taskter.Domain.Documents
 {
@@ -27,5 +28,10 @@ namespace Utilities.Taskter.Domain.Documents
         /// The number of the story in the project its on. Sequential.
         /// </summary>
         public int StoryNumber { get; set; } = 0;
+
+        [BsonCtor]
+        public StoryReferenceDocument() : base(ObjectId.NewObjectId(), DateTime.UtcNow, null) { }
+
+        //TODO: needs a BSONCTOR
     }
 }

@@ -1,5 +1,5 @@
-﻿using ProjectAccessComponent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.ProjectAccessTest
 {
@@ -7,11 +7,11 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
     /// This interface establishes the a builder pattern, where each function in its concrete has to have 'this.'
     /// Also each function is a void becuase its going to use its self as a reference.
     /// </summary>
-    public interface IProjectBuilder
+    public interface IProjectCreationBuilder
     {
-        IProjectBuilder BuildProjectWithName(string name);
+        IProjectCreationBuilder BuildProjectWithName(string name);
 
-        IProjectBuilder BuildProjectWithProjectAcronym(string projectAcronym);
+        IProjectCreationBuilder BuildProjectWithProjectAcronym(string projectAcronym);
 
         // TODO: maybe own projectdetails builder?
         void BuildProjectWithNumberOfActiveStories(int numberOfActiveStories);
@@ -19,8 +19,8 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
         // TODO: maybe own projectdetails builder?
         void BuildProjectWithNumberOfCompletedStories(int numberOfCompletedStories);
 
-        IEnumerable<ProjectDocument> BuildManyProjects(int numberOfProjects);
+        IEnumerable<ProjectCreationRequest> BuildManyProjects(int numberOfProjects);
 
-        ProjectDocument Build();
+        ProjectCreationRequest Build();
     }
 }

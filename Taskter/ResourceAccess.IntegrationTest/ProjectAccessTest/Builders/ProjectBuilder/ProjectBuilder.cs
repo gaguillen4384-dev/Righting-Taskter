@@ -1,18 +1,25 @@
-﻿using ProjectAccessComponent;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.ProjectAccessTest
 {
-    public class ProjectBuilder : IProjectBuilder
+    public class ProjectBuilder : IProjectCreationBuilder
     {
-        private List<ProjectDocument> _projects;
-        private ProjectDocument _project;
+        private List<ProjectCreationRequest> _projects;
+        private ProjectCreationRequest _project;
 
-
-        public IEnumerable<ProjectDocument> BuildManyProjects(int numberOfProjects)
+        // NEED TO INSTANTIATE THE BUILDER PROPERTIES BEFORE THEY GET USED
+        public ProjectBuilder() 
         {
-            for (int i = 0; i <= numberOfProjects; i++) 
+            _project = new ProjectCreationRequest();
+            _projects = new List<ProjectCreationRequest>();
+        }
+
+
+        public IEnumerable<ProjectCreationRequest> BuildManyProjects(int numberOfProjects)
+        {
+            for (int i = 0; i < numberOfProjects; i++) 
             {
                 _projects.Add(new ProjectBuilder()
                     .BuildProjectWithProjectAcronym($"PJT{i}")
@@ -23,13 +30,13 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
             return _projects;
         }
 
-        public IProjectBuilder BuildProjectWithName(string name)
+        public IProjectCreationBuilder BuildProjectWithName(string name)
         {
             this._project.Name = name;
             return this;
         }
 
-        public IProjectBuilder BuildProjectWithProjectAcronym(string projectAcronym)
+        public IProjectCreationBuilder BuildProjectWithProjectAcronym(string projectAcronym)
         {
             this._project.ProjectAcronym = projectAcronym;
             return this;
@@ -47,7 +54,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
             throw new NotImplementedException();
         }
 
-        public ProjectDocument Build()
+        public ProjectCreationRequest Build()
         {
             return _project;
         }

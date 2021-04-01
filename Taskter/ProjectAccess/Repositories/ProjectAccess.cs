@@ -14,11 +14,18 @@ namespace ProjectAccessComponent
     // TODO: if users become a thing then this needs change.
     public class ProjectAccess : IProjectAccess
     {
-        private ProjectResourceConfig _projectConnection;
+        private ProjectResource _projectConnection;
+        private ProjectNumbersResource _projectNumbersConnection;
+        private StoryReferenceResource _storyReferenceResource;
 
-        public ProjectAccess(IOptions<ProjectResourceConfig> projectConnection) 
+        public ProjectAccess(IOptions<ProjectResource> projectConnection,
+            IOptions<ProjectNumbersResource> projectNumbersConnection,
+            IOptions<StoryReferenceResource> storyReferenceResource) 
         {
+            // This needs to be full path to open .db file
             _projectConnection = projectConnection.Value;
+            _projectNumbersConnection = projectNumbersConnection.Value;
+            _storyReferenceResource = storyReferenceResource.Value;
         }
         /// <summary>
         /// Concrete implementation of <see cref="IProjectAccess.StartProject(ProjectCreationRequest)"/>
@@ -32,14 +39,14 @@ namespace ProjectAccessComponent
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
 
                 // Unlike stories, project own their own reference.
-                projectsCollection.EnsureIndex(projectx => projectx.ProjectAcronym);
+                projectsCollection.EnsureIndex(project => project.ProjectAcronym);
 
                 var projectDocument = ProjectRepositoryMapper.MapToProjectDocumentFromCreationRequest(projectRequest);
 
                 // TODO: what to do if it fails?
                 projectsCollection.Insert(projectDocument);
                 var projectDetailsDocument = await CreateProjectDetails(projectDocument.ProjectAcronym);
-                await CreateProjectReference(projectDocument.ProjectAcronym, projectDocument._id.ToString());
+                await CreateProjectReference(projectDocument.ProjectAcronym, projectDocument.ID.ToString());
 
                 var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
 
@@ -102,7 +109,7 @@ namespace ProjectAccessComponent
 
                 var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
-                return projectsCollection.Delete(project._id);
+                return projectsCollection.Delete(project.ID);
             }
         }
 
@@ -127,7 +134,7 @@ namespace ProjectAccessComponent
                 ProjectNumbersDetails projectDetails = new EmptyProjectNumbersDetails();
                 if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest)) 
                 {
-                    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project._id.ToString());
+                    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.ID.ToString());
                     // return a null object if failed to update.
                     if (projectDetails is EmptyProjectNumbersDetails)
                         return ProjectRepositoryMapper.MapToEmptyProjectResponse();
@@ -152,7 +159,7 @@ namespace ProjectAccessComponent
 
         #endregion
 
-        #region StoryNumber Access
+        #region ProjectsStory Access
 
         /// <summary>
         /// This creates a refence that stores the last number of the project.
@@ -160,7 +167,7 @@ namespace ProjectAccessComponent
         private async Task<ProjectsStoryNumberDocument> CreateProjectDetails(string projectAcronym)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
@@ -182,7 +189,7 @@ namespace ProjectAccessComponent
         private async Task<ProjectNumbersDetails> GetProjectNumberDetails(string projectAcronym) 
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
@@ -202,7 +209,7 @@ namespace ProjectAccessComponent
         private async Task<IEnumerable<ProjectNumbersDetails>> GetProjectsNumbersDetails()
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
@@ -247,7 +254,7 @@ namespace ProjectAccessComponent
         private async Task CreateProjectReference(string projectAcronym, string projectId) 
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
@@ -274,7 +281,7 @@ namespace ProjectAccessComponent
         private async Task UpdateProjectStoriesReferenceAcronym(string updateProjectAcronym, string projectId)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
