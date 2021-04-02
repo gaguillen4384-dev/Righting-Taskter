@@ -31,7 +31,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taskter.Domain", "Utilities
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteDbDriver", "Utilities\LiteDbDriver\LiteDbDriver\LiteDbDriver.csproj", "{76051C1C-4C52-4723-B512-D88BB500AA76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceAccess.IntegrationTest", "ResourceAccess.IntegrationTest\ResourceAccess.IntegrationTest.csproj", "{373AE553-0D92-4C81-8B2D-6910768A8F36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceAccess.IntegrationTest", "ResourceAccess.IntegrationTest\ResourceAccess.IntegrationTest.csproj", "{373AE553-0D92-4C81-8B2D-6910768A8F36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{691B508F-A379-4D5F-A245-F4BEBC9C7013}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -24,7 +24,7 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Deletes a specific project and all the references.
         /// </summary>
-        Task<bool> RemoveStory(string projectAcronym);
+        Task<bool> RemoveProject(string projectAcronym);
 
         /// <summary>
         /// Update a specific project and its references only if projectAcronym changed.

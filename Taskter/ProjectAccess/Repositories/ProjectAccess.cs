@@ -32,7 +32,6 @@ namespace ProjectAccessComponent
         /// </summary>
         public async Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest)
         {
-            // @"\Projects.db"
             using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
@@ -60,7 +59,6 @@ namespace ProjectAccessComponent
         /// </summary>
         public async Task<IEnumerable<ProjectResponse>> OpenProjects()
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
@@ -80,8 +78,7 @@ namespace ProjectAccessComponent
         /// </summary>
         public async Task<ProjectResponse> OpenProject(string projectAcronym)
         {
-            /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\Projects.db"))
+            using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
@@ -97,12 +94,12 @@ namespace ProjectAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectAccess.RemoveStory(string)"/>
+        /// Concrete implementation of <see cref="IProjectAccess.RemoveProject(string)"/>
         /// </summary>
-        public async Task<bool> RemoveStory(string projectAcronym)
+        public async Task<bool> RemoveProject(string projectAcronym)
         {
-            /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\Projects.db"))
+            /// TODO: Need to figure out how to delete each reference and what does that mean for the References.
+            using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
@@ -119,7 +116,7 @@ namespace ProjectAccessComponent
         public async Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym)
         {
             // UPDATE reference, storynumbers, projectdetail if acronym changes
-            using (var db = new LiteDatabase(@"\Projects.db"))
+            using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
@@ -224,7 +221,7 @@ namespace ProjectAccessComponent
         private async Task<ProjectNumbersDetails> UpdateProjectNumbersAcronym(string projectAcronym, string updatedProjectAcronym) 
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");

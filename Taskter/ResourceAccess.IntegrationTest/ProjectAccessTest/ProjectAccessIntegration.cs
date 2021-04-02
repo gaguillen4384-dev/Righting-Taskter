@@ -56,8 +56,8 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
         public async void ProjectAccess_CreateASingleProject()
         {
             // Arrange
-            var projectToCreate = _projectBuilder.BuildProjectWithName("TestProject")
-                                            .BuildProjectWithProjectAcronym("PJTO")
+            var projectToCreate = _projectBuilder.BuildProjectWithName(NaturalValues.ProjectNameToBeUsed)
+                                            .BuildProjectWithProjectAcronym(NaturalValues.ProjectAcronymToBeUsed)
                                             .Build();
             // Act
             var result = await _projectAccess.StartProject(projectToCreate);
@@ -71,8 +71,26 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
             _fixture.Dispose();
         }
 
-        //TODO: Create project test where validating properties.
-        // Example of specific properties: project.As<ProjectResponse>().[property].Should().Be([w.e natural value]);
+        /// <summary>
+        /// Validates the project access getting ALL projects.
+        /// </summary>
+        [Fact]
+        public async void ProjectAccess_CreateASingleProject_WithProperName()
+        {
+            // Arrange
+            var projectToCreate = _projectBuilder.BuildProjectWithName(NaturalValues.ProjectNameToBeUsed)
+                                            .BuildProjectWithProjectAcronym(NaturalValues.ProjectAcronymToBeUsed)
+                                            .Build();
+            // Act
+            var result = await _projectAccess.StartProject(projectToCreate);
+
+            // Assert - descriptive
+            result.As<ProjectResponse>().Name.Should().Be(NaturalValues.ProjectNameToBeUsed);
+            result.As<ProjectResponse>().ProjectAcronym.Should().Be(NaturalValues.ProjectAcronymToBeUsed);
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
         #endregion
     }
 }
