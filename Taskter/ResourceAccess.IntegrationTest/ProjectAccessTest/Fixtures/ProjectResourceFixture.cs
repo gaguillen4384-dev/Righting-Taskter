@@ -77,7 +77,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
                     projectsCollection.Insert(projectDocument);
                 }
 
-                var projects = projectsCollection.Find(Query.All());
+                var projects = db.GetCollection<ProjectDocument>("Projects");
             }
         }
 

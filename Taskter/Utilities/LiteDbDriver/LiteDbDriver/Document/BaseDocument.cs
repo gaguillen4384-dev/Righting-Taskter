@@ -6,9 +6,9 @@ namespace LiteDbDriver
     public class BaseDocument
     {
         /// <summary>
-        /// The unique identifier for the object. Can only be retrieved, not set.
+        /// The unique identifier for the object.
         /// </summary>
-        public ObjectId ID { get; } = ObjectId.NewObjectId();
+        public ObjectId Id { get; set; } = ObjectId.NewObjectId();
 
         /// <summary>
         /// The date the object got created.
@@ -21,12 +21,7 @@ namespace LiteDbDriver
         public DateTime? DateUpdated { get; set; } = null;
 
         [BsonCtor]
-        public BaseDocument(ObjectId _id, DateTime dateCreated, DateTime? dateUpdated)
-        {
-            ID = _id;
-            DateCreated = dateCreated;
-            DateUpdated = dateUpdated;
-        }
+        public BaseDocument() {}
     }
 }
 

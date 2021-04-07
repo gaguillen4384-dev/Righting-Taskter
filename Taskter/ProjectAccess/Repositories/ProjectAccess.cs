@@ -45,7 +45,7 @@ namespace ProjectAccessComponent
                 // TODO: what to do if it fails?
                 projectsCollection.Insert(projectDocument);
                 var projectDetailsDocument = await CreateProjectDetails(projectDocument.ProjectAcronym);
-                await CreateProjectReference(projectDocument.ProjectAcronym, projectDocument.ID.ToString());
+                await CreateProjectReference(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
 
                 var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
 
@@ -104,9 +104,14 @@ namespace ProjectAccessComponent
                 // this creates or gets collection
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
 
+                //var project = projectsCollection.FindOne(projectToFind => projectToFind.ProjectAcronym == projectAcronym);
                 var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
-                return projectsCollection.Delete(project.ID);
+                await RemoveProjectNumberDetails(projectAcronym);
+
+                //TODO: a Remove StoryReference where the isdeleted flag gets set for all storyReferences.
+
+                return projectsCollection.Delete(project.Id);
             }
         }
 
@@ -131,7 +136,7 @@ namespace ProjectAccessComponent
                 ProjectNumbersDetails projectDetails = new EmptyProjectNumbersDetails();
                 if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest)) 
                 {
-                    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.ID.ToString());
+                    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
                     // return a null object if failed to update.
                     if (projectDetails is EmptyProjectNumbersDetails)
                         return ProjectRepositoryMapper.MapToEmptyProjectResponse();
@@ -239,6 +244,20 @@ namespace ProjectAccessComponent
                 return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectNumber);
             }
 
+        }
+
+        private async Task RemoveProjectNumberDetails(string projectAcronym)
+        {
+            /// TODO: the path got to be configure for each db.
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
+            {
+                // this creates or gets collection
+                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+
+                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                projectNumberCollection.Delete(projectNumber.Id);
+            }
         }
 
         #endregion

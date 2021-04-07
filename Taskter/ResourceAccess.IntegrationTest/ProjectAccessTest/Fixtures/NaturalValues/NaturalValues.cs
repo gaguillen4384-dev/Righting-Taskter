@@ -6,7 +6,7 @@
 
         public static string ProjectNameToBeUsed = "TestProject";
 
-        public static string ProjectAcronymToBeUsed = "PJTO";
+        public static string ProjectAcronymToBeUsed = "PJT0";
 
         public static string AppsettingsLocation = @"C:\WorkSpace\Righting-Taskter\Taskter\ResourceAccess.IntegrationTest\appsettings.json";
 

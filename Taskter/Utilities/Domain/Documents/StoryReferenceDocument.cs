@@ -1,6 +1,5 @@
 ﻿using LiteDB;
 using LiteDbDriver;
-using System;
 
 namespace Utilities.Taskter.Domain.Documents
 {
@@ -29,8 +28,14 @@ namespace Utilities.Taskter.Domain.Documents
         /// </summary>
         public int StoryNumber { get; set; } = 0;
 
+        /// <summary>
+        /// Flag Indicating if its meant to be deleted only set by projectAccess;
+        /// </summary>
+        public bool IsDeleted { get; set; } = false;
+        
+
         [BsonCtor]
-        public StoryReferenceDocument() : base(ObjectId.NewObjectId(), DateTime.UtcNow, null) { }
+        public StoryReferenceDocument() : base() { }
 
         //TODO: needs a BSONCTOR
     }

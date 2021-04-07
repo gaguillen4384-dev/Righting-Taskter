@@ -16,6 +16,9 @@ namespace ProjectAccessComponent
         /// </summary>
         public static ProjectResponse MapToProjectResponse(ProjectDocument project, ProjectNumbersDetails projectDetails) 
         {
+            if (project == null)
+                return new EmptyProjectResponse();
+
             return new ProjectResponse()
             {
                 Name = project.Name,

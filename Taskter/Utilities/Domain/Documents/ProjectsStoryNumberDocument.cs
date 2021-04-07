@@ -27,7 +27,7 @@ namespace Utilities.Taskter.Domain.Documents
         public int NumberOfActiveStories { get; set; } = 0;
 
         [BsonCtor]
-        public ProjectsStoryNumberDocument() : base(ObjectId.NewObjectId(), DateTime.UtcNow, null) { }
+        public ProjectsStoryNumberDocument() : base() { }
 
     }
 }

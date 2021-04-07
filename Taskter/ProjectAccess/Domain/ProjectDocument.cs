@@ -22,7 +22,7 @@ namespace ProjectAccessComponent
         public string ProjectAcronym { get; set; } = string.Empty;
         
         [BsonCtor]
-        public ProjectDocument() :base(ObjectId.NewObjectId(), DateTime.UtcNow, null) { }
+        public ProjectDocument() : base() { }
 
     }
 }
