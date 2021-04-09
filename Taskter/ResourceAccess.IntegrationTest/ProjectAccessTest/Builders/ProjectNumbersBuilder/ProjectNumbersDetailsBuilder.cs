@@ -12,15 +12,15 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
             _details = new ProjectsStoryNumberDocument();
         }
 
-        public ProjectsStoryNumberDocument Build()
-        {
-            return _details;
-        }
-
         public IProjectNumbersBuilder BuildProjectDetailsWithAcronym(string acronym)
         {
             this._details.ProjectAcronym = acronym;
             return this;
+        }
+
+        public ProjectsStoryNumberDocument Build()
+        {
+            return _details;
         }
     }
 }

@@ -133,8 +133,13 @@ namespace ProjectAccessComponent
 
                 var updated = projectsCollection.Update(project);
 
+                // return a null object if failed to update.
+                if (!updated)
+                    return ProjectRepositoryMapper.MapToEmptyProjectResponse();
+
                 ProjectNumbersDetails projectDetails = new EmptyProjectNumbersDetails();
-                if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest)) 
+                // TODO: If acronym is the same no changes.
+                if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
                 {
                     projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
                     // return a null object if failed to update.
@@ -142,12 +147,8 @@ namespace ProjectAccessComponent
                         return ProjectRepositoryMapper.MapToEmptyProjectResponse();
                 }
 
-                // return a null object if failed to update.
-                if (!updated)
-                    return ProjectRepositoryMapper.MapToEmptyProjectResponse();
-
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectResponse(project, projectDetails);
+                return ProjectRepositoryMapper.MapToProjectResponse(projectUpdated, projectDetails);
             }
         }
 

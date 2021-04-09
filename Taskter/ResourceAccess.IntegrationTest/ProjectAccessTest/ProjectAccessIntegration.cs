@@ -12,6 +12,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
         private readonly IServiceProvider _serviceProvider;
         private readonly IProjectAccess _projectAccess;
         private readonly IProjectCreationBuilder _projectBuilder;
+        private readonly IProjectUpdateBuilder _updateBuilder;
         private readonly ProjectResourceFixture _fixture;
 
         public ProjectAccessIntegration(ProjectResourceFixture fixture) 
@@ -23,9 +24,11 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
 
             // Test components
             _projectBuilder = _serviceProvider.GetService<IProjectCreationBuilder>();
+            _updateBuilder = _serviceProvider.GetService<IProjectUpdateBuilder>();
         }
 
         #region Open Projects
+        
         /// <summary>
         /// Validates the project access getting ALL projects.
         /// </summary>
@@ -47,6 +50,25 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
         }
 
         // TODO: GET SINGLE PROJECT.
+        /// <summary>
+        /// Validates the project access getting single project.
+        /// </summary>
+        [Fact]
+        public async void ProjectAccess_GetSingleAvailableProjects_Success()
+        {
+            // Arrange
+            _fixture.PopulateProjectCollection(NaturalValues.NumberOfProjectsToBeCreated);
+
+            // Act
+            var result = await _projectAccess.OpenProject(NaturalValues.ProjectAcronymToBeUsed);
+
+            // Assert - descriptive
+            result.Should().BeOfType<ProjectResponse>();
+            result.As<ProjectResponse>().ProjectAcronym.Should().Be(NaturalValues.ProjectAcronymToBeUsed);
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
 
         #endregion
 
@@ -58,7 +80,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
         public async void ProjectAccess_CreateASingleProject_Success()
         {
             // Arrange
-            var projectToCreate = _projectBuilder.BuildProjectWithName(NaturalValues.ProjectNameToBeUsed)
+            var projectToCreate = _projectBuilder.BuildProjectWithName(NaturalValues.ProjectNameToBeUsedForCreation)
                                             .BuildProjectWithProjectAcronym(NaturalValues.ProjectAcronymToBeUsed)
                                             .Build();
             // Act
@@ -80,14 +102,14 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
         public async void ProjectAccess_CreateASingleProject_WithProperNameAndAcronym_Success()
         {
             // Arrange
-            var projectToCreate = _projectBuilder.BuildProjectWithName(NaturalValues.ProjectNameToBeUsed)
+            var projectToCreate = _projectBuilder.BuildProjectWithName(NaturalValues.ProjectNameToBeUsedForCreation)
                                             .BuildProjectWithProjectAcronym(NaturalValues.ProjectAcronymToBeUsed)
                                             .Build();
             // Act
             var result = await _projectAccess.StartProject(projectToCreate);
 
             // Assert - descriptive
-            result.As<ProjectResponse>().Name.Should().Be(NaturalValues.ProjectNameToBeUsed);
+            result.As<ProjectResponse>().Name.Should().Be(NaturalValues.ProjectNameToBeUsedForCreation);
             result.As<ProjectResponse>().ProjectAcronym.Should().Be(NaturalValues.ProjectAcronymToBeUsed);
 
             // Teardown Needs to happen per test so other tests are not affected.
@@ -138,7 +160,50 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
 
         #region Update Projects
 
-        //TODO: UPDATE PROJECTS
+        /// <summary>
+        /// Validates the project access Updating a project.
+        /// </summary>
+        [Fact]
+        public async void ProjectAccess_UpdateSingleProjectName_Success()
+        {
+            // Arrange
+            _fixture.PopulateProjectCollection(NaturalValues.NumberOfProjectsToBeCreated);
+            
+            var projectToCreate = _updateBuilder.BuildProjectUpdateRequestWithName(NaturalValues.ProjectNameToBeUsedForUpdate)
+                                            .Build();
+
+            // Act
+            var result = await _projectAccess.UpdateProject(projectToCreate, NaturalValues.ProjectAcronymToBeUsed);
+
+            // Assert - descriptive
+            result.As<ProjectResponse>().Name.Should().NotBe(NaturalValues.ProjectNameToBeUsedForCreation);
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
+
+        /// <summary>
+        /// Validates the project access Updating a project.
+        /// </summary>
+        [Fact]
+        public async void ProjectAccess_UpdateSingleProjectAcronym_Success()
+        {
+            // Arrange
+            _fixture.PopulateProjectCollection(NaturalValues.NumberOfProjectsToBeCreated);
+
+            var projectToCreate = _updateBuilder.BuildProjectUpdateRequestWithAcronym(NaturalValues.ProjectAcronymToBeUsedForUpdate)
+                                            .Build();
+
+            // Act
+            var result = await _projectAccess.UpdateProject(projectToCreate, NaturalValues.ProjectAcronymToBeUsed);
+
+            // Assert - descriptive
+            result.As<ProjectResponse>().Name.Should().NotBe(NaturalValues.ProjectAcronymToBeUsed);
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
+
 
         #endregion
     }

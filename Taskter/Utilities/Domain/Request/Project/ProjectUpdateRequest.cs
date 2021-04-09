@@ -7,11 +7,11 @@ namespace Utilities.Taskter.Domain
         /// <summary>
         /// The name of the project.
         /// </summary>
-        public string Name = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// The project acronym, used as an identifier.
         /// </summary>
-        public string ProjectAcronym = string.Empty;
+        public string ProjectAcronym { get; set; } = string.Empty;
     }
 }

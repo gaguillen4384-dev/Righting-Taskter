@@ -37,6 +37,5 @@ namespace Utilities.Taskter.Domain.Documents
         [BsonCtor]
         public StoryReferenceDocument() : base() { }
 
-        //TODO: needs a BSONCTOR
     }
 }

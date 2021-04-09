@@ -49,6 +49,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTest
             // TEST SERVICES
             services.AddTransient<IProjectCreationBuilder, ProjectBuilder>();
             services.AddTransient<IProjectNumbersBuilder, ProjectNumbersDetailsBuilder>();
+            services.AddTransient<IProjectUpdateBuilder, ProjectUpdateBuilder>();
 
             ServiceProvider = services.BuildServiceProvider();
         }

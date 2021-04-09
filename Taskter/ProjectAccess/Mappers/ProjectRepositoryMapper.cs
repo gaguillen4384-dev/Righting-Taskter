@@ -59,7 +59,7 @@ namespace ProjectAccessComponent
         {
             // map from the original project.
             project.Name = IsProjectNameUpdated(projectRequest) ? projectRequest.Name : project.Name;
-            project.ProjectAcronym = IsProjectAcronymUpdated(projectRequest) ? projectRequest.ProjectAcronym : project.ProjectAcronym;
+            project.ProjectAcronym = IsProjectAcronymUpdated(projectRequest, project.ProjectAcronym) ? projectRequest.ProjectAcronym : project.ProjectAcronym;
             project.DateUpdated = DateTime.UtcNow;
             project.LastWorkedOn = DateTime.UtcNow;
 
@@ -70,7 +70,7 @@ namespace ProjectAccessComponent
         {
             // map from the original project.
             project.Name = IsProjectNameUpdated(projectRequest) ? projectRequest.Name : project.Name;
-            project.ProjectAcronym = IsProjectAcronymUpdated(projectRequest) ? projectRequest.ProjectAcronym : project.ProjectAcronym;
+            project.ProjectAcronym = IsProjectAcronymUpdated(projectRequest, project.ProjectAcronym) ? projectRequest.ProjectAcronym : project.ProjectAcronym;
             project.DateUpdated = DateTime.UtcNow;
             project.LastWorkedOn = DateTime.UtcNow;
 
@@ -90,9 +90,15 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Assumes that the request has a projectAcronym if desired changed.
         /// </summary>
-        public static bool IsProjectAcronymUpdated(ProjectUpdateRequest projectRequest)
+        public static bool IsProjectAcronymUpdated(ProjectUpdateRequest projectRequest, string currentProjectAcronym)
         {
-            return !string.IsNullOrWhiteSpace(projectRequest.ProjectAcronym);
+            if (string.IsNullOrWhiteSpace(projectRequest.ProjectAcronym))
+                return false;
+
+            if (projectRequest.ProjectAcronym.Equals(currentProjectAcronym))
+                return false;
+
+            return true;
         }
 
         #region private methods
