@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Utilities.Taskter.Domain;
 
-namespace ResourceAccess.IntegrationTest.ProjectAccessTest
+namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
     public class ProjectBuilder : IProjectCreationBuilder
     {

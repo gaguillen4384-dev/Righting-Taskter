@@ -1,4 +1,4 @@
-﻿namespace ResourceAccess.IntegrationTest.ProjectAccessTest
+﻿namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
     public static class NaturalValues
     {
@@ -14,7 +14,7 @@
 
         public static string ProjectAcronymToBeUsed = "PJT0";
 
-        public static string AppsettingsLocation = @"C:\WorkSpace\Righting-Taskter\Taskter\ResourceAccess.IntegrationTest\appsettings.json";
+        public static string AppsettingsLocation = @"C:\WorkSpace\Righting-Taskter\Taskter\ResourceAccess.IntegrationTest\ProjectAccessTests\appsettings.json";
 
     }
 }

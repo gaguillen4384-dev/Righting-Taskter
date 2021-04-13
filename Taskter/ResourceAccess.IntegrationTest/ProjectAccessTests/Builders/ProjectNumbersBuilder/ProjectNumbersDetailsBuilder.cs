@@ -1,6 +1,6 @@
 ﻿using Utilities.Taskter.Domain.Documents;
 
-namespace ResourceAccess.IntegrationTest.ProjectAccessTest
+namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
     public class ProjectNumbersDetailsBuilder : IProjectNumbersBuilder
     {

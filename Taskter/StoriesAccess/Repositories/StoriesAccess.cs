@@ -164,6 +164,7 @@ namespace StoriesAccessComponent
 
         #endregion
 
+        //TODO: Make this its own access
         #region NumbersAccess
 
         /// <summary>
@@ -226,6 +227,7 @@ namespace StoriesAccessComponent
 
         #endregion
 
+        //TODO: Make this its own access
         #region StoryReferenceAccess
 
         /// <summary>

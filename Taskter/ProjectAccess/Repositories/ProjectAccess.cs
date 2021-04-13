@@ -162,6 +162,7 @@ namespace ProjectAccessComponent
 
         #endregion
 
+        //TODO: Make this its own access
         #region ProjectsStory Access
 
         /// <summary>
@@ -263,6 +264,7 @@ namespace ProjectAccessComponent
 
         #endregion
 
+        //TODO: Make this its own access
         #region StoryReferenceAccess
 
         /// <summary>

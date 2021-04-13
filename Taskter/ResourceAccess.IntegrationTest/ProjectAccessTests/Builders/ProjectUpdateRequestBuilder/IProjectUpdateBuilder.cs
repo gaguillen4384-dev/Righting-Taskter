@@ -1,6 +1,6 @@
 ﻿using Utilities.Taskter.Domain;
 
-namespace ResourceAccess.IntegrationTest.ProjectAccessTest
+namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
     public interface IProjectUpdateBuilder
     {

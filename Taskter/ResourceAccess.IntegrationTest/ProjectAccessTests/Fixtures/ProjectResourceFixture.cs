@@ -9,12 +9,10 @@ using System.IO;
 using Utilities.Taskter.Domain;
 using Utilities.Taskter.Domain.Documents;
 
-namespace ResourceAccess.IntegrationTest.ProjectAccessTest
+namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
     public class ProjectResourceFixture : IDisposable
-    {
-        // TODO: Figure out the IOptions and where the sys grabbing it from.
-        
+    {     
         public IServiceProvider ServiceProvider { get; set; }
         private readonly IConfiguration _configuration;
 

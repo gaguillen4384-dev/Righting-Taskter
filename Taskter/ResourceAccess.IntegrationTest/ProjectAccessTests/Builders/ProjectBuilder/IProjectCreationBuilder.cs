@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Utilities.Taskter.Domain;
 
-namespace ResourceAccess.IntegrationTest.ProjectAccessTest
+namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
     /// <summary>
     /// This interface establishes the a builder pattern, where each function in its concrete has to have 'this.'

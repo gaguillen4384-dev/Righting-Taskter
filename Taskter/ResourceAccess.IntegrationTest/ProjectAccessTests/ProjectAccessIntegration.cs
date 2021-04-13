@@ -5,7 +5,7 @@ using System;
 using Utilities.Taskter.Domain;
 using Xunit;
 
-namespace ResourceAccess.IntegrationTest.ProjectAccessTest
+namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
     public class ProjectAccessIntegration : IClassFixture<ProjectResourceFixture>
     {
