@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectAccess\ProjectAccessComponent.csproj" />
+    <ProjectReference Include="..\StoriesAccess\StoriesAccessComponent.csproj" />
     <ProjectReference Include="..\Utilities\Domain\Taskter.Domain.csproj" />
     <ProjectReference Include="..\Utilities\LiteDbDriver\LiteDbDriver\LiteDbDriver.csproj" />
   </ItemGroup>

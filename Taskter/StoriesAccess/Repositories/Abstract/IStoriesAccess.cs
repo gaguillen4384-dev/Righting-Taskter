@@ -7,7 +7,6 @@ namespace StoriesAccessComponent
     /// <summary>
     /// Responsible for acting on the story resource.
     /// </summary>
-    // TODO: Make it more about Actions instead of CRUD
     public interface IStoriesAccess
     {
         /// <summary>

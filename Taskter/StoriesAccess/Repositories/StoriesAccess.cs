@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,27 @@ namespace StoriesAccessComponent
     // TODO: if users become a thing then this needs change.
     public class StoriesAccess : IStoriesAccess
     {
+        private StoriesResource _storiesConnection;
+        private ProjectNumbersResource _projectNumbersConnection;
+        private StoryReferenceResource _storyReferenceResource;
+
+        public StoriesAccess(IOptions<StoriesResource> storiesConnection,
+          IOptions<ProjectNumbersResource> projectNumbersConnection,
+          IOptions<StoryReferenceResource> storyReferenceResource)
+        {
+            // This needs to be full path to open .db file
+            _storiesConnection = storiesConnection.Value;
+            _projectNumbersConnection = projectNumbersConnection.Value;
+            _storyReferenceResource = storyReferenceResource.Value;
+        }
+
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.StartStory(string, StoryCreationRequest)">
         /// </summary>
         public async Task<StoryResponse> StartStory(string projectAcronym, StoryCreationRequest storyRequest)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\Stories.db"))
+            using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
@@ -63,7 +78,7 @@ namespace StoriesAccessComponent
         public async Task<StoryResponse> ReadStory(string projectAcronym, int storyNumber)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\Stories.db"))
+            using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
@@ -83,7 +98,7 @@ namespace StoriesAccessComponent
         /// </summary>
         public async Task<StoryResponse> UpdateStory(string projectAcronym, int storyNumber, StoryUpdateRequest storyRequest)
         {
-            using (var db = new LiteDatabase(@"\Stories.db"))
+            using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
@@ -116,7 +131,7 @@ namespace StoriesAccessComponent
         public async Task<bool> RemoveStory(string projectAcronym, int storyNumber)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\Stories.db"))
+            using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
@@ -148,7 +163,7 @@ namespace StoriesAccessComponent
         private async Task<IEnumerable<StoryDocument>> GetProjectStoriesFromStoryIds(IEnumerable<string> storiesID)
         {
             var listResult = new List<StoryDocument>();
-            using (var db = new LiteDatabase(@"\Stories.db"))
+            using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 foreach (var storyId in storiesID) 
                 {
@@ -173,7 +188,7 @@ namespace StoriesAccessComponent
         private async Task<int> GetLatestStoryNumberForProject(string projectAcronym)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
@@ -198,7 +213,7 @@ namespace StoriesAccessComponent
         private void UpdateStoryNumberForProject(string projectAcronym, bool isCompleted = false)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\ProjectsStoryNumber.db"))
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
@@ -236,7 +251,7 @@ namespace StoriesAccessComponent
         private async Task<string> GetSingleStoryId(string projectAcronym, int storyNumber)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
@@ -256,7 +271,7 @@ namespace StoriesAccessComponent
         private async Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
@@ -278,7 +293,7 @@ namespace StoriesAccessComponent
         private async Task<ObjectId> GetProjectId(string projectAcronym)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
@@ -297,7 +312,7 @@ namespace StoriesAccessComponent
         private void CreateReferenceForProjectAndStory(string projectAcronym, int storyNumber, ObjectId storyId, ObjectId projectId)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
@@ -324,7 +339,7 @@ namespace StoriesAccessComponent
         private bool DeleteReferenceForStory(string storyId)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
@@ -344,7 +359,7 @@ namespace StoriesAccessComponent
         private async Task<string> GetSingleStoryReferenceId(string storyId)
         {
             /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(@"\StoryReference.db"))
+            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
