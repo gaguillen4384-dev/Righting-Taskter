@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectAccessComponent;
+using ProjectsAccessComponent;
 using System;
 using Utilities.Taskter.Domain;
 using Xunit;

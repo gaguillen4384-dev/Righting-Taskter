@@ -2,7 +2,7 @@
 using LiteDbDriver;
 using System;
 
-namespace ProjectAccessComponent
+namespace ProjectsAccessComponent
 {
     public class ProjectDocument : BaseDocument
     {

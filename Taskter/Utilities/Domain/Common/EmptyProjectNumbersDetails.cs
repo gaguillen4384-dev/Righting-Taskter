@@ -1,6 +1,6 @@
 ﻿namespace Utilities.Taskter.Domain
 {
-    public class EmptyProjectNumbersDetails : ProjectNumbersDetails
+    public class EmptyProjectNumbersDetails : ProjectMetadataDetails
     {
         //TODO: null pattern.
     }

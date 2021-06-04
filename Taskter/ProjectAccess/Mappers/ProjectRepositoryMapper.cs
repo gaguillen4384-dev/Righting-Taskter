@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Utilities.Taskter.Domain;
 using Utilities.Taskter.Domain.Documents;
 
-namespace ProjectAccessComponent
+namespace ProjectsAccessComponent
 {
     /// <summary>
     /// Responsible for mapping Project domain to project reponses/request.
@@ -13,7 +13,7 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Maps a project document to a project response.
         /// </summary>
-        public static ProjectResponse MapToProjectResponse(ProjectDocument project, ProjectNumbersDetails projectDetails) 
+        public static ProjectResponse MapToProjectResponse(ProjectDocument project, ProjectMetadataDetails projectDetails) 
         {
             if (project == null)
                 return new EmptyProjectResponse();
@@ -30,7 +30,7 @@ namespace ProjectAccessComponent
             };
         }
 
-        public static IEnumerable<ProjectResponse> MapToProjectsResponse(IEnumerable<ProjectDocument> projects, IEnumerable<ProjectNumbersDetails> projectsDetails) 
+        public static IEnumerable<ProjectResponse> MapToProjectsResponse(IEnumerable<ProjectDocument> projects, IEnumerable<ProjectMetadataDetails> projectsDetails) 
         {
             // TODO: Get a dictionary where the projectAcronym are the same and then map them together
             // then use the MapToProjectResponse in a forloop
@@ -113,11 +113,11 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Uses nested loops based on projectAcronym.
         /// </summary>
-        private static Dictionary<ProjectDocument, ProjectNumbersDetails> CombineListsToDictionary(IEnumerable<ProjectDocument> projects, IEnumerable<ProjectNumbersDetails> projectsDetails) 
+        private static Dictionary<ProjectDocument, ProjectMetadataDetails> CombineListsToDictionary(IEnumerable<ProjectDocument> projects, IEnumerable<ProjectMetadataDetails> projectsDetails) 
         {
             var listOfProjects = new List<ProjectDocument>(projects);
-            var listOfProjectsDetails = new List<ProjectNumbersDetails>(projectsDetails);
-            var projectsDictionary = new Dictionary<ProjectDocument, ProjectNumbersDetails>();
+            var listOfProjectsDetails = new List<ProjectMetadataDetails>(projectsDetails);
+            var projectsDictionary = new Dictionary<ProjectDocument, ProjectMetadataDetails>();
 
             foreach (var project in listOfProjects) 
             {
@@ -138,9 +138,9 @@ namespace ProjectAccessComponent
         #endregion
 
         #region Project Numbers Details
-        public static ProjectNumbersDetails MapToProjectNumbersDetails(ProjectsStoryNumberDocument projectsStoryNumber) 
+        public static ProjectMetadataDetails MapToProjectNumbersDetails(ProjectMetadataDocument projectsStoryNumber) 
         {
-            return new ProjectNumbersDetails()
+            return new ProjectMetadataDetails()
             {
                 ProjectAcronym = projectsStoryNumber.ProjectAcronym,
                 LatestStoryNumber = projectsStoryNumber.LatestStoryNumber,
@@ -149,9 +149,9 @@ namespace ProjectAccessComponent
             };
         }
 
-        public static IEnumerable<ProjectNumbersDetails> MapToProjectsNumbersDetails(IEnumerable<ProjectsStoryNumberDocument> projectsDetails)
+        public static IEnumerable<ProjectMetadataDetails> MapToProjectsNumbersDetails(IEnumerable<ProjectMetadataDocument> projectsDetails)
         {
-            var listOfProjectsNumbers = new List<ProjectNumbersDetails>();
+            var listOfProjectsNumbers = new List<ProjectMetadataDetails>();
 
             foreach (var projectNumber in projectsDetails)
             {
@@ -162,7 +162,7 @@ namespace ProjectAccessComponent
         }
 
 
-        public static ProjectNumbersDetails MapToEmptyProjectNumbersDetails()
+        public static ProjectMetadataDetails MapToEmptyProjectNumbersDetails()
         {
             return new EmptyProjectNumbersDetails();
         }

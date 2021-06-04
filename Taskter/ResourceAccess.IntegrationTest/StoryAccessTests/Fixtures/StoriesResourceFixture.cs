@@ -30,12 +30,12 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
                 .GetSection(nameof(StoriesResource))
                 .Bind(options));
 
-            services.Configure<ProjectNumbersResource>(options => _configuration
-                .GetSection(nameof(ProjectNumbersResource))
+            services.Configure<ProjectsMetadataResource>(options => _configuration
+                .GetSection(nameof(ProjectsMetadataResource))
                 .Bind(options));
 
-            services.Configure<StoryReferenceResource>(options => _configuration
-                .GetSection(nameof(StoryReferenceResource))
+            services.Configure<StoriesReferencesResource>(options => _configuration
+                .GetSection(nameof(StoriesReferencesResource))
                 .Bind(options));
 
 
@@ -52,8 +52,8 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
             public void Dispose()
         {
             var storiesResource = ServiceProvider.GetService<IOptions<StoriesResource>>();
-            var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectNumbersResource>>();
-            var storyReferenceResource = ServiceProvider.GetService<IOptions<StoryReferenceResource>>();
+            var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
+            var storyReferenceResource = ServiceProvider.GetService<IOptions<StoriesReferencesResource>>();
             // delete DB from file system.
             File.Delete(storiesResource.Value.ConnectionString);
             File.Delete(projectDetailsResource.Value.ConnectionString);

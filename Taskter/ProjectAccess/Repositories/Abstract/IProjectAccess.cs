@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
 
-namespace ProjectAccessComponent
+namespace ProjectsAccessComponent
 { 
     public interface IProjectAccess
     {

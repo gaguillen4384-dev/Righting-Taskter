@@ -10,6 +10,6 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
     {
         IProjectNumbersBuilder BuildProjectDetailsWithAcronym(string acronym);
 
-        ProjectsStoryNumberDocument Build();
+        ProjectMetadataDocument Build();
     }
 }

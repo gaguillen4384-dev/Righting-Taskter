@@ -1,7 +1,7 @@
 ﻿using LiteDB;
 using LiteDbDriver;
 
-namespace Utilities.Taskter.Domain.Documents
+namespace StoriesReferencesAccessComponent
 {
     /// <summary>
     /// Responsible for keeping a relationship between stories and projects, using project acronym.

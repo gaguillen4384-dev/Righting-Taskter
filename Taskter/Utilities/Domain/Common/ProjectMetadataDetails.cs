@@ -1,10 +1,8 @@
-﻿using LiteDB;
-using LiteDbDriver;
-using System;
+﻿using System;
 
-namespace Utilities.Taskter.Domain.Documents
+namespace Utilities.Taskter.Domain
 {
-    public class ProjectsStoryNumberDocument : BaseDocument
+    public class ProjectMetadataDetails
     {
         /// <summary>
         /// The Acronym of the project.
@@ -26,8 +24,14 @@ namespace Utilities.Taskter.Domain.Documents
         /// </summary>
         public int NumberOfActiveStories { get; set; } = 0;
 
-        [BsonCtor]
-        public ProjectsStoryNumberDocument() : base() { }
+        /// <summary>
+        /// The date the object got created.
+        /// </summary>
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
+        /// <summary>
+        /// The date the object got updated.
+        /// </summary>
+        public DateTime? DateUpdated { get; set; } = null;
     }
 }

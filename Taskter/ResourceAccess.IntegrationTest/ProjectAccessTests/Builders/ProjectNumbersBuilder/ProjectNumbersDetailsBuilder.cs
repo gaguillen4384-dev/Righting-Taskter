@@ -5,11 +5,11 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
     public class ProjectNumbersDetailsBuilder : IProjectNumbersBuilder
     {
         // NEED TO INSTANTIATE THE BUILDER PROPERTIES BEFORE THEY GET USED
-        public ProjectsStoryNumberDocument _details;
+        public ProjectMetadataDocument _details;
 
         public ProjectNumbersDetailsBuilder()
         {
-            _details = new ProjectsStoryNumberDocument();
+            _details = new ProjectMetadataDocument();
         }
 
         public IProjectNumbersBuilder BuildProjectDetailsWithAcronym(string acronym)
@@ -18,7 +18,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
             return this;
         }
 
-        public ProjectsStoryNumberDocument Build()
+        public ProjectMetadataDocument Build()
         {
             return _details;
         }

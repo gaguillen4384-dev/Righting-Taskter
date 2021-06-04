@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
 using Utilities.Taskter.Domain.Documents;
 
-namespace ProjectAccessComponent
+namespace ProjectsAccessComponent
 {
     /// <summary>
     /// Concrete implementation of <see cref="IProjectAccess"/>
@@ -15,12 +15,12 @@ namespace ProjectAccessComponent
     public class ProjectAccess : IProjectAccess
     {
         private ProjectResource _projectConnection;
-        private ProjectNumbersResource _projectNumbersConnection;
-        private StoryReferenceResource _storyReferenceResource;
+        private ProjectsMetadataResource _projectNumbersConnection;
+        private StoriesReferencesResource _storyReferenceResource;
 
         public ProjectAccess(IOptions<ProjectResource> projectConnection,
-            IOptions<ProjectNumbersResource> projectNumbersConnection,
-            IOptions<StoryReferenceResource> storyReferenceResource) 
+            IOptions<ProjectsMetadataResource> projectNumbersConnection,
+            IOptions<StoriesReferencesResource> storyReferenceResource) 
         {
             // This needs to be full path to open .db file
             _projectConnection = projectConnection.Value;
@@ -44,8 +44,8 @@ namespace ProjectAccessComponent
 
                 // TODO: what to do if it fails?
                 projectsCollection.Insert(projectDocument);
-                var projectDetailsDocument = await CreateProjectDetails(projectDocument.ProjectAcronym);
-                await CreateProjectReference(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
+                var projectDetailsDocument = await CreateProjectMetadataDetails(projectDocument.ProjectAcronym);
+                await CreateStoryReferenceForProject(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
 
                 var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
 
@@ -66,7 +66,7 @@ namespace ProjectAccessComponent
 
                 var projects = projectsCollection.Find(Query.All());
 
-                var projectsDetails = await GetProjectsNumbersDetails();
+                var projectsDetails = await GetAllProjectsMetadataDetails();
 
                 // use mapper to return what its needed.
                 return ProjectRepositoryMapper.MapToProjectsResponse(projects, projectsDetails);
@@ -86,7 +86,7 @@ namespace ProjectAccessComponent
                 var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
                 // Get project numbers details
-                var projectDetails = await GetProjectNumberDetails(projectAcronym);
+                var projectDetails = await GetProjectMetadataDetails(projectAcronym);
 
                 // use mapper to return what its needed.
                 return ProjectRepositoryMapper.MapToProjectResponse(project, projectDetails);
@@ -107,9 +107,9 @@ namespace ProjectAccessComponent
                 //var project = projectsCollection.FindOne(projectToFind => projectToFind.ProjectAcronym == projectAcronym);
                 var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
-                await RemoveProjectNumberDetails(projectAcronym);
+                await RemoveProjectMetadataDetails(projectAcronym);
 
-                //TODO: a Remove StoryReference where the isdeleted flag gets set for all storyReferences.
+                //TODO: a Remove StoryReference where the isdeleted flag gets set for all StoriesReferences.
 
                 return projectsCollection.Delete(project.Id);
             }
@@ -137,7 +137,7 @@ namespace ProjectAccessComponent
                 if (!updated)
                     return ProjectRepositoryMapper.MapToEmptyProjectResponse();
 
-                ProjectNumbersDetails projectDetails = new EmptyProjectNumbersDetails();
+                ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
                 // TODO: If acronym is the same no changes.
                 if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
                 {
@@ -154,32 +154,32 @@ namespace ProjectAccessComponent
 
         #region Private Methods
 
-        private async Task<ProjectNumbersDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
+        private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
         {
-            await UpdateProjectStoriesReferenceAcronym(updatedProjectAcronym, projectId);
-            return await UpdateProjectNumbersAcronym(projectAcronym, updatedProjectAcronym);
+            await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
+            return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
         }
 
         #endregion
 
         //TODO: Make this its own access
-        #region ProjectsStory Access
+        #region ProjectMetadata Access
 
         /// <summary>
         /// This creates a refence that stores the last number of the project.
         /// </summary>
-        private async Task<ProjectsStoryNumberDocument> CreateProjectDetails(string projectAcronym)
+        private async Task<ProjectMetadataDocument> CreateProjectMetadataDetails(string projectAcronym)
         {
-            /// TODO: the path got to be configure for each db.
+
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // Index Document on name property
                 projectNumberCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
 
-                var projectNumber = new ProjectsStoryNumberDocument()
+                var projectNumber = new ProjectMetadataDocument()
                 {
                     ProjectAcronym = projectAcronym
                 };
@@ -190,13 +190,12 @@ namespace ProjectAccessComponent
             }
         }
 
-        private async Task<ProjectNumbersDetails> GetProjectNumberDetails(string projectAcronym) 
+        private async Task<ProjectMetadataDetails> GetProjectMetadataDetails(string projectAcronym) 
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // This needs to be generic in a driver.
                 var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
@@ -210,13 +209,12 @@ namespace ProjectAccessComponent
             }
         }
 
-        private async Task<IEnumerable<ProjectNumbersDetails>> GetProjectsNumbersDetails()
+        private async Task<IEnumerable<ProjectMetadataDetails>> GetAllProjectsMetadataDetails()
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectsCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectsCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // TODO: if users become a thing then this needs change.
                 var result = projectsCollection.Find(Query.All());
@@ -225,13 +223,12 @@ namespace ProjectAccessComponent
             }
         }
 
-        private async Task<ProjectNumbersDetails> UpdateProjectNumbersAcronym(string projectAcronym, string updatedProjectAcronym) 
+        private async Task<ProjectMetadataDetails> UpdateProjectMetadataAcronym(string projectAcronym, string updatedProjectAcronym) 
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
@@ -248,13 +245,12 @@ namespace ProjectAccessComponent
 
         }
 
-        private async Task RemoveProjectNumberDetails(string projectAcronym)
+        private async Task RemoveProjectMetadataDetails(string projectAcronym)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
@@ -270,13 +266,12 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Create a project reference.
         /// </summary>
-        private async Task CreateProjectReference(string projectAcronym, string projectId) 
+        private async Task CreateStoryReferenceForProject(string projectAcronym, string projectId) 
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 storiesReferenceCollection.EnsureIndex(reference => reference.ProjectAcronym);
 
@@ -297,13 +292,12 @@ namespace ProjectAccessComponent
         /// <summary>
         /// Updates a project reference.
         /// </summary>
-        private async Task UpdateProjectStoriesReferenceAcronym(string updateProjectAcronym, string projectId)
+        private async Task UpdateStoryReferenceAcronym(string updateProjectAcronym, string projectId)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 // TODO: might need to pass in a objectId
                 var projectStories = storiesReferenceCollection.Find(Query.EQ("ProjectId", projectId));

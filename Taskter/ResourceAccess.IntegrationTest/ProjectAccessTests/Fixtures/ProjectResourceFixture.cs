@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using ProjectAccessComponent;
+using ProjectsAccessComponent;
 using System;
 using System.Configuration;
 using System.IO;
@@ -33,12 +33,12 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
                 .GetSection(nameof(ProjectResource))
                 .Bind(options));
 
-            services.Configure<ProjectNumbersResource>(options => _configuration
-                .GetSection(nameof(ProjectNumbersResource))
+            services.Configure<ProjectsMetadataResource>(options => _configuration
+                .GetSection(nameof(ProjectsMetadataResource))
                 .Bind(options));
 
-            services.Configure<StoryReferenceResource>(options => _configuration
-                .GetSection(nameof(StoryReferenceResource))
+            services.Configure<StoriesReferencesResource>(options => _configuration
+                .GetSection(nameof(StoriesReferencesResource))
                 .Bind(options));
 
 
@@ -83,12 +83,12 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         // TODO: PRIVATE Create a Builder for ProjectNumbers
         private void PopulateProjectDetail(string projectAcronym)
         {
-            var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectNumbersResource>>();
+            var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it
             using (var db = new LiteDatabase(projectDetailsResource.Value.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // Index Document on name property
                 projectNumberCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
@@ -104,8 +104,8 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         public void Dispose()
         {
             var projectResource = ServiceProvider.GetService<IOptions<ProjectResource>>();
-            var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectNumbersResource>>();
-            var storyReferenceResource = ServiceProvider.GetService<IOptions<StoryReferenceResource>>();
+            var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
+            var storyReferenceResource = ServiceProvider.GetService<IOptions<StoriesReferencesResource>>();
             // delete DB from file system.
             File.Delete(projectResource.Value.ConnectionString);
             File.Delete(projectDetailsResource.Value.ConnectionString);

@@ -1,6 +1,9 @@
-﻿namespace Utilities.Taskter.Domain
+﻿using LiteDB;
+using LiteDbDriver;
+
+namespace Utilities.Taskter.Domain.Documents
 {
-    public class ProjectNumbersDetails
+    public class ProjectMetadataDocument : BaseDocument
     {
         /// <summary>
         /// The Acronym of the project.
@@ -21,5 +24,9 @@
         /// The number of active stories in the project.
         /// </summary>
         public int NumberOfActiveStories { get; set; } = 0;
+
+        [BsonCtor]
+        public ProjectMetadataDocument() : base() { }
+
     }
 }

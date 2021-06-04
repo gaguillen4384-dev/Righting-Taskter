@@ -12,16 +12,15 @@ namespace StoriesAccessComponent
     /// <summary>
     /// Concrete implementation of <see cref="IStoriesAccess"/>
     /// </summary>
-    // TODO: if users become a thing then this needs change.
     public class StoriesAccess : IStoriesAccess
     {
         private StoriesResource _storiesConnection;
-        private ProjectNumbersResource _projectNumbersConnection;
-        private StoryReferenceResource _storyReferenceResource;
+        private ProjectsMetadataResource _projectNumbersConnection;
+        private StoriesReferencesResource _storyReferenceResource;
 
         public StoriesAccess(IOptions<StoriesResource> storiesConnection,
-          IOptions<ProjectNumbersResource> projectNumbersConnection,
-          IOptions<StoryReferenceResource> storyReferenceResource)
+          IOptions<ProjectsMetadataResource> projectNumbersConnection,
+          IOptions<StoriesReferencesResource> storyReferenceResource)
         {
             // This needs to be full path to open .db file
             _storiesConnection = storiesConnection.Value;
@@ -34,7 +33,6 @@ namespace StoriesAccessComponent
         /// </summary>
         public async Task<StoryResponse> StartStory(string projectAcronym, StoryCreationRequest storyRequest)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
@@ -130,7 +128,6 @@ namespace StoriesAccessComponent
         /// </summary>
         public async Task<bool> RemoveStory(string projectAcronym, int storyNumber)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
@@ -180,18 +177,17 @@ namespace StoriesAccessComponent
         #endregion
 
         //TODO: Make this its own access
-        #region NumbersAccess
+        #region ProjectsMetadata
 
         /// <summary>
         /// This retrieves a K-V that stores the last number of the project.
         /// </summary>
         private async Task<int> GetLatestStoryNumberForProject(string projectAcronym)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // This needs to be generic in a driver.
                 var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
@@ -212,11 +208,10 @@ namespace StoriesAccessComponent
         /// </summary>
         private void UpdateStoryNumberForProject(string projectAcronym, bool isCompleted = false)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectsStoryNumberDocument>("ProjectsStoryNumbers");
+                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // This needs to be generic in a driver.
                 var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
@@ -246,15 +241,14 @@ namespace StoriesAccessComponent
         #region StoryReferenceAccess
 
         /// <summary>
-        /// Gets the story id from StoryReferences.
+        /// Gets the story id from StoriesReferences.
         /// </summary>
         private async Task<string> GetSingleStoryId(string projectAcronym, int storyNumber)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 // This needs to be generic in a driver.
                 var result = storiesReferenceCollection.FindOne(Query.And(
@@ -266,7 +260,7 @@ namespace StoriesAccessComponent
         }
 
         /// <summary>
-        /// Gets the story ids from StoryReferences.
+        /// Gets the story ids from StoriesReferences.
         /// </summary>
         private async Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
         {
@@ -274,7 +268,7 @@ namespace StoriesAccessComponent
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 // This needs to be generic in a driver.
                 var result = storiesReferenceCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
@@ -288,15 +282,14 @@ namespace StoriesAccessComponent
         }
 
         /// <summary>
-        /// Gets the project id from StoryReferences.
+        /// Gets the project id from StoriesReferences.
         /// </summary>
         private async Task<ObjectId> GetProjectId(string projectAcronym)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 // This needs to be generic in a driver.
                 var result = storiesReferenceCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
@@ -311,11 +304,10 @@ namespace StoriesAccessComponent
         // TODO: I dont want to be passing db specific types into method. I could pass in a string a map it to objectID
         private void CreateReferenceForProjectAndStory(string projectAcronym, int storyNumber, ObjectId storyId, ObjectId projectId)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 storiesReferenceCollection.EnsureIndex(reference => reference.ProjectAcronym);
                 
@@ -342,7 +334,7 @@ namespace StoriesAccessComponent
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 var storyObjectID = GetSingleStoryReferenceId(storyId).Result;
 
@@ -358,11 +350,10 @@ namespace StoriesAccessComponent
         /// </summary>
         private async Task<string> GetSingleStoryReferenceId(string storyId)
         {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoryReferences");
+                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 // This needs to be generic in a driver.
                 var result = storiesReferenceCollection.FindOne(Query.EQ("StoryId", storyId));
