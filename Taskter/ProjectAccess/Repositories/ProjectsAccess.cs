@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
-using Utilities.Taskter.Domain.Documents;
 
 namespace ProjectsAccessComponent
 {
@@ -12,13 +11,13 @@ namespace ProjectsAccessComponent
     /// Concrete implementation of <see cref="IProjectAccess"/>
     /// </summary>
     // TODO: if users become a thing then this needs change.
-    public class ProjectAccess : IProjectAccess
+    public class ProjectsAccess : IProjectAccess
     {
         private ProjectResource _projectConnection;
         private ProjectsMetadataResource _projectNumbersConnection;
         private StoriesReferencesResource _storyReferenceResource;
 
-        public ProjectAccess(IOptions<ProjectResource> projectConnection,
+        public ProjectsAccess(IOptions<ProjectResource> projectConnection,
             IOptions<ProjectsMetadataResource> projectNumbersConnection,
             IOptions<StoriesReferencesResource> storyReferenceResource) 
         {
@@ -27,6 +26,7 @@ namespace ProjectsAccessComponent
             _projectNumbersConnection = projectNumbersConnection.Value;
             _storyReferenceResource = storyReferenceResource.Value;
         }
+
         /// <summary>
         /// Concrete implementation of <see cref="IProjectAccess.StartProject(ProjectCreationRequest)"/>
         /// </summary>

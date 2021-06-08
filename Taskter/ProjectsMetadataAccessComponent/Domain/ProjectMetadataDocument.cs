@@ -1,7 +1,7 @@
 ﻿using LiteDB;
 using LiteDbDriver;
 
-namespace Utilities.Taskter.Domain.Documents
+namespace ProjectsMetadataAccessComponent
 {
     public class ProjectMetadataDocument : BaseDocument
     {

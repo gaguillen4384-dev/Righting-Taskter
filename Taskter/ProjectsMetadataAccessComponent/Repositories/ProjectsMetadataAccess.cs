@@ -1,8 +1,10 @@
 ﻿using LiteDB;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
-using Utilities.Taskter.Domain.Documents;
 
 namespace ProjectsMetadataAccessComponent
 {
@@ -13,7 +15,6 @@ namespace ProjectsMetadataAccessComponent
     {
         private ProjectsMetadataResource _projectNumbersConnection;
 
-
         public ProjectsMetadataAccess(IOptions<ProjectsMetadataResource> projectsMetadataConnection)
         {
             // This needs to be full path to open .db file
@@ -23,25 +24,24 @@ namespace ProjectsMetadataAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IProjectsMetadataAccess.CreateProjectMetadataDetails(string)"/>
         /// </summary>
-        // TODO: This could return the domain object instead of repo layer.
         public async Task<ProjectMetadataDetails> CreateProjectMetadataDetails(string projectAcronym)
         {
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
+                var projectMetadataCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // Index Document on name property
-                projectNumberCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
+                projectMetadataCollection.EnsureIndex(projectMetadataDetails => projectMetadataDetails.ProjectAcronym);
 
                 var projectMetadata = new ProjectMetadataDocument()
                 {
                     ProjectAcronym = projectAcronym
                 };
 
-                projectNumberCollection.Insert(projectMetadata);
+                projectMetadataCollection.Insert(projectMetadata);
 
-                return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectMetadata);
+                return ProjectMetadataMapper.MapToProjectMetadataDetails(projectMetadata);
             }
         }
 
@@ -53,66 +53,127 @@ namespace ProjectsMetadataAccessComponent
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
+                var projectMetadataCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
+
+                // This needs to be generic in a driver.
+                var projectMetadataDetails = projectMetadataCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                if (projectMetadataDetails == null)
+                {
+                    return ProjectMetadataMapper.MapToEmptyProjectMetadataDetails();
+                }
+
+                return ProjectMetadataMapper.MapToProjectMetadataDetails(projectMetadataDetails);
+            }
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectsMetadataAccess.GetAllProjectsMetadataDetails()"/>
+        /// </summary>
+        public async Task<IEnumerable<ProjectMetadataDetails>> GetAllProjectsMetadataDetails()
+        {
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
+            {
+                // this creates or gets collection
+                var projectMetadataCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
+
+                var result = projectMetadataCollection.Find(Query.All());
+
+                return ProjectMetadataMapper.MapToProjectsMetadataDetails(result);
+            }
+        }
+
+        /// <summary>
+        /// This retrieves the latest story number of a project.
+        /// </summary>
+        public async Task<int> GetLatestStoryNumberForProject(string projectAcronym)
+        {
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
+            {
+                // this creates or gets collection
                 var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // This needs to be generic in a driver.
-                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
+
+                var projectNumber = result.FirstOrDefault();
 
                 if (projectNumber == null)
                 {
-                    return ProjectRepositoryMapper.MapToEmptyProjectNumbersDetails();
+                    return 0;
                 }
 
-                return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectNumber);
+                return projectNumber.LatestStoryNumber;
             }
         }
 
-        private async Task<IEnumerable<ProjectMetadataDetails>> GetAllProjectsMetadataDetails()
-        {
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectsCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                // TODO: if users become a thing then this needs change.
-                var result = projectsCollection.Find(Query.All());
-
-                return ProjectRepositoryMapper.MapToProjectsNumbersDetails(result);
-            }
-        }
-
-        private async Task<ProjectMetadataDetails> UpdateProjectMetadataAcronym(string projectAcronym, string updatedProjectAcronym)
+        /// <summary>
+        /// Updates ProjectMetadata
+        /// </summary>
+        public async Task UpdateProjectMetadataDetails(string projectAcronym, bool isCompleted = false)
         {
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
-                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+                // This needs to be generic in a driver.
+                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
 
-                projectNumber.ProjectAcronym = updatedProjectAcronym;
+                var projectNumber = result.FirstOrDefault();
 
-                var updated = projectNumberCollection.Update(projectNumber);
+                projectNumber.DateUpdated = DateTime.UtcNow;
+                projectNumber.LatestStoryNumber++;
+                projectNumber.NumberOfActiveStories++;
+
+                if (isCompleted)
+                {
+                    projectNumber.NumberOfStoriesCompleted++;
+                    projectNumber.NumberOfActiveStories--;
+                }
+
+                if (!projectNumberCollection.Update(projectNumber))
+                {
+                    throw new KeyNotFoundException("The project could not be found.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectsMetadataAccess.GetAllProjectsMetadataDetails()"/>
+        /// </summary>
+        public async Task<ProjectMetadataDetails> UpdateProjectMetadataAcronym(string projectAcronym, string updatedProjectAcronym)
+        {
+            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
+            {
+                // this creates or gets collection
+                var projectMetadataCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
+
+                var projectMetadataDetails = projectMetadataCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                projectMetadataDetails.ProjectAcronym = updatedProjectAcronym;
+
+                var updated = projectMetadataCollection.Update(projectMetadataDetails);
                 if (updated == false)
                 {
-                    return ProjectRepositoryMapper.MapToEmptyProjectNumbersDetails();
+                    return ProjectMetadataMapper.MapToEmptyProjectMetadataDetails();
                 }
 
-                return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectNumber);
+                return ProjectMetadataMapper.MapToProjectMetadataDetails(projectMetadataDetails);
             }
 
         }
 
-        private async Task RemoveProjectMetadataDetails(string projectAcronym)
+        public async Task RemoveProjectMetadataDetails(string projectAcronym)
         {
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
             {
                 // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
+                var projectMetadataCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
-                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+                var projectNumber = projectMetadataCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
-                projectNumberCollection.Delete(projectNumber.Id);
+                projectMetadataCollection.Delete(projectNumber.Id);
             }
         }
     }

@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
-using Utilities.Taskter.Domain.Documents;
 
 namespace ProjectsMetadataAccessComponent
 {
@@ -15,8 +15,23 @@ namespace ProjectsMetadataAccessComponent
         Task<ProjectMetadataDetails> CreateProjectMetadataDetails(string projectAcronym);
 
         /// <summary>
-        /// Retrieves project metadata details for 
+        /// Retrieves project metadata details for a given project.
         /// </summary>
-        Task<ProjectMetadataDetails> GetProjectMetadataDetails(string projectAcronym)
+        Task<ProjectMetadataDetails> GetProjectMetadataDetails(string projectAcronym);
+
+        /// <summary>
+        /// Retrieves all the projects metadata details.
+        /// </summary>
+        Task<IEnumerable<ProjectMetadataDetails>> GetAllProjectsMetadataDetails();
+
+        /// <summary>
+        /// Updates the project metadata details.
+        /// </summary>
+        Task UpdateProjectMetadataDetails(string projectAcronym, bool isCompleted = false);
+
+        /// <summary>
+        /// Updates the project metadata identifier.
+        /// </summary>
+        Task<ProjectMetadataDetails> UpdateProjectMetadataAcronym(string projectAcronym, string updatedProjectAcronym);
     }
 }

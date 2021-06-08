@@ -42,7 +42,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
                 .Bind(options));
 
 
-            services.AddTransient<IProjectAccess, ProjectAccess>();
+            services.AddTransient<IProjectAccess, ProjectsAccess>();
 
             // TEST SERVICES
             services.AddTransient<IProjectCreationBuilder, ProjectBuilder>();

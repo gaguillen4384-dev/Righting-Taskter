@@ -19,7 +19,6 @@ namespace ProjectsMetadataAccessComponent
             };
         }
 
-
         public static IEnumerable<ProjectMetadataDetails> MapToProjectsMetadataDetails(IEnumerable<ProjectMetadataDocument> projectsDetails)
         {
             var listOfProjectsNumbers = new List<ProjectMetadataDetails>();
