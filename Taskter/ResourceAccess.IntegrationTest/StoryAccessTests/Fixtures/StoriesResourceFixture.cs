@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using LiteDB;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using StoriesAccessComponent;
@@ -30,34 +31,46 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
                 .GetSection(nameof(StoriesResource))
                 .Bind(options));
 
-            services.Configure<ProjectsMetadataResource>(options => _configuration
-                .GetSection(nameof(ProjectsMetadataResource))
-                .Bind(options));
-
-            services.Configure<StoriesReferencesResource>(options => _configuration
-                .GetSection(nameof(StoriesReferencesResource))
-                .Bind(options));
-
 
             services.AddTransient<IStoriesAccess, StoriesAccess>();
 
             // TEST SERVICES
-            //services.AddTransient<IProjectCreationBuilder, ProjectBuilder>();
+            services.AddTransient<IStoriesBuilder, StoriesBuilder>();
             //services.AddTransient<IProjectNumbersBuilder, ProjectNumbersDetailsBuilder>();
             //services.AddTransient<IProjectUpdateBuilder, ProjectUpdateBuilder>();
 
             ServiceProvider = services.BuildServiceProvider();
         }
 
-            public void Dispose()
+        public void PopulateStoriesCollection(int NumberOfStories) 
         {
             var storiesResource = ServiceProvider.GetService<IOptions<StoriesResource>>();
-            var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
-            var storyReferenceResource = ServiceProvider.GetService<IOptions<StoriesReferencesResource>>();
+            // TODO: Bring the inner logic to the litedbdriver and then reference it
+            using (var db = new LiteDatabase(storiesResource.Value.ConnectionString))
+            {
+                var storiesCollection = db.GetCollection<StoryDocument>("Stories");
+
+                // Ensureindex might need to be called after object creation
+                storiesCollection.EnsureIndex(story => story.Id);
+
+                StoriesBuilder storiesBuilder = new StoriesBuilder();
+                var listOfStoriesRequest = storiesBuilder.BuildStoriesOut(NumberOfStories);
+
+                foreach (var projectRequest in listOfStoriesRequest)
+                {
+                    var storyDocument = StoriesRepositoryMapper.MapCreationRequestToStory(projectRequest);
+                    storiesCollection.Insert(storyDocument);
+                }
+
+                var projects = db.GetCollection<StoryDocument>("Stories");
+            }
+        }
+
+        public void Dispose()
+        {
+            var storiesResource = ServiceProvider.GetService<IOptions<StoriesResource>>();
             // delete DB from file system.
             File.Delete(storiesResource.Value.ConnectionString);
-            File.Delete(projectDetailsResource.Value.ConnectionString);
-            File.Delete(storyReferenceResource.Value.ConnectionString);
         }
     }
 }

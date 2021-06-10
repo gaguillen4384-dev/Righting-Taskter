@@ -55,7 +55,8 @@ namespace StoriesAccessComponent
             {
                 Name = storyRequest.Name,
                 Details = storyRequest.Details,
-                IsRecurrant = storyRequest.IsRecurrant
+                IsRecurrant = storyRequest.IsRecurrant,
+                StoryNumber = storyRequest.StoryNumber
             };
         }
 

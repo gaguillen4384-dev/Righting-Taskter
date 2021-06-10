@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.ProjectAccessTests
@@ -42,17 +41,18 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
             return this;
         }
 
-        // TODO: Their own builder.
-        public void BuildProjectWithNumberOfActiveStories(int numberOfActiveStories)
-        {
-            throw new NotImplementedException();
-        }
 
-        // TODO: Their own builder.
-        public void BuildProjectWithNumberOfCompletedStories(int numberOfCompletedStories)
-        {
-            throw new NotImplementedException();
-        }
+        //// TODO: Their own builder in ProjectMetadataRA
+        //public void BuildProjectWithNumberOfActiveStories(int numberOfActiveStories)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //// TODO:  Their own builder in ProjectMetadataRA
+        //public void BuildProjectWithNumberOfCompletedStories(int numberOfCompletedStories)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public ProjectCreationRequest Build()
         {

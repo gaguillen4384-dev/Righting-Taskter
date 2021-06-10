@@ -43,50 +43,53 @@ namespace StoriesAccessComponent
                 // Map from request to story
                 var story = StoriesRepositoryMapper.MapCreationRequestToStory(storyRequest);
 
-                var latestStoryNumber = await GetLatestStoryNumberForProject(projectAcronym);
-                var storyNumber = latestStoryNumber++;
+                //TODO: Copy to Manager.
+                //var latestStoryNumber = await GetLatestStoryNumberForProject(projectAcronym);
+                //var storyNumber = latestStoryNumber++;
 
-                story.StoryNumber = storyNumber;
                 storiesCollection.Insert(story);
 
-                await UpdateStoryReferences(projectAcronym, storyNumber, story.Id);
+                //TODO: Copy to Manager.
+                //await UpdateStoryReferences(projectAcronym, storyNumber, story.Id);
 
                 return StoriesRepositoryMapper.MapToStoryResponse(story, projectAcronym);
             }
         }
 
+        //TODO: move to Manager.
+        ///// <summary>
+        ///// Concrete implementation of <see cref="IStoriesAccess.ReadStoriesForAProject(string)">
+        ///// </summary>
+        //public async Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym)
+        //{
+        //    // use stories ID list, filter to find all stories
+        //    var listOfStoriesID = await GetProjectStoriesIds(projectAcronym);
+        //    var result = await GetProjectStoriesFromStoryIds(listOfStoriesID);
+
+        //    // use mapper to return what its needed.
+        //    return StoriesRepositoryMapper.MapToStoriesResponse(result, projectAcronym);
+
+        //}
+
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.ReadStoriesForAProject(string)">
+        /// Concrete implementation of <see cref="IStoriesAccess.ReadStory(string)">
         /// </summary>
-        public async Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym)
+        public async Task<StoryResponse> ReadStory(string storyId)
         {
-            // use stories ID list, filter to find all stories
-            var listOfStoriesID = await GetProjectStoriesIds(projectAcronym);
-            var result = await GetProjectStoriesFromStoryIds(listOfStoriesID);
-
-            // use mapper to return what its needed.
-            return StoriesRepositoryMapper.MapToStoriesResponse(result, projectAcronym);
-
-        }
-
-        /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccess.ReadStory(string, int)">
-        /// </summary>
-        public async Task<StoryResponse> ReadStory(string projectAcronym, int storyNumber)
-        {
-            /// TODO: the path got to be configure for each db.
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-                // Use story Reference to get ID
-                var storyId = await GetSingleStoryId(projectAcronym, storyNumber);
+                var story = storiesCollection.FindOne();
 
-                var result = storiesCollection.FindById(storyId);
+                if (story == null) 
+                {
+                    return new EmptyStoryResponse();
+                }
 
                 // use mapper to return what its needed.
-                return StoriesRepositoryMapper.MapToStoryResponse(result, projectAcronym);
+                return StoriesRepositoryMapper.MapToStoryResponse(story, projectAcronym);
             }
         }
 
@@ -100,18 +103,16 @@ namespace StoriesAccessComponent
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-                // Use story Reference to get ID
-                var storyId = await GetSingleStoryId(projectAcronym, storyNumber);
-
-                var story = storiesCollection.FindById(storyId);
+                var story = storiesCollection.FindOne(Query.EQ("StoryNumber", storyNumber));
 
                 // with the story, map the new updated fields
                 var storyUpdated = StoriesRepositoryMapper.UpdateStoryPropertiesFromRequest(story, storyRequest);
 
                 var updated = storiesCollection.Update(storyUpdated);
 
-                if (storyUpdated.IsCompleted)
-                    UpdateStoryNumberForProject(projectAcronym, storyUpdated.IsCompleted);
+                //TODO: move to ProjectMetadataRA
+                //if (storyUpdated.IsCompleted)
+                //    UpdateStoryNumberForProject(projectAcronym, storyUpdated.IsCompleted);
 
                 // return a null object if failed to update.
                 if (!updated)
@@ -132,14 +133,14 @@ namespace StoriesAccessComponent
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-                // Use story Reference to get ID
-                var storyId = await GetSingleStoryId(projectAcronym, storyNumber);
+                var story = storiesCollection.FindOne(Query.EQ("StoryNumber", storyNumber));
 
-                if (!storiesCollection.Delete(storyId))
+                if (!storiesCollection.Delete(story.StoryNumber))
                     return false;
 
-                if (!DeleteReferenceForStory(storyId))
-                    return false;
+                //TODO: this needs to be moved to manager
+                //if (!DeleteReferenceForStory(storyId))
+                //    return false;
 
                 return true;
             }
@@ -147,14 +148,15 @@ namespace StoriesAccessComponent
 
         #region Private Methods
 
-        private async Task UpdateStoryReferences(string projectAcronym, int storyNumber, ObjectId storyId)
-        {
-            var projectId = await GetProjectId(projectAcronym);
+        //TODO: Copy to Manager
+        //private async Task UpdateStoryReferences(string projectAcronym, int storyNumber, ObjectId storyId)
+        //{
+        //    var projectId = await GetProjectId(projectAcronym);
 
-            CreateReferenceForProjectAndStory(projectAcronym, storyNumber, storyId, projectId);
+        //    CreateReferenceForProjectAndStory(projectAcronym, storyNumber, storyId, projectId);
 
-            UpdateStoryNumberForProject(projectAcronym);
-        }
+        //    UpdateStoryNumberForProject(projectAcronym);
+        //}
 
         private async Task<IEnumerable<StoryDocument>> GetProjectStoriesFromStoryIds(IEnumerable<string> storiesID)
         {
@@ -175,192 +177,5 @@ namespace StoriesAccessComponent
 
         #endregion
 
-        //TODO: Make this its own access
-        #region ProjectsMetadata
-
-        /// <summary>
-        /// This retrieves a K-V that stores the last number of the project.
-        /// </summary>
-        private async Task<int> GetLatestStoryNumberForProject(string projectAcronym)
-        {
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                // This needs to be generic in a driver.
-                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
-
-                var projectNumber = result.FirstOrDefault();
-
-                if (projectNumber == null) 
-                {
-                    return 0;
-                }
-
-                return projectNumber.LatestStoryNumber;
-            }
-        }
-
-        /// <summary>
-        /// This retrieves a K-V that stores the last number of the project.
-        /// </summary>
-        private void UpdateStoryNumberForProject(string projectAcronym, bool isCompleted = false)
-        {
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                // This needs to be generic in a driver.
-                var result = projectNumberCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
-
-                var projectNumber = result.FirstOrDefault();
-
-                projectNumber.DateUpdated = DateTime.UtcNow;
-                projectNumber.LatestStoryNumber++;
-                projectNumber.NumberOfActiveStories++;
-
-                if (isCompleted) 
-                {
-                    projectNumber.NumberOfStoriesCompleted++;
-                    projectNumber.NumberOfActiveStories--;
-                }
-
-                if (!projectNumberCollection.Update(projectNumber))
-                {
-                    throw new KeyNotFoundException("The project could not be found.");
-                }
-            }
-        }
-
-        #endregion
-
-        //TODO: Make this its own access
-        #region StoryReferenceAccess
-
-        /// <summary>
-        /// Gets the story id from StoriesReferences.
-        /// </summary>
-        private async Task<string> GetSingleStoryId(string projectAcronym, int storyNumber)
-        {
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                // This needs to be generic in a driver.
-                var result = storiesReferenceCollection.FindOne(Query.And(
-                    Query.EQ("ProjectAcronym", projectAcronym),
-                    Query.EQ("StoryNumber", storyNumber)));
-                
-                return result.StoryId.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets the story ids from StoriesReferences.
-        /// </summary>
-        private async Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
-        {
-            /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                // This needs to be generic in a driver.
-                var result = storiesReferenceCollection.Find(Query.EQ("ProjectAcronym", projectAcronym));
-
-                var listResult = result.ToList();
-
-                var listIdsResult = listResult.Select(reference => reference.StoryId.ToString());
-
-                return listIdsResult;
-            }
-        }
-
-        /// <summary>
-        /// Gets the project id from StoriesReferences.
-        /// </summary>
-        private async Task<ObjectId> GetProjectId(string projectAcronym)
-        {
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                // This needs to be generic in a driver.
-                var result = storiesReferenceCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
-
-                return result.ProjectId;
-            }
-        }
-
-        /// <summary>
-        /// Creates the story Reference
-        /// </summary>
-        // TODO: I dont want to be passing db specific types into method. I could pass in a string a map it to objectID
-        private void CreateReferenceForProjectAndStory(string projectAcronym, int storyNumber, ObjectId storyId, ObjectId projectId)
-        {
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                storiesReferenceCollection.EnsureIndex(reference => reference.ProjectAcronym);
-                
-                var storyReference = new StoryReferenceDocument()
-                {
-                    ProjectAcronym = projectAcronym,
-                    StoryNumber = storyNumber,
-                    StoryId = storyId,
-                    ProjectId = projectId
-                };
-
-                storiesReferenceCollection.Insert(storyReference);
-
-                // TODO: What to do if insert fails?
-            }
-        }
-
-        /// <summary>
-        /// Creates the story Reference
-        /// </summary>
-        private bool DeleteReferenceForStory(string storyId)
-        {
-            /// TODO: the path got to be configure for each db.
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                var storyObjectID = GetSingleStoryReferenceId(storyId).Result;
-
-                if (!storiesReferenceCollection.Delete(storyObjectID))
-                    return false;
-
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Get the story reference ID, ONLY USE FOR STORYREFERENCE ACCESS.
-        /// </summary>
-        private async Task<string> GetSingleStoryReferenceId(string storyId)
-        {
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                // This needs to be generic in a driver.
-                var result = storiesReferenceCollection.FindOne(Query.EQ("StoryId", storyId));
-
-                return result.Id.ToString();
-            }
-        }
-
-        #endregion
     }
 }

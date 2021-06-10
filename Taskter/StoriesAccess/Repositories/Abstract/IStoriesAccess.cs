@@ -12,12 +12,13 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Retrieves a single story for the given project.
         /// </summary>
-        Task<StoryResponse> ReadStory(string projectAcronym, int storyNumber);
+        Task<StoryResponse> ReadStory(string storyId);
 
-        /// <summary>
-        /// Retrieves all stories for the given project.
-        /// </summary>
-        Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym);
+        //TODO: move to Manager.
+        ///// <summary>
+        ///// Retrieves all stories for the given project.
+        ///// </summary>
+        //Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym);
 
         /// <summary>
         /// Creates a story for the given project.

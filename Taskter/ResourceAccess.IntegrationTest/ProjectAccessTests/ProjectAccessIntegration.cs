@@ -49,7 +49,6 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
             _fixture.Dispose();
         }
 
-        // TODO: GET SINGLE PROJECT.
         /// <summary>
         /// Validates the project access getting single project.
         /// </summary>

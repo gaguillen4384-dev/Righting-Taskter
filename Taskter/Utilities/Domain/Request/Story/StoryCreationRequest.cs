@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Utilities.Taskter.Domain
 {
@@ -14,9 +13,9 @@ namespace Utilities.Taskter.Domain
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// The Acronym of the project.
+        /// The number of the story in the project its on. Should be sequential.
         /// </summary>
-        public string ProjectAcronym { get; set; } = string.Empty;
+        public int StoryNumber { get; set; } = 0;
 
         /// <summary>
         /// The content of the story.

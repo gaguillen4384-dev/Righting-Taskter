@@ -28,13 +28,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectAccess\ProjectsAccessComponent.csproj" />
+    <ProjectReference Include="..\ProjectsMetadataAccessComponent\ProjectsMetadataAccessComponent.csproj" />
     <ProjectReference Include="..\StoriesAccess\StoriesAccessComponent.csproj" />
+    <ProjectReference Include="..\StoriesReferencesAccessComponent\StoriesReferencesAccessComponent.csproj" />
     <ProjectReference Include="..\Utilities\Domain\Taskter.Domain.csproj" />
     <ProjectReference Include="..\Utilities\LiteDbDriver\LiteDbDriver\LiteDbDriver.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="StoryAccessTests\Builders\" />
   </ItemGroup>
 
 </Project>

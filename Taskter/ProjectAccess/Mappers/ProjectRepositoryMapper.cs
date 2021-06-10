@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Utilities.Taskter.Domain;
-using Utilities.Taskter.Domain.Documents;
 
 namespace ProjectsAccessComponent
 {
@@ -13,7 +12,8 @@ namespace ProjectsAccessComponent
         /// <summary>
         /// Maps a project document to a project response.
         /// </summary>
-        public static ProjectResponse MapToProjectResponse(ProjectDocument project, ProjectMetadataDetails projectDetails) 
+        public static ProjectResponse MapToProjectResponse(ProjectDocument project
+            ) 
         {
             if (project == null)
                 return new EmptyProjectResponse();
@@ -24,22 +24,17 @@ namespace ProjectsAccessComponent
                 LastWorkedOn = project.LastWorkedOn,
                 DateCreated = project.DateCreated,
                 DateUpdated = project.DateUpdated,
-                ProjectAcronym = project.ProjectAcronym,
-                NumberOfActiveStories = projectDetails.NumberOfActiveStories,
-                NumberOfCompletedStories = projectDetails.NumberOfStoriesCompleted
+                ProjectAcronym = project.ProjectAcronym
             };
         }
 
-        public static IEnumerable<ProjectResponse> MapToProjectsResponse(IEnumerable<ProjectDocument> projects, IEnumerable<ProjectMetadataDetails> projectsDetails) 
+        public static IEnumerable<ProjectResponse> MapToProjectsResponse(IEnumerable<ProjectDocument> projects) 
         {
-            // TODO: Get a dictionary where the projectAcronym are the same and then map them together
-            // then use the MapToProjectResponse in a forloop
             var listOfProjects = new List<ProjectResponse>();
-            var projectDictionary = CombineListsToDictionary(projects, projectsDetails);
 
-            foreach (var project in projectDictionary)
+            foreach (var project in projects)
             {
-                listOfProjects.Add(MapToProjectResponse(project.Key, project.Value));
+                listOfProjects.Add(MapToProjectResponse(project));
             }
 
             return listOfProjects;
@@ -110,63 +105,33 @@ namespace ProjectsAccessComponent
             return !string.IsNullOrWhiteSpace(projectRequest.Name);
         }
 
-        /// <summary>
-        /// Uses nested loops based on projectAcronym.
-        /// </summary>
-        private static Dictionary<ProjectDocument, ProjectMetadataDetails> CombineListsToDictionary(IEnumerable<ProjectDocument> projects, IEnumerable<ProjectMetadataDetails> projectsDetails) 
-        {
-            var listOfProjects = new List<ProjectDocument>(projects);
-            var listOfProjectsDetails = new List<ProjectMetadataDetails>(projectsDetails);
-            var projectsDictionary = new Dictionary<ProjectDocument, ProjectMetadataDetails>();
+        //TODO: Move to Manger.
+        ///// <summary>
+        ///// Uses nested loops based on projectAcronym.
+        ///// </summary>
+        //private static Dictionary<ProjectDocument, ProjectMetadataDetails> CombineListsToDictionary(IEnumerable<ProjectDocument> projects, IEnumerable<ProjectMetadataDetails> projectsDetails) 
+        //{
+        //    var listOfProjects = new List<ProjectDocument>(projects);
+        //    var listOfProjectsDetails = new List<ProjectMetadataDetails>(projectsDetails);
+        //    var projectsDictionary = new Dictionary<ProjectDocument, ProjectMetadataDetails>();
 
-            foreach (var project in listOfProjects) 
-            {
-                foreach (var projectDetail in listOfProjectsDetails) 
-                {
-                    if (projectDetail.ProjectAcronym.Equals(project.ProjectAcronym)) 
-                    {
-                        projectsDictionary.Add(project, projectDetail);
-                        // attempt to make it more efficient, might bring bugs in large numbers.
-                        listOfProjectsDetails.Remove(projectDetail);
-                        break;
-                    }
-                }
-            }
-            return projectsDictionary;
-        }
-
-        #endregion
-
-        #region Project Numbers Details
-        public static ProjectMetadataDetails MapToProjectNumbersDetails(ProjectMetadataDocument projectsStoryNumber) 
-        {
-            return new ProjectMetadataDetails()
-            {
-                ProjectAcronym = projectsStoryNumber.ProjectAcronym,
-                LatestStoryNumber = projectsStoryNumber.LatestStoryNumber,
-                NumberOfActiveStories = projectsStoryNumber.NumberOfActiveStories,
-                NumberOfStoriesCompleted = projectsStoryNumber.NumberOfStoriesCompleted
-            };
-        }
-
-        public static IEnumerable<ProjectMetadataDetails> MapToProjectsNumbersDetails(IEnumerable<ProjectMetadataDocument> projectsDetails)
-        {
-            var listOfProjectsNumbers = new List<ProjectMetadataDetails>();
-
-            foreach (var projectNumber in projectsDetails)
-            {
-                listOfProjectsNumbers.Add(MapToProjectNumbersDetails(projectNumber));
-            }
-
-            return listOfProjectsNumbers;
-        }
-
-
-        public static ProjectMetadataDetails MapToEmptyProjectNumbersDetails()
-        {
-            return new EmptyProjectNumbersDetails();
-        }
+        //    foreach (var project in listOfProjects) 
+        //    {
+        //        foreach (var projectDetail in listOfProjectsDetails) 
+        //        {
+        //            if (projectDetail.ProjectAcronym.Equals(project.ProjectAcronym)) 
+        //            {
+        //                projectsDictionary.Add(project, projectDetail);
+        //                // attempt to make it more efficient, might bring bugs in large numbers.
+        //                listOfProjectsDetails.Remove(projectDetail);
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    return projectsDictionary;
+        //}
 
         #endregion
+
     }
 }

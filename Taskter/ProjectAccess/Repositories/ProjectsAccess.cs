@@ -42,15 +42,16 @@ namespace ProjectsAccessComponent
 
                 var projectDocument = ProjectRepositoryMapper.MapToProjectDocumentFromCreationRequest(projectRequest);
 
-                // TODO: what to do if it fails?
+                // TODO: what to do if it fails? -upto the API that recieves it.
                 projectsCollection.Insert(projectDocument);
-                var projectDetailsDocument = await CreateProjectMetadataDetails(projectDocument.ProjectAcronym);
-                await CreateStoryReferenceForProject(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
 
-                var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
+                // TODO: move to Manager.
+                //var projectDetailsDocument = await CreateProjectMetadataDetails(projectDocument.ProjectAcronym);
+                //await CreateStoryReferenceForProject(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
+                //var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
 
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectResponse(projectDocument, projectDetails);
+                return ProjectRepositoryMapper.MapToProjectResponse(projectDocument);
             }
         }
 
@@ -66,10 +67,8 @@ namespace ProjectsAccessComponent
 
                 var projects = projectsCollection.Find(Query.All());
 
-                var projectsDetails = await GetAllProjectsMetadataDetails();
-
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectsResponse(projects, projectsDetails);
+                return ProjectRepositoryMapper.MapToProjectsResponse(projects);
             }
         }
 
@@ -85,11 +84,8 @@ namespace ProjectsAccessComponent
 
                 var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
-                // Get project numbers details
-                var projectDetails = await GetProjectMetadataDetails(projectAcronym);
-
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectResponse(project, projectDetails);
+                return ProjectRepositoryMapper.MapToProjectResponse(project);
             }
         }
 
@@ -98,7 +94,6 @@ namespace ProjectsAccessComponent
         /// </summary>
         public async Task<bool> RemoveProject(string projectAcronym)
         {
-            /// TODO: Need to figure out how to delete each reference and what does that mean for the References.
             using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
@@ -106,10 +101,6 @@ namespace ProjectsAccessComponent
 
                 //var project = projectsCollection.FindOne(projectToFind => projectToFind.ProjectAcronym == projectAcronym);
                 var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
-
-                await RemoveProjectMetadataDetails(projectAcronym);
-
-                //TODO: a Remove StoryReference where the isdeleted flag gets set for all StoriesReferences.
 
                 return projectsCollection.Delete(project.Id);
             }
@@ -120,7 +111,6 @@ namespace ProjectsAccessComponent
         /// </summary>
         public async Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym)
         {
-            // UPDATE reference, storynumbers, projectdetail if acronym changes
             using (var db = new LiteDatabase(_projectConnection.ConnectionString))
             {
                 // this creates or gets collection
@@ -137,180 +127,31 @@ namespace ProjectsAccessComponent
                 if (!updated)
                     return ProjectRepositoryMapper.MapToEmptyProjectResponse();
 
-                ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
-                // TODO: If acronym is the same no changes.
-                if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
-                {
-                    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
-                    // return a null object if failed to update.
-                    if (projectDetails is EmptyProjectNumbersDetails)
-                        return ProjectRepositoryMapper.MapToEmptyProjectResponse();
-                }
+                // TODO: Move to Managers.
+                //ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
+                //// TODO: If acronym is the same no changes.
+                //if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
+                //{
+                //    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
+                //    // return a null object if failed to update.
+                //    if (projectDetails is EmptyProjectNumbersDetails)
+                //        return ProjectRepositoryMapper.MapToEmptyProjectResponse();
+                //}
 
                 // use mapper to return what its needed.
-                return ProjectRepositoryMapper.MapToProjectResponse(projectUpdated, projectDetails);
+                return ProjectRepositoryMapper.MapToProjectResponse(projectUpdated);
             }
         }
 
         #region Private Methods
 
-        private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
-        {
-            await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
-            return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
-        }
+        //TODO: move to Manger.
+        //private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
+        //{
+        //    await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
+        //    return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
+        //}
 
-        #endregion
-
-        //TODO: Make this its own access
-        #region ProjectMetadata Access
-
-        /// <summary>
-        /// This creates a refence that stores the last number of the project.
-        /// </summary>
-        private async Task<ProjectMetadataDocument> CreateProjectMetadataDetails(string projectAcronym)
-        {
-
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                // Index Document on name property
-                projectNumberCollection.EnsureIndex(projectNum => projectNum.ProjectAcronym);
-
-                var projectNumber = new ProjectMetadataDocument()
-                {
-                    ProjectAcronym = projectAcronym
-                };
-
-                projectNumberCollection.Insert(projectNumber);
-
-                return projectNumber;
-            }
-        }
-
-        private async Task<ProjectMetadataDetails> GetProjectMetadataDetails(string projectAcronym) 
-        {
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                // This needs to be generic in a driver.
-                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
-
-                if (projectNumber == null)
-                {
-                    return ProjectRepositoryMapper.MapToEmptyProjectNumbersDetails();
-                }
-
-                return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectNumber);
-            }
-        }
-
-        private async Task<IEnumerable<ProjectMetadataDetails>> GetAllProjectsMetadataDetails()
-        {
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectsCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                // TODO: if users become a thing then this needs change.
-                var result = projectsCollection.Find(Query.All());
-
-                return ProjectRepositoryMapper.MapToProjectsNumbersDetails(result);
-            }
-        }
-
-        private async Task<ProjectMetadataDetails> UpdateProjectMetadataAcronym(string projectAcronym, string updatedProjectAcronym) 
-        {
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
-
-                projectNumber.ProjectAcronym = updatedProjectAcronym;
-
-                var updated = projectNumberCollection.Update(projectNumber);
-                if (updated == false)
-                {
-                    return ProjectRepositoryMapper.MapToEmptyProjectNumbersDetails();
-                }
-
-                return ProjectRepositoryMapper.MapToProjectNumbersDetails(projectNumber);
-            }
-
-        }
-
-        private async Task RemoveProjectMetadataDetails(string projectAcronym)
-        {
-            using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))
-            {
-                // this creates or gets collection
-                var projectNumberCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
-
-                var projectNumber = projectNumberCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
-
-                projectNumberCollection.Delete(projectNumber.Id);
-            }
-        }
-
-        #endregion
-
-        //TODO: Make this its own access
-        #region StoryReferenceAccess
-
-        /// <summary>
-        /// Create a project reference.
-        /// </summary>
-        private async Task CreateStoryReferenceForProject(string projectAcronym, string projectId) 
-        {
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                storiesReferenceCollection.EnsureIndex(reference => reference.ProjectAcronym);
-
-                var projectDBId = new ObjectId(projectId);
-
-                var storyReference = new StoryReferenceDocument()
-                {
-                    ProjectAcronym = projectAcronym,
-                    ProjectId = projectDBId
-                };
-
-                storiesReferenceCollection.Insert(storyReference);
-
-                // TODO: What to do if insert fails?
-            }
-        }
-
-        /// <summary>
-        /// Updates a project reference.
-        /// </summary>
-        private async Task UpdateStoryReferenceAcronym(string updateProjectAcronym, string projectId)
-        {
-            using (var db = new LiteDatabase(_storyReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                // TODO: might need to pass in a objectId
-                var projectStories = storiesReferenceCollection.Find(Query.EQ("ProjectId", projectId));
-
-                foreach (var storyReference in projectStories) 
-                {
-                    storyReference.DateUpdated = DateTime.UtcNow;
-                    storyReference.ProjectAcronym = updateProjectAcronym;
-                }
-
-                storiesReferenceCollection.Update(projectStories);
-            }
-        }
         #endregion
     }
 }
