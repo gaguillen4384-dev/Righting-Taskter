@@ -13,12 +13,11 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Returns a Story Response from a resourceAccess story.
         /// </summary>
-        public static StoryResponse MapToStoryResponse(StoryDocument story,string projectAcronym) 
+        public static StoryResponse MapToStoryResponse(StoryDocument story) 
         {
             return new StoryResponse()
             {
                Name = story.Name,
-               ProjectAcronymName = projectAcronym,
                StoryNumber = story.StoryNumber,
                Details = story.Details,
                DateCompleted = story.DateCompleted.GetValueOrDefault(),
@@ -32,15 +31,14 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Returns a Stories Response from a resourceAccess stories.
         /// </summary>
-        public static IEnumerable<StoryResponse> MapToStoriesResponse(IEnumerable<StoryDocument> stories, string projectAcronym)
+        public static IEnumerable<StoryResponse> MapToStoriesResponse(IEnumerable<StoryDocument> stories)
         {
-
             var storyResponses = new List<StoryResponse>();
 
             // Each story has a reference to its number but not projectAcronym
             foreach (var story in stories) 
             {
-                storyResponses.Add(MapToStoryResponse(story, projectAcronym));
+                storyResponses.Add(MapToStoryResponse(story));
             }
 
             return storyResponses;

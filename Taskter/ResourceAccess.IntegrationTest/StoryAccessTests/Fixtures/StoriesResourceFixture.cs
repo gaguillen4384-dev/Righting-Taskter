@@ -4,7 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using StoriesAccessComponent;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.StoryAccessTests
@@ -42,7 +44,7 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
             ServiceProvider = services.BuildServiceProvider();
         }
 
-        public void PopulateStoriesCollection(int NumberOfStories) 
+        public IEnumerable<string> PopulateStoriesCollection(int NumberOfStories) 
         {
             var storiesResource = ServiceProvider.GetService<IOptions<StoriesResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it
@@ -55,14 +57,17 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
 
                 StoriesBuilder storiesBuilder = new StoriesBuilder();
                 var listOfStoriesRequest = storiesBuilder.BuildStoriesOut(NumberOfStories);
-
+                List<string> counter = new List<string>();
                 foreach (var projectRequest in listOfStoriesRequest)
                 {
                     var storyDocument = StoriesRepositoryMapper.MapCreationRequestToStory(projectRequest);
                     storiesCollection.Insert(storyDocument);
+                    counter.Add(storyDocument.Id.ToString());
                 }
+                var stories = storiesCollection.FindAll().ToList();
+                var story = storiesCollection.FindById(counter.First());
 
-                var projects = db.GetCollection<StoryDocument>("Stories");
+                return counter;
             }
         }
 

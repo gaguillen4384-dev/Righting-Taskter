@@ -52,24 +52,29 @@ namespace StoriesAccessComponent
                 //TODO: Copy to Manager.
                 //await UpdateStoryReferences(projectAcronym, storyNumber, story.Id);
 
-                return StoriesRepositoryMapper.MapToStoryResponse(story, projectAcronym);
+                return StoriesRepositoryMapper.MapToStoryResponse(story);
             }
         }
-
-        //TODO: move to Manager.
-        ///// <summary>
-        ///// Concrete implementation of <see cref="IStoriesAccess.ReadStoriesForAProject(string)">
-        ///// </summary>
-        //public async Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym)
-        //{
-        //    // use stories ID list, filter to find all stories
-        //    var listOfStoriesID = await GetProjectStoriesIds(projectAcronym);
-        //    var result = await GetProjectStoriesFromStoryIds(listOfStoriesID);
-
-        //    // use mapper to return what its needed.
-        //    return StoriesRepositoryMapper.MapToStoriesResponse(result, projectAcronym);
-
-        //}
+        
+        /// <summary>
+        /// Concrete implementation of <see cref="IStoriesAccess.ReadMultipleStories(IEnumerable{string})
+        /// </summary>
+        public async Task<IEnumerable<StoryResponse>> ReadMultipleStories(IEnumerable<string> storiesId)
+        {
+            var listResult = new List<StoryDocument>();
+            using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
+            {
+                foreach (var storyId in storiesId)
+                {
+                    // this creates or gets collection
+                    var storiesCollection = db.GetCollection<StoryDocument>("Stories");
+                    var Id = new ObjectId(storyId);
+                    var result = storiesCollection.FindById(Id);
+                    listResult.Add(result);
+                }
+            }
+            return StoriesRepositoryMapper.MapToStoriesResponse(listResult); ;
+        }
 
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.ReadStory(string)">
@@ -81,7 +86,9 @@ namespace StoriesAccessComponent
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-                var story = storiesCollection.FindOne();
+                //TODO: this needs to be seperated by driver.
+                var Id = new ObjectId(storyId);
+                var story = storiesCollection.FindById(Id);
 
                 if (story == null) 
                 {
@@ -89,21 +96,21 @@ namespace StoriesAccessComponent
                 }
 
                 // use mapper to return what its needed.
-                return StoriesRepositoryMapper.MapToStoryResponse(story, projectAcronym);
+                return StoriesRepositoryMapper.MapToStoryResponse(story);
             }
         }
 
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.UpdateStory(string, int, StoryUpdateRequest)">
         /// </summary>
-        public async Task<StoryResponse> UpdateStory(string projectAcronym, int storyNumber, StoryUpdateRequest storyRequest)
+        public async Task<StoryResponse> UpdateStory(string projectAcronym, string storyId, StoryUpdateRequest storyRequest)
         {
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-                var story = storiesCollection.FindOne(Query.EQ("StoryNumber", storyNumber));
+                var story = storiesCollection.FindById(storyId);
 
                 // with the story, map the new updated fields
                 var storyUpdated = StoriesRepositoryMapper.UpdateStoryPropertiesFromRequest(story, storyRequest);
@@ -119,21 +126,21 @@ namespace StoriesAccessComponent
                     return StoriesRepositoryMapper.MapToEmptyStoryResponse();
 
                 // use mapper to return what its needed.
-                return StoriesRepositoryMapper.MapToStoryResponse(storyUpdated, projectAcronym);
+                return StoriesRepositoryMapper.MapToStoryResponse(storyUpdated);
             }
         }
 
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.RemoveStory(string, int)">
         /// </summary>
-        public async Task<bool> RemoveStory(string projectAcronym, int storyNumber)
+        public async Task<bool> RemoveStory(string projectAcronym, string storyId)
         {
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-                var story = storiesCollection.FindOne(Query.EQ("StoryNumber", storyNumber));
+                var story = storiesCollection.FindById(storyId);
 
                 if (!storiesCollection.Delete(story.StoryNumber))
                     return false;
@@ -158,22 +165,20 @@ namespace StoriesAccessComponent
         //    UpdateStoryNumberForProject(projectAcronym);
         //}
 
-        private async Task<IEnumerable<StoryDocument>> GetProjectStoriesFromStoryIds(IEnumerable<string> storiesID)
-        {
-            var listResult = new List<StoryDocument>();
-            using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
-            {
-                foreach (var storyId in storiesID) 
-                {
-                    // this creates or gets collection
-                    var storiesCollection = db.GetCollection<StoryDocument>("Stories");
-                    var result = storiesCollection.FindById(storyId);
-                    listResult.Add(result);
-                }
-            }
-            return listResult;
-        }
+        //TODO: move to Manager.
+        ///// <summary>
+        ///// Concrete implementation of <see cref="IStoriesAccess.ReadStoriesForAProject(string)">
+        ///// </summary>
+        //public async Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym)
+        //{
+        //    // use stories ID list, filter to find all stories
+        //    var listOfStoriesID = await GetProjectStoriesIds(projectAcronym);
+        //    var result = await GetProjectStoriesFromStoryIds(listOfStoriesID);
 
+        //    // use mapper to return what its needed.
+        //    return StoriesRepositoryMapper.MapToStoriesResponse(result, projectAcronym);
+
+        //}
 
         #endregion
 

@@ -16,12 +16,6 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
             _stories = new List<StoryCreationRequest>();
         }
 
-        public IStoriesBuilder BuildStoryWithProjectAcronym(string projectAcronym)
-        {
-            this._story.ProjectAcronym = projectAcronym;
-            return this;
-        }
-
         public IStoriesBuilder BuildStoryWithName(string name)
         {
             this._story.Name = name;
@@ -63,7 +57,6 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
             for (int i = 0; i < numberOfStories; i++)
             {
                 _stories.Add(new StoriesBuilder()
-                    .BuildStoryWithProjectAcronym($"{NaturalValues.ProjectAcronymWorks}{i}")
                     .BuildStoryWithStoryNumber(i)
                     .BuildStoryWithName($"{NaturalValues.StoryName}{i}")
                     .BuildStoryWithDetails(i)

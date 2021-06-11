@@ -1,4 +1,5 @@
-﻿using LiteDbDriver;
+﻿using LiteDB;
+using LiteDbDriver;
 using System;
 using System.Collections.Generic;
 using Utilities.Taskter.Domain;
@@ -36,5 +37,8 @@ namespace StoriesAccessComponent
         /// A flag indicating if the story its recurrant.
         /// </summary>
         public bool IsRecurrant { get; set; } = false;
+
+        [BsonCtor]
+        public StoryDocument() : base() { }
     }
 }

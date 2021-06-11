@@ -14,6 +14,11 @@ namespace StoriesAccessComponent
         /// </summary>
         Task<StoryResponse> ReadStory(string storyId);
 
+        /// <summary>
+        /// Retrieves a list of stories, from a list Id.
+        /// </summary>
+        Task<IEnumerable<StoryResponse>> ReadMultipleStories(IEnumerable<string> storiesID);
+
         //TODO: move to Manager.
         ///// <summary>
         ///// Retrieves all stories for the given project.
@@ -28,12 +33,12 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Updates a specific story for the given project.
         /// </summary>
-        Task<StoryResponse> UpdateStory(string projectAcronym, int storyNumber, StoryUpdateRequest storyRequest);
+        Task<StoryResponse> UpdateStory(string projectAcronym, string storyId, StoryUpdateRequest storyRequest);
 
         /// <summary>
         /// Deletes a specific story for the given project.
         /// </summary>
-        Task<bool> RemoveStory(string projectAcronym, int storyNumber);
+        Task<bool> RemoveStory(string projectAcronym, string storyId);
 
     }
 }
