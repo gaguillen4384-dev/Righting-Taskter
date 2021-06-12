@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ProjectsAccessComponent;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Utilities.Taskter.Domain;
 
@@ -41,7 +42,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         }
 
 
-        public void PopulateProjectCollection(int numberOfProjects) 
+        public IEnumerable<string> PopulateProjectCollection(int numberOfProjects) 
         {
             var projectResource = ServiceProvider.GetService<IOptions<ProjectResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it
@@ -54,14 +55,15 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 
                 ProjectBuilder projectBuilder = new ProjectBuilder();
                 var listOfProjectRequest = projectBuilder.BuildManyProjects(numberOfProjects);
-
+                List<string> counter = new List<string>();
                 foreach (var projectRequest in listOfProjectRequest)
                 {
                     var projectDocument = ProjectRepositoryMapper.MapToProjectDocumentFromCreationRequest(projectRequest);
                     projectsCollection.Insert(projectDocument);
+                    counter.Add(projectDocument.Id.ToString());
                 }
 
-                var projects = db.GetCollection<ProjectDocument>("Projects");
+                return counter;
             }
         }
 

@@ -131,7 +131,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         {
             // Arrange
             // Create a bunch of projects
-            _fixture.PopulateProjectCollection(NaturalValues.NumberOfProjectsToBeCreated);
+            var count = _fixture.PopulateProjectCollection(NaturalValues.NumberOfProjectsToBeCreated);
 
             // Act
             // Delete project0
@@ -148,6 +148,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
             // Teardown Needs to happen per test so other tests are not affected.
             _fixture.Dispose();
         }
+
 
         //TODO: REMOVE MULTIPLE PROJECTS.
 

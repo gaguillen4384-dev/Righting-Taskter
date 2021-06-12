@@ -28,17 +28,17 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Creates a story for the given project.
         /// </summary>
-        Task<StoryResponse> StartStory(string projectAcronym, StoryCreationRequest storyRequest);
+        Task<StoryResponse> StartStory(StoryCreationRequest storyRequest);
 
         /// <summary>
         /// Updates a specific story for the given project.
         /// </summary>
-        Task<StoryResponse> UpdateStory(string projectAcronym, string storyId, StoryUpdateRequest storyRequest);
+        Task<StoryResponse> UpdateStory(string storyId, StoryUpdateRequest storyRequest);
 
         /// <summary>
         /// Deletes a specific story for the given project.
         /// </summary>
-        Task<bool> RemoveStory(string projectAcronym, string storyId);
+        Task<bool> RemoveStory(string storyId);
 
     }
 }

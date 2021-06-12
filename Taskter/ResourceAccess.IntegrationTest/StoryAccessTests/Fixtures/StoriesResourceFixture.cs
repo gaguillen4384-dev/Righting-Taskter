@@ -64,8 +64,6 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
                     storiesCollection.Insert(storyDocument);
                     counter.Add(storyDocument.Id.ToString());
                 }
-                var stories = storiesCollection.FindAll().ToList();
-                var story = storiesCollection.FindById(counter.First());
 
                 return counter;
             }

@@ -102,6 +102,9 @@ namespace ProjectsAccessComponent
                 //var project = projectsCollection.FindOne(projectToFind => projectToFind.ProjectAcronym == projectAcronym);
                 var project = projectsCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
 
+                if (project == null)
+                    return false;
+
                 return projectsCollection.Delete(project.Id);
             }
         }

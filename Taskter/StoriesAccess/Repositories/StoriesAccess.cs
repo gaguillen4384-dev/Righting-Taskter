@@ -30,7 +30,7 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.StartStory(string, StoryCreationRequest)">
         /// </summary>
-        public async Task<StoryResponse> StartStory(string projectAcronym, StoryCreationRequest storyRequest)
+        public async Task<StoryResponse> StartStory(StoryCreationRequest storyRequest)
         {
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
@@ -103,14 +103,15 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.UpdateStory(string, int, StoryUpdateRequest)">
         /// </summary>
-        public async Task<StoryResponse> UpdateStory(string projectAcronym, string storyId, StoryUpdateRequest storyRequest)
+        public async Task<StoryResponse> UpdateStory(string storyId, StoryUpdateRequest storyRequest)
         {
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
+                var Id = new ObjectId(storyId);
 
-                var story = storiesCollection.FindById(storyId);
+                var story = storiesCollection.FindById(Id);
 
                 // with the story, map the new updated fields
                 var storyUpdated = StoriesRepositoryMapper.UpdateStoryPropertiesFromRequest(story, storyRequest);
@@ -133,16 +134,15 @@ namespace StoriesAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesAccess.RemoveStory(string, int)">
         /// </summary>
-        public async Task<bool> RemoveStory(string projectAcronym, string storyId)
+        public async Task<bool> RemoveStory(string storyId)
         {
             using (var db = new LiteDatabase(_storiesConnection.ConnectionString))
             {
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
+                var Id = new ObjectId(storyId);
 
-                var story = storiesCollection.FindById(storyId);
-
-                if (!storiesCollection.Delete(story.StoryNumber))
+                if (!storiesCollection.Delete(Id))
                     return false;
 
                 //TODO: this needs to be moved to manager

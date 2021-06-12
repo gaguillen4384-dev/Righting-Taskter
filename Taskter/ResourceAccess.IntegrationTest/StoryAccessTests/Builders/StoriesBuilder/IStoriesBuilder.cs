@@ -11,10 +11,20 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
 
         IStoriesBuilder BuildStoryWithDetails(int numberOfDetails);
 
+        IStoriesBuilder BuildStoryWithIsRecurrant(bool flag);
+
+        IStoriesBuilder UpdateStoryWithName(string name);
+
+        IStoriesBuilder UpdateStoryWithDetails(int numberOfDetails);
+
+        IStoriesBuilder UpdateStoryWithIsCompleted(bool flag);
+
+        IStoriesBuilder UpdateStoryWithIsRecurrant(bool flag);
+
         IEnumerable<StoryCreationRequest> BuildStoriesOut(int numberOfStories);
 
-        IStoriesBuilder BuildStoryWithProjectAcronym(bool isRecurrant);
+        StoryCreationRequest BuildCreateRequest();
 
-        StoryCreationRequest Build();
+        StoryUpdateRequest BuildUpdateRequest();
     }
 }
