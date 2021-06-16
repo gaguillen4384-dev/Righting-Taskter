@@ -16,12 +16,12 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Reference to project unique identifier.
         /// </summary>
-        public ObjectId ProjectId { get; set; } = ObjectId.Empty;
+        public string ProjectId { get; set; } = BsonId.Empty.ToString();
 
         /// <summary>
         /// Reference to story unique identifier.
         /// </summary>
-        public ObjectId StoryId { get; set; } = ObjectId.Empty;
+        public string StoryId { get; set; } = BsonId.Empty.ToString();
 
         /// <summary>
         /// The number of the story in the project its on. Sequential.

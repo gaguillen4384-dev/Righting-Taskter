@@ -4,14 +4,14 @@ using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.StoryAccessTests
 {
-    public class StoriesBuilder : IStoriesBuilder
+    public class StoriesReferencesBuilder : IStoriesReferencesBuilder
     {
         private List<StoryCreationRequest> _stories;
         private StoryCreationRequest _storyToCreate;
         private StoryUpdateRequest _storyToUpdate;
 
         // NEED TO INSTANTIATE THE BUILDER PROPERTIES BEFORE THEY GET USED
-        public StoriesBuilder()
+        public StoriesReferencesBuilder()
         {
             _storyToCreate = new StoryCreationRequest();
             _stories = new List<StoryCreationRequest>();
@@ -20,25 +20,25 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
 
         #region Creation builder
 
-        public IStoriesBuilder BuildStoryWithName(string name)
+        public IStoriesReferencesBuilder BuildStoryWithName(string name)
         {
             _storyToCreate.Name = name;
             return this;
         }
 
-        public IStoriesBuilder BuildStoryWithStoryNumber(int storyNumber)
+        public IStoriesReferencesBuilder BuildStoryWithStoryNumber(int storyNumber)
         {
             _storyToCreate.StoryNumber = storyNumber;
             return this;
         }
 
-        public IStoriesBuilder BuildStoryWithDetails(int numberOfDetails)
+        public IStoriesReferencesBuilder BuildStoryWithDetails(int numberOfDetails)
         {
             _storyToCreate.Details = PopulateStoryDetails(numberOfDetails);
             return this;
         }
 
-        public IStoriesBuilder BuildStoryWithIsRecurrant(bool isRecurrant)
+        public IStoriesReferencesBuilder BuildStoryWithIsRecurrant(bool isRecurrant)
         {
             _storyToCreate.IsRecurrant = isRecurrant;
             return this;
@@ -61,25 +61,25 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
         #endregion
 
         #region Update builder
-        public IStoriesBuilder UpdateStoryWithDetails(int numberOfDetails)
+        public IStoriesReferencesBuilder UpdateStoryWithDetails(int numberOfDetails)
         {
             _storyToUpdate.Details = PopulateStoryDetails(numberOfDetails, update: true);
             return this;
         }
 
-        public IStoriesBuilder UpdateStoryWithName(string name)
+        public IStoriesReferencesBuilder UpdateStoryWithName(string name)
         {
             _storyToUpdate.Name = name;
             return this;
         }
 
-        public IStoriesBuilder UpdateStoryWithIsCompleted(bool flag)
+        public IStoriesReferencesBuilder UpdateStoryWithIsCompleted(bool flag)
         {
             _storyToUpdate.IsCompleted = flag;
             return this;
         }
 
-        public IStoriesBuilder UpdateStoryWithIsRecurrant(bool flag)
+        public IStoriesReferencesBuilder UpdateStoryWithIsRecurrant(bool flag)
         {
             _storyToUpdate.IsRecurrant = flag;
             return this;

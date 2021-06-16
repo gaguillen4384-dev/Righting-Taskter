@@ -12,11 +12,12 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Create a story reference for a project.
         /// </summary>
-        Task MakeStoriesReferenceForProject(string projectAcronym, string projectId);
+        Task StartStoriesReferenceForProject(string projectAcronym, string projectId);
 
         /// <summary>
         /// Creates a story reference for the given project.
         /// </summary>
+        // TODO: Make the four parameters an object. 
         Task MakeReferenceForProjectAndStory(string projectAcronym, int storyNumber, ObjectId storyId, ObjectId projectId);
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Gets the project id from stories references.
         /// </summary>
-        Task<ObjectId> GetProjectId(string projectAcronym);
+        Task<string> GetProjectId(string projectAcronym);
 
         /// <summary>
         /// Updates a story reference project acronym.

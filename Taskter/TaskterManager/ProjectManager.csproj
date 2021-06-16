@@ -9,4 +9,8 @@
     <ProjectReference Include="..\Utilities\Domain\Taskter.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\StoryService\" />
+  </ItemGroup>
+
 </Project>

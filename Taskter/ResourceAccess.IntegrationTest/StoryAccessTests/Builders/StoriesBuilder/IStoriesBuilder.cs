@@ -3,23 +3,23 @@ using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.StoryAccessTests
 {
-    public interface IStoriesBuilder
+    public interface IStoriesReferencesBuilder
     {
-        IStoriesBuilder BuildStoryWithName(string name);
+        IStoriesReferencesBuilder BuildStoryWithName(string name);
 
-        IStoriesBuilder BuildStoryWithStoryNumber(int storyNumber);
+        IStoriesReferencesBuilder BuildStoryWithStoryNumber(int storyNumber);
 
-        IStoriesBuilder BuildStoryWithDetails(int numberOfDetails);
+        IStoriesReferencesBuilder BuildStoryWithDetails(int numberOfDetails);
 
-        IStoriesBuilder BuildStoryWithIsRecurrant(bool flag);
+        IStoriesReferencesBuilder BuildStoryWithIsRecurrant(bool flag);
 
-        IStoriesBuilder UpdateStoryWithName(string name);
+        IStoriesReferencesBuilder UpdateStoryWithName(string name);
 
-        IStoriesBuilder UpdateStoryWithDetails(int numberOfDetails);
+        IStoriesReferencesBuilder UpdateStoryWithDetails(int numberOfDetails);
 
-        IStoriesBuilder UpdateStoryWithIsCompleted(bool flag);
+        IStoriesReferencesBuilder UpdateStoryWithIsCompleted(bool flag);
 
-        IStoriesBuilder UpdateStoryWithIsRecurrant(bool flag);
+        IStoriesReferencesBuilder UpdateStoryWithIsRecurrant(bool flag);
 
         IEnumerable<StoryCreationRequest> BuildStoriesOut(int numberOfStories);
 

@@ -24,7 +24,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesReferencesAccess.CreateStoryReferenceForProject(string, string)"/>
         /// </summary>
-        public async Task MakeStoriesReferenceForProject(string projectAcronym, string projectId)
+        public async Task StartStoriesReferenceForProject(string projectAcronym, string projectId)
         {
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
@@ -38,7 +38,7 @@ namespace StoriesReferencesAccessComponent
                 var storyReference = new StoryReferenceDocument()
                 {
                     ProjectAcronym = projectAcronym,
-                    ProjectId = projectDocumentId
+                    ProjectId = projectDocumentId.ToString()
                 };
 
                 storiesReferenceCollection.Insert(storyReference);
@@ -89,7 +89,7 @@ namespace StoriesReferencesAccessComponent
                     Query.EQ("ProjectAcronym", projectAcronym),
                     Query.EQ("StoryNumber", storyNumber)));
 
-                return result.StoryId.ToString();
+                return result.StoryId;
             }
         }
 
@@ -117,7 +117,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesReferencesAccess.GetProjectId(string)"/>
         /// </summary>
-        public async Task<ObjectId> GetProjectId(string projectAcronym)
+        public async Task<string> GetProjectId(string projectAcronym)
         {
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {

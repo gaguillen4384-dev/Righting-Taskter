@@ -8,7 +8,7 @@ namespace LiteDbDriver
         /// <summary>
         /// The unique identifier for the object.
         /// </summary>
-        public ObjectId Id { get; set; } = ObjectId.NewObjectId();
+        public BsonId Id { get; set; } = BsonId.NewObjectId();
 
         /// <summary>
         /// The date the object got created.
