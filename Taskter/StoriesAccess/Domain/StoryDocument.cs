@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using LiteDbDriver;
+﻿using LiteDbDriver;
 using System;
 using System.Collections.Generic;
 using Utilities.Taskter.Domain;
@@ -38,7 +37,7 @@ namespace StoriesAccessComponent
         /// </summary>
         public bool IsRecurrant { get; set; } = false;
 
-        [BsonCtor]
+        [BsonConstructor]
         public StoryDocument() : base() { }
     }
 }

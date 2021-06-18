@@ -51,20 +51,19 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             // TODO: Bring the inner logic to the litedbdriver and then reference it, bring a static service?
             using (var db = new LiteDatabase(storiesResource.Value.ConnectionString))
             {
-                var storiesCollection = db.GetCollection<StoryReferenceDocument>("Stories");
+                var storiesCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
                 // Ensureindex might need to be called after object creation
                 storiesCollection.EnsureIndex(story => story.Id);
 
-                //StoriesReferencesBuilder storiesBuilder = new StoriesBuilder();
-                //var listOfStoriesRequest = storiesBuilder.BuildStoriesOut(NumberOfStories);
+                StoriesReferencesBuilder storiesReferenceBuilder = new StoriesReferencesBuilder();
+                var listOfStories = storiesReferenceBuilder.BuildStoriesReferences(NumberOfStories);
                 List<string> counter = new List<string>();
-                //foreach (var projectRequest in listOfStoriesRequest)
-                //{
-                //    var storyDocument = StoriesRepositoryMapper.MapCreationRequestToStory(projectRequest);
-                //    storiesCollection.Insert(storyDocument);
-                //    counter.Add(storyDocument.Id.ToString());
-                //}
+                foreach (var storyRequest in listOfStories)
+                {
+                    storiesCollection.Insert(storyRequest);
+                    counter.Add(storyRequest.ProjectAcronym.ToString());
+                }
 
                 return counter;
             }
@@ -72,7 +71,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
 
         public void Dispose()
         {
-            var storiesResource = ServiceProvider.GetService<IOptions<StoriesResource>>();
+            var storiesResource = ServiceProvider.GetService<IOptions<StoriesReferencesResource>>();
             // delete DB from file system.
             File.Delete(storiesResource.Value.ConnectionString);
         }

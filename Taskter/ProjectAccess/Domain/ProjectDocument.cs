@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using LiteDbDriver;
+﻿using LiteDbDriver;
 using System;
 
 namespace ProjectsAccessComponent
@@ -21,7 +20,7 @@ namespace ProjectsAccessComponent
         /// </summary>
         public string ProjectAcronym { get; set; } = string.Empty;
         
-        [BsonCtor]
+        [BsonConstructor]
         public ProjectDocument() : base() { }
 
     }

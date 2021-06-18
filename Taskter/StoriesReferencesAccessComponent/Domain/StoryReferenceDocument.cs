@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using LiteDbDriver;
+﻿using LiteDbDriver;
 
 namespace StoriesReferencesAccessComponent
 {
@@ -16,12 +15,12 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Reference to project unique identifier.
         /// </summary>
-        public string ProjectId { get; set; } = BsonId.Empty.ToString();
+        public string ProjectId { get; set; } = string.Empty;
 
         /// <summary>
         /// Reference to story unique identifier.
         /// </summary>
-        public string StoryId { get; set; } = BsonId.Empty.ToString();
+        public string StoryId { get; set; } = string.Empty;
 
         /// <summary>
         /// The number of the story in the project its on. Sequential.
@@ -34,7 +33,7 @@ namespace StoriesReferencesAccessComponent
         public bool IsDeleted { get; set; } = false;
         
 
-        [BsonCtor]
+        [BsonConstructor]
         public StoryReferenceDocument() : base() { }
 
     }

@@ -29,29 +29,11 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _storiesReferencesBuilder = _serviceProvider.GetService<IStoriesReferencesBuilder>();
         }
 
-        #region Start A story
-        [Fact]
-        public async void StoriesReferencesAccess_MakeStoriesReferenceForProject_Success()
-        {
-            // Arrange
-            _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStories);
-            var request = _storiesBuilder.BuildStoryWithName(NaturalValues.StoryName)
-                           .BuildStoryWithStoryNumber(NaturalValues.SingleStoryNumber)
-                           .BuildStoryWithDetails(NaturalValues.NumberOfStoryDetails)
-                           .BuildCreateRequest();
+        //TODO: TESTS with different project names, wrong number for project, empty projects
+        //TODO: Update Reference acronym
+        //TODO: RemoveReference
+        //TODO: GetProjectId , not found
 
-            // Act
-            var result = await _storiesAccess.StartStory(request);
-            // Assert - descriptive
-            result.Should().BeOfType<StoryResponse>();
-            result.As<StoryResponse>().Name.Should().Be(NaturalValues.StoryName);
-
-            // Teardown Needs to happen per test so other tests are not affected.
-            _fixture.Dispose();
-        }
-        #endregion
-
-        #region Read stories
         /// <summary>
         /// Reads a story from a project. This is one is not specific, limitations of the system.
         /// </summary>
@@ -59,39 +41,24 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         public async void StoriesAccess_ReadMultipleStories_Success()
         {
             // Arrange
-            var listOfIds = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStories);
+            var listOfIds = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStories).ToList();
+
+            var nameToUse = randomizer.Next(listOfIds.Count);
 
             // Act
-            var result = await _storiesAccess.ReadMultipleStories(listOfIds);
+            var result = await _storiesReferencesAccess.GetProjectId(listOfIds[nameToUse]);
 
             // Assert - descriptive
-            result.Should().NotBeEmpty()
-                .And.HaveCount(NaturalValues.NumberOfStories);
-
-            // Teardown Needs to happen per test so other tests are not affected.
-            _fixture.Dispose();
-        }
-        /// <summary>
-        /// Reads a story from a project. This is one is not specific, limitations of the system.
-        /// </summary>
-        [Fact]
-        public async void StoriesAccess_ReadSingleStory_Success()
-        {
-            // Arrange
-            List<string> listOfIds = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStories).ToList();
-
-            var idToUse = randomizer.Next(listOfIds.Count);
-
-            // Act
-            var result = await _storiesAccess.ReadStory(listOfIds[idToUse]);
-
-            // Assert - descriptive
-            result.Should().BeOfType<StoryResponse>();
+            result.Should().NotBeEmpty();
 
             // Teardown Needs to happen per test so other tests are not affected.
             _fixture.Dispose();
         }
 
-        #endregion
+        //TODO: GetProjectStoriesIds
+        //TODO: GetSingleStoryId
+        //TODO: MakeReferenceForProjectAndStory
+        //TODO: StartStoriesReferenceForProject
+
     }
 }

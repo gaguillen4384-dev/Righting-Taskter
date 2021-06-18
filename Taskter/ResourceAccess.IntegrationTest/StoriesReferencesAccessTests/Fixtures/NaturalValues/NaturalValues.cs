@@ -2,7 +2,7 @@
 {
     public class NaturalValues
     {
-        public static string AppsettingsLocation = @"C:\WorkSpace\Righting-Taskter\Taskter\ResourceAccess.IntegrationTest\StoryAccessTests\appsettings.json";
+        public static string AppsettingsLocation = @"C:\WorkSpace\Righting-Taskter\Taskter\ResourceAccess.IntegrationTest\StoriesReferencesAccessTests\appsettings.json";
 
         public static string StoryName = "Name-";
 

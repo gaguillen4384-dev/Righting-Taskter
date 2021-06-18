@@ -50,8 +50,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// 
         /// </summary>
-        // TODO: I dont want to be passing db specific types into method. I could pass in a string a map it to objectID
-        public async Task MakeReferenceForProjectAndStory(string projectAcronym, int storyNumber, ObjectId storyId, ObjectId projectId)
+        public async Task MakeReferenceForProjectAndStory(string projectAcronym, int storyNumber, string storyId, string projectId)
         {
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
@@ -70,7 +69,6 @@ namespace StoriesReferencesAccessComponent
 
                 storiesReferenceCollection.Insert(storyReference);
 
-                // TODO: What to do if insert fails?
             }
         }
 
@@ -88,6 +86,9 @@ namespace StoriesReferencesAccessComponent
                 var result = storiesReferenceCollection.FindOne(Query.And(
                     Query.EQ("ProjectAcronym", projectAcronym),
                     Query.EQ("StoryNumber", storyNumber)));
+
+                if (result == null)
+                    return string.Empty;
 
                 return result.StoryId;
             }
@@ -108,7 +109,7 @@ namespace StoriesReferencesAccessComponent
 
                 var listResult = result.ToList();
 
-                var listIdsResult = listResult.Select(reference => reference.StoryId.ToString());
+                var listIdsResult = listResult.Select(reference => reference.StoryId);
 
                 return listIdsResult;
             }
@@ -126,6 +127,9 @@ namespace StoriesReferencesAccessComponent
 
                 // This needs to be generic in a driver.
                 var result = storiesReferenceCollection.FindOne(Query.EQ("ProjectAcronym", projectAcronym));
+
+                if (result == null)
+                    return string.Empty;
 
                 return result.ProjectId;
             }

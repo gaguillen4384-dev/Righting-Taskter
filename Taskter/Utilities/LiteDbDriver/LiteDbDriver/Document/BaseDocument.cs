@@ -8,7 +8,8 @@ namespace LiteDbDriver
         /// <summary>
         /// The unique identifier for the object.
         /// </summary>
-        public BsonId Id { get; set; } = BsonId.NewObjectId();
+        // TODO: This bleeds litedb calling to clients of this code, how can I move it? 
+        public ObjectId Id { get; set; } = ObjectId.NewObjectId();
 
         /// <summary>
         /// The date the object got created.
@@ -20,7 +21,7 @@ namespace LiteDbDriver
         /// </summary>
         public DateTime? DateUpdated { get; set; } = null;
 
-        [BsonCtor]
+        [BsonConstructor]
         public BaseDocument() {}
     }
 }

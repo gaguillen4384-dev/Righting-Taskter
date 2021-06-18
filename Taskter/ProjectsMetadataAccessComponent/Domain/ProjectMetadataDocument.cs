@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using LiteDbDriver;
+﻿using LiteDbDriver;
 
 namespace ProjectsMetadataAccessComponent
 {
@@ -25,7 +24,7 @@ namespace ProjectsMetadataAccessComponent
         /// </summary>
         public int NumberOfActiveStories { get; set; } = 0;
 
-        [BsonCtor]
+        [BsonConstructor]
         public ProjectMetadataDocument() : base() { }
 
     }

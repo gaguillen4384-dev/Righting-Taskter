@@ -9,15 +9,15 @@ using Xunit;
 
 namespace ResourceAccess.IntegrationTest.StoryAccessTests
 {
-    public class StoriesReferencesAccessIntegration : IClassFixture<StoriesReferencesResourceFixture>
+    public class StoriesResourceFixtureIntegration : IClassFixture<StoriesResourceFixture>
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IStoriesAccess _storiesAccess;
-        private readonly IStoriesReferencesBuilder _storiesBuilder;
-        private readonly StoriesReferencesResourceFixture _fixture;
+        private readonly IStoriesBuilder _storiesBuilder;
+        private readonly StoriesResourceFixture _fixture;
         private readonly Random randomizer = new Random();
 
-        public StoriesReferencesAccessIntegration(StoriesReferencesResourceFixture fixture)
+        public StoriesResourceFixtureIntegration(StoriesResourceFixture fixture)
         {
             _fixture = fixture;
             _serviceProvider = fixture.ServiceProvider;
@@ -25,7 +25,7 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
             _storiesAccess = _serviceProvider.GetService<IStoriesAccess>();
 
             //// Test components
-            _storiesBuilder = _serviceProvider.GetService<IStoriesReferencesBuilder>();
+            _storiesBuilder = _serviceProvider.GetService<IStoriesBuilder>();
         }
 
         #region Start A story
