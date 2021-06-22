@@ -168,34 +168,16 @@ namespace StoriesReferencesAccessComponent
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
-                var storyObjectID = GetSingleStoryReferenceId(storyId).Result;
+                // This needs to be generic in a driver.
+                var result = storiesReferenceCollection.FindOne(Query.EQ("StoryId", storyId));
 
-                if (!storiesReferenceCollection.Delete(storyObjectID))
+                if (!storiesReferenceCollection.Delete(result.Id))
                     return Task.FromResult(false);
 
                 return Task.FromResult(true);
             }
         }
 
-        #region Private Methods
 
-        /// <summary>
-        /// Get the story reference ID, ONLY USE FOR stories Reference Resource ACCESS.
-        /// </summary>
-        private async Task<string> GetSingleStoryReferenceId(string storyId)
-        {
-            using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
-            {
-                // this creates or gets collection
-                var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
-
-                // This needs to be generic in a driver.
-                var result = storiesReferenceCollection.FindOne(Query.EQ("StoryId", storyId));
-
-                return result.Id.ToString();
-            }
-        }
-
-        #endregion
     }
 }

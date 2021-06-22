@@ -55,11 +55,28 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             {
                 //TODO: replace with natural values.
                 _storyReferences.Add(new StoriesReferencesBuilder()
-                    .BuildStoryReferenceWithProjectAcronym($"PJT{i}")
-                    .BuildStoryReferenceWithStoryNumber(i)
-                    .BuildStoryReferenceWithStoryId($"PJT{i}")
+                    .BuildStoryReferenceWithProjectAcronym(NaturalValues.ProjectAcronymToGet + i)
+                    .BuildStoryReferenceWithStoryNumber(NaturalValues.StoryNumberToUse + i)
+                    .BuildStoryReferenceWithStoryId(NaturalValues.SingleStoryId + i)
                     .BuildStoryReferenceWithIsDeleted(false)
-                    .BuildStoryReferenceWithProjectId($"PJT{i}")
+                    .BuildStoryReferenceWithProjectId(NaturalValues.SingleProjectId + i)
+                    .Build());
+            }
+
+            return _storyReferences;
+        }
+
+        public IEnumerable<StoryReferenceDocument> BuildStoriesReferencesForSpecificProject(int numberOfReferences, string projectAcronym)
+        {
+            for (int i = 0; i < numberOfReferences; i++)
+            {
+                //TODO: replace with natural values.
+                _storyReferences.Add(new StoriesReferencesBuilder()
+                    .BuildStoryReferenceWithProjectAcronym(projectAcronym)
+                    .BuildStoryReferenceWithStoryNumber(NaturalValues.StoryNumberToUse + i)
+                    .BuildStoryReferenceWithStoryId(NaturalValues.SingleStoryId + i)
+                    .BuildStoryReferenceWithIsDeleted(false)
+                    .BuildStoryReferenceWithProjectId(NaturalValues.SingleProjectId)
                     .Build());
             }
 

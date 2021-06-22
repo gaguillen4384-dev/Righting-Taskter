@@ -1,11 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using StoriesAccessComponent;
 using StoriesReferencesAccessComponent;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Utilities.Taskter.Domain;
 using Xunit;
 
 namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
@@ -29,24 +26,18 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _storiesReferencesBuilder = _serviceProvider.GetService<IStoriesReferencesBuilder>();
         }
 
-        //TODO: TESTS with different project names, wrong number for project, empty projects
-        //TODO: Update Reference acronym
-        //TODO: RemoveReference
-        //TODO: GetProjectId , not found
+        #region Get project ID
 
-        /// <summary>
-        /// Reads a story from a project. This is one is not specific, limitations of the system.
-        /// </summary>
         [Fact]
-        public async void StoriesAccess_ReadMultipleStories_Success()
+        public async void StoriesReferences_GetProjectById_Success()
         {
             // Arrange
-            var listOfIds = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStories).ToList();
+            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
 
-            var nameToUse = randomizer.Next(listOfIds.Count);
+            var nameToUse = randomizer.Next(resource.listOfProjectUsed.Count);
 
             // Act
-            var result = await _storiesReferencesAccess.GetProjectId(listOfIds[nameToUse]);
+            var result = await _storiesReferencesAccess.GetProjectId(resource.listOfProjectUsed.ElementAtOrDefault(nameToUse));
 
             // Assert - descriptive
             result.Should().NotBeEmpty();
@@ -55,8 +46,102 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: GetProjectStoriesIds
-        //TODO: GetSingleStoryId
+        [Fact]
+        public async void StoriesReferences_GetProjectByIdWhichIsNotThere_ReturnEmpty_Success()
+        {
+            // Arrange
+            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
+
+            // Act
+            var result = await _storiesReferencesAccess.GetProjectId(NaturalValues.EmptyProjectAcronym);
+
+            // Assert - descriptive
+            result.Should().BeEmpty();
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
+
+        #endregion
+
+        #region Get Story/ies
+
+        [Fact]
+        public async void StoriesReferences_GetStoryById_Success()
+        {
+            // Arrange
+            var listOfIds = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToGet);
+
+            // Act
+            var result = await _storiesReferencesAccess.GetSingleStoryId(NaturalValues.ProjectAcronymToGet, NaturalValues.StoryNumberToUse);
+
+            // Assert - descriptive
+            result.Should().NotBeEmpty();
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
+
+        [Fact]
+        public async void StoriesReferences_GetStoryByIdWhichIsNotThere_ReturnEmpty_Success()
+        {
+            // Arrange
+            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
+
+            // Act
+            var result = await _storiesReferencesAccess.GetSingleStoryId(NaturalValues.ProjectAcronymToGet, NaturalValues.StoryNumberToNotGet);
+
+            // Assert - descriptive
+            result.Should().BeEmpty();
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
+
+        [Fact]
+        public async void StoriesReferences_GetProjectStoriesById_Success()
+        {
+            // Arrange
+            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToGet);
+
+            // Act
+            var result = await _storiesReferencesAccess.GetProjectStoriesIds(NaturalValues.ProjectAcronymToGet);
+
+            // Assert - descriptive
+            result.Should().NotBeEmpty()
+                .And.HaveCount(resource.listOfStoriesReferenceIds.Count); ;
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
+        #endregion
+
+        #region Remove a Reference
+        
+        [Fact]
+        public async void StoriesReferences_RemoveStoryReference_Success()
+        {
+
+            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToGet);
+
+            // Act
+            var result = await _storiesReferencesAccess.RemoveReferenceOfStory(resource.listOfStoriesReferenceIds.ElementAtOrDefault(NaturalValues.StoryNumberToUse));
+
+            // Assert - descriptive
+            result.Should().BeTrue();
+
+            var resultAfterDelete = await _storiesReferencesAccess.GetSingleStoryId(NaturalValues.ProjectAcronymToGet, NaturalValues.StoryNumberToUse);
+            resultAfterDelete.Should().BeEmpty();
+
+            // Teardown Needs to happen per test so other tests are not affected.
+            _fixture.Dispose();
+        }
+
+        #endregion
+
+        //TODO: TESTS with different project names, wrong number for project, empty projects
+        //TODO: Update Reference acronym
+        //TODO: RemoveReference
         //TODO: MakeReferenceForProjectAndStory
         //TODO: StartStoriesReferenceForProject
 

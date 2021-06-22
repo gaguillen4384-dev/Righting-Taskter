@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using StoriesAccessComponent;
 using StoriesReferencesAccessComponent;
 using System;
 using System.Collections.Generic;
@@ -45,7 +44,8 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             ServiceProvider = services.BuildServiceProvider();
         }
 
-        public IEnumerable<string> PopulateStoriesCollection(int NumberOfStories) 
+        // Should it return an object with specif things?
+        public FixtureResource PopulateStoriesCollection(int NumberOfStories, string? projectAcronym) 
         {
             var storiesResource = ServiceProvider.GetService<IOptions<StoriesReferencesResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it, bring a static service?
@@ -57,15 +57,27 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
                 storiesCollection.EnsureIndex(story => story.Id);
 
                 StoriesReferencesBuilder storiesReferenceBuilder = new StoriesReferencesBuilder();
-                var listOfStories = storiesReferenceBuilder.BuildStoriesReferences(NumberOfStories);
-                List<string> counter = new List<string>();
+                var listOfStories = storiesReferenceBuilder.BuildStoriesReferences(NumberOfStories).ToList();
+
+                if (!string.IsNullOrWhiteSpace(projectAcronym)) 
+                {
+                    // Reset the setup
+                    storiesReferenceBuilder = new StoriesReferencesBuilder();
+                    listOfStories.Clear();
+                    listOfStories = new List<StoryReferenceDocument>(storiesReferenceBuilder.BuildStoriesReferencesForSpecificProject(NumberOfStories, projectAcronym));
+                }
+
+                var result = new FixtureResource();
+
                 foreach (var storyRequest in listOfStories)
                 {
                     storiesCollection.Insert(storyRequest);
-                    counter.Add(storyRequest.ProjectAcronym.ToString());
+                    result.listOfProjectUsed.Add(storyRequest.ProjectAcronym);
+                    result.listOfStoriesReferenceIds.Add(storyRequest.StoryId);
+                    result.listOfProjectIds.Add(storyRequest.ProjectId);
                 }
 
-                return counter;
+                return result;
             }
         }
 
