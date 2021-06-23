@@ -7,9 +7,9 @@ using System.Linq;
 using Utilities.Taskter.Domain;
 using Xunit;
 
-namespace ResourceAccess.IntegrationTest.StoryAccessTests
+namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
 {
-    public class StoriesResourceFixtureIntegration : IClassFixture<ProjectMetadataFixture>
+    public class ProjectMetadataFixtureIntegration : IClassFixture<ProjectMetadataFixture>
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IStoriesAccess _storiesAccess;
@@ -17,7 +17,7 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
         private readonly ProjectMetadataFixture _fixture;
         private readonly Random randomizer = new Random();
 
-        public StoriesResourceFixtureIntegration(ProjectMetadataFixture fixture)
+        public ProjectMetadataFixtureIntegration(ProjectMetadataFixture fixture)
         {
             _fixture = fixture;
             _serviceProvider = fixture.ServiceProvider;

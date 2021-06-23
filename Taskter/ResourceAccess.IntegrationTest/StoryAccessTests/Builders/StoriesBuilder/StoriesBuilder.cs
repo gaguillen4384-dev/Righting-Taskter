@@ -4,14 +4,14 @@ using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.StoryAccessTests
 {
-    public class StoriesBuilder : IStoriesBuilder
+    public class ProjectMetadataBuilder : IStoriesBuilder
     {
         private List<StoryCreationRequest> _stories;
         private StoryCreationRequest _storyToCreate;
         private StoryUpdateRequest _storyToUpdate;
 
         // NEED TO INSTANTIATE THE BUILDER PROPERTIES BEFORE THEY GET USED
-        public StoriesBuilder()
+        public ProjectMetadataBuilder()
         {
             _storyToCreate = new StoryCreationRequest();
             _stories = new List<StoryCreationRequest>();

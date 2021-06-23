@@ -33,5 +33,15 @@ namespace ProjectsMetadataAccessComponent
         /// Updates the project metadata identifier.
         /// </summary>
         Task<ProjectMetadataDetails> UpdateProjectMetadataAcronym(string projectAcronym, string updatedProjectAcronym);
+
+        /// <summary>
+        /// Removes the project metadata.
+        /// </summary>
+        Task RemoveProjectMetadataDetails(string projectAcronym);
+
+        /// <summary>
+        /// Get the latest number on a project
+        /// </summary>
+        Task<int> GetLatestStoryNumberForProject(string projectAcronym);
     }
 }

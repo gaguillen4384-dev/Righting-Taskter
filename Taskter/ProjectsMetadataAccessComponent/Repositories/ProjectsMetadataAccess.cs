@@ -84,7 +84,7 @@ namespace ProjectsMetadataAccessComponent
         }
 
         /// <summary>
-        /// This retrieves the latest story number of a project.
+        /// Concrete implementation of <see cref="IProjectsMetadataAccess.GetLatestStoryNumberForProject"/>
         /// </summary>
         public async Task<int> GetLatestStoryNumberForProject(string projectAcronym)
         {
@@ -140,7 +140,7 @@ namespace ProjectsMetadataAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectsMetadataAccess.GetAllProjectsMetadataDetails()"/>
+        /// Concrete implementation of <see cref="IProjectsMetadataAccess.GetAllProjectsMetadataDetails"/>
         /// </summary>
         public async Task<ProjectMetadataDetails> UpdateProjectMetadataAcronym(string projectAcronym, string updatedProjectAcronym)
         {
@@ -164,6 +164,9 @@ namespace ProjectsMetadataAccessComponent
 
         }
 
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectsMetadataAccess.RemoveProjectMetadataDetails"/> 
+        /// </summary>
         public async Task RemoveProjectMetadataDetails(string projectAcronym)
         {
             using (var db = new LiteDatabase(_projectNumbersConnection.ConnectionString))

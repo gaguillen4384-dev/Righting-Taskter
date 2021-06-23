@@ -2,14 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using ProjectsMetadataAccessComponent;
 using StoriesAccessComponent;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Utilities.Taskter.Domain;
 
-namespace ResourceAccess.IntegrationTest.StoryAccessTests
+namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
 {
     public class ProjectMetadataFixture : IDisposable
     {
@@ -29,39 +29,39 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
 
             // this is by Microsoft.Extensions.Options.ConfigurationExtensions & ConfigurationBinder which allows strongtype 
             // Supposed to fill in IOptions
-            services.Configure<StoriesResource>(options => _configuration
-                .GetSection(nameof(StoriesResource))
+            services.Configure<ProjectsMetadataResource>(options => _configuration
+                .GetSection(nameof(ProjectsMetadataResource))
                 .Bind(options));
 
 
-            services.AddTransient<IStoriesAccess, StoriesAccess>();
+            services.AddTransient<IProjectsMetadataAccess, ProjectsMetadataAccess>();
 
             // TEST SERVICES
-            services.AddTransient<IStoriesBuilder, ProjectMetadataBuilder>();
+            services.AddTransient<IProjectMetadataBuilder, ProjectMetadataBuilder>();
             //services.AddTransient<IProjectNumbersBuilder, ProjectNumbersDetailsBuilder>();
             //services.AddTransient<IProjectUpdateBuilder, ProjectUpdateBuilder>();
 
             ServiceProvider = services.BuildServiceProvider();
         }
 
-        public IEnumerable<string> PopulateStoriesCollection(int NumberOfStories) 
+        public IEnumerable<string> PopulateStoriesCollection(int NumberOfProjects) 
         {
-            var storiesResource = ServiceProvider.GetService<IOptions<StoriesResource>>();
+            var storiesResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it
             using (var db = new LiteDatabase(storiesResource.Value.ConnectionString))
             {
-                var storiesCollection = db.GetCollection<StoryDocument>("Stories");
+                var projectsMetadataCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");
 
                 // Ensureindex might need to be called after object creation
-                storiesCollection.EnsureIndex(story => story.Id);
+                projectsMetadataCollection.EnsureIndex(story => story.Id);
 
-                ProjectMetadataBuilder storiesBuilder = new StoriesBuilder();
-                var listOfStoriesRequest = storiesBuilder.BuildStoriesOut(NumberOfStories);
+                ProjectMetadataBuilder projectMetadataBuilder = new ProjectMetadataBuilder();
+                var listOfProjectRequest = projectMetadataBuilder.BuildProjectsOut(NumberOfProjects);
                 List<string> counter = new List<string>();
-                foreach (var projectRequest in listOfStoriesRequest)
+                foreach (var projectRequest in listOfProjectRequest)
                 {
                     var storyDocument = StoriesRepositoryMapper.MapCreationRequestToStory(projectRequest);
-                    storiesCollection.Insert(storyDocument);
+                    projectsMetadataCollection.Insert(storyDocument);
                     counter.Add(storyDocument.Id.ToString());
                 }
 
