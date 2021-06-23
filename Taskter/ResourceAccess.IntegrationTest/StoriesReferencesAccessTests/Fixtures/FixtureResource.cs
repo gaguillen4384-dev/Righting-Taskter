@@ -10,5 +10,6 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
 
         public HashSet<string> listOfProjectUsed { get; set; } = new HashSet<string>();
 
+        public HashSet<string> listOfStoriesIds { get; set; } = new HashSet<string>();
     }
 }

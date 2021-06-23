@@ -4,13 +4,15 @@
     {
         public static string AppsettingsLocation = @"C:\WorkSpace\Righting-Taskter\Taskter\ResourceAccess.IntegrationTest\StoriesReferencesAccessTests\appsettings.json";
 
-        public static string ProjectAcronymToGet = "PJT-";
+        public static string ProjectAcronymToUse = "PJT-";
+
+        public static string ProjectAcronymToUpdateWith = "UPJT-";
 
         public static string EmptyProjectAcronym = "EPJT";
 
-        public static string SingleStoryId = "26857441";
+        public static string SingleStoryId = "376d2f7dab8a2aa5a13c4a41";
 
-        public static string SingleProjectId = "33357552";
+        public static string SingleProjectId = "9b72ff94ab5366979180f5ae";
 
         public static int StoryNumberToUse = 0;
 

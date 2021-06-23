@@ -33,12 +33,10 @@ namespace StoriesReferencesAccessComponent
 
                 storiesReferenceCollection.EnsureIndex(reference => reference.ProjectAcronym);
 
-                var projectDocumentId = new ObjectId(projectId);
-
                 var storyReference = new StoryReferenceDocument()
                 {
                     ProjectAcronym = projectAcronym,
-                    ProjectId = projectDocumentId.ToString()
+                    ProjectId = projectId
                 };
 
                 storiesReferenceCollection.Insert(storyReference);
@@ -50,7 +48,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// 
         /// </summary>
-        public async Task MakeReferenceForProjectAndStory(string projectAcronym, int storyNumber, string storyId, string projectId)
+        public async Task MakeReferenceForStoryInProject(string projectAcronym, int storyNumber, string storyId, string projectId)
         {
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
@@ -88,6 +86,9 @@ namespace StoriesReferencesAccessComponent
                     Query.EQ("StoryNumber", storyNumber)));
 
                 if (result == null)
+                    return string.Empty;
+
+                if (string.IsNullOrWhiteSpace(result.StoryId))
                     return string.Empty;
 
                 return result.StoryId;
@@ -145,16 +146,16 @@ namespace StoriesReferencesAccessComponent
                 // this creates or gets collection
                 var storiesReferenceCollection = db.GetCollection<StoryReferenceDocument>("StoriesReferences");
 
-                // TODO: might need to pass in a objectId
                 var projectStories = storiesReferenceCollection.Find(Query.EQ("ProjectId", projectId));
-
+                var updateProjectStoriesList = new HashSet<StoryReferenceDocument>();
                 foreach (var storyReference in projectStories)
                 {
                     storyReference.DateUpdated = DateTime.UtcNow;
                     storyReference.ProjectAcronym = updateProjectAcronym;
+                    updateProjectStoriesList.Add(storyReference);
                 }
 
-                storiesReferenceCollection.Update(projectStories);
+                storiesReferenceCollection.Update(updateProjectStoriesList);
             }
         }
 
@@ -177,7 +178,5 @@ namespace StoriesReferencesAccessComponent
                 return Task.FromResult(true);
             }
         }
-
-
     }
 }

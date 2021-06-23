@@ -75,6 +75,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
                     result.listOfProjectUsed.Add(storyRequest.ProjectAcronym);
                     result.listOfStoriesReferenceIds.Add(storyRequest.StoryId);
                     result.listOfProjectIds.Add(storyRequest.ProjectId);
+                    result.listOfStoriesIds.Add(storyRequest.StoryId);
                 }
 
                 return result;

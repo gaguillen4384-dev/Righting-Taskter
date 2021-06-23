@@ -55,7 +55,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             {
                 //TODO: replace with natural values.
                 _storyReferences.Add(new StoriesReferencesBuilder()
-                    .BuildStoryReferenceWithProjectAcronym(NaturalValues.ProjectAcronymToGet + i)
+                    .BuildStoryReferenceWithProjectAcronym(NaturalValues.ProjectAcronymToUse + i)
                     .BuildStoryReferenceWithStoryNumber(NaturalValues.StoryNumberToUse + i)
                     .BuildStoryReferenceWithStoryId(NaturalValues.SingleStoryId + i)
                     .BuildStoryReferenceWithIsDeleted(false)
