@@ -45,7 +45,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         }
 
         // Should it return an object with specif things?
-        public FixtureResource PopulateStoriesCollection(int NumberOfStories, string? projectAcronym) 
+        public FixtureResource PopulateStoriesReferencesCollection(int NumberOfStories, string? projectAcronym) 
         {
             var storiesResource = ServiceProvider.GetService<IOptions<StoriesReferencesResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it, bring a static service?

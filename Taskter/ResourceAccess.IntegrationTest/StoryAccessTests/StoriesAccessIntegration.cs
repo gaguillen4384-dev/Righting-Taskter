@@ -9,15 +9,15 @@ using Xunit;
 
 namespace ResourceAccess.IntegrationTest.StoryAccessTests
 {
-    public class StoriesResourceFixtureIntegration : IClassFixture<ProjectMetadataFixture>
+    public class StoriesResourceFixtureIntegration : IClassFixture<StoriesResourceFixture>
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IStoriesAccess _storiesAccess;
         private readonly IStoriesBuilder _storiesBuilder;
-        private readonly ProjectMetadataFixture _fixture;
+        private readonly StoriesResourceFixture _fixture;
         private readonly Random randomizer = new Random();
 
-        public StoriesResourceFixtureIntegration(ProjectMetadataFixture fixture)
+        public StoriesResourceFixtureIntegration(StoriesResourceFixture fixture)
         {
             _fixture = fixture;
             _serviceProvider = fixture.ServiceProvider;

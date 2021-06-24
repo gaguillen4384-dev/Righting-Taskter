@@ -5,23 +5,15 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
 {
     public interface IProjectMetadataBuilder
     {
-        IProjectMetadataBuilder BuildStoryWithName(string name);
+        IProjectMetadataBuilder BuildrojectMetadataWithProjectAcronym(string projectAcronym);
 
-        IProjectMetadataBuilder BuildStoryWithStoryNumber(int storyNumber);
+        IProjectMetadataBuilder BuildrojectMetadataWithLatestStoryNumber(int latestStoryNumber);
 
-        IProjectMetadataBuilder BuildStoryWithDetails(int numberOfDetails);
+        IProjectMetadataBuilder BuildrojectMetadataWithNumberOfStoriesCompleted(int numberOfStoriesCompleted);
 
-        IProjectMetadataBuilder BuildStoryWithIsRecurrant(bool flag);
+        IProjectMetadataBuilder BuildrojectMetadataWithNumberOfActiveStories(int numberOfActiveStories);
 
-        IProjectMetadataBuilder UpdateStoryWithName(string name);
-
-        IProjectMetadataBuilder UpdateStoryWithDetails(int numberOfDetails);
-
-        IProjectMetadataBuilder UpdateStoryWithIsCompleted(bool flag);
-
-        IProjectMetadataBuilder UpdateStoryWithIsRecurrant(bool flag);
-
-        IEnumerable<ProjectMetadataDocument> BuildProjectsOut(int numberOfStories);
+        IEnumerable<ProjectMetadataDocument> BuildManyProjectsOut(int numberOfProjects);
 
         ProjectMetadataDocument BuildCreateRequest();
     }

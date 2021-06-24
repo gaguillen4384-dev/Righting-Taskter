@@ -32,7 +32,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         public async void StoriesReferences_GetProjectById_Success()
         {
             // Arrange
-            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
+            var resource = _fixture.PopulateStoriesReferencesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
 
             var nameToUse = randomizer.Next(resource.listOfProjectUsed.Count);
 
@@ -50,7 +50,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         public async void StoriesReferences_GetProjectByIdWhichIsNotThere_ReturnEmpty_Success()
         {
             // Arrange
-            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
+            var resource = _fixture.PopulateStoriesReferencesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
 
             // Act
             var result = await _storiesReferencesAccess.GetProjectId(NaturalValues.EmptyProjectAcronym);
@@ -70,7 +70,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         public async void StoriesReferences_GetStoryById_Success()
         {
             // Arrange
-            var listOfIds = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
+            var listOfIds = _fixture.PopulateStoriesReferencesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
 
             // Act
             var result = await _storiesReferencesAccess.GetSingleStoryId(NaturalValues.ProjectAcronymToUse, NaturalValues.StoryNumberToUse);
@@ -86,7 +86,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         public async void StoriesReferences_GetStoryByIdWhichIsNotThere_ReturnEmpty_Success()
         {
             // Arrange
-            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
+            var resource = _fixture.PopulateStoriesReferencesCollection(NaturalValues.NumberOfStoryRefToCreate, null);
 
             // Act
             var result = await _storiesReferencesAccess.GetSingleStoryId(NaturalValues.ProjectAcronymToUse, NaturalValues.StoryNumberToNotGet);
@@ -102,7 +102,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         public async void StoriesReferences_GetProjectStoriesById_Success()
         {
             // Arrange
-            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
+            var resource = _fixture.PopulateStoriesReferencesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
 
             // Act
             var result = await _storiesReferencesAccess.GetProjectStoriesIds(NaturalValues.ProjectAcronymToUse);
@@ -124,7 +124,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         public async void StoriesReferences_RemoveStoryReference_Success()
         {
 
-            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
+            var resource = _fixture.PopulateStoriesReferencesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
 
             // Act
             var result = await _storiesReferencesAccess.RemoveReferenceOfStory(resource.listOfStoriesReferenceIds.ElementAtOrDefault(NaturalValues.StoryNumberToUse));
@@ -172,7 +172,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         [Fact]
         public async void StoriesReferences_UpdateRef_Success()
         {
-            var resource = _fixture.PopulateStoriesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
+            var resource = _fixture.PopulateStoriesReferencesCollection(NaturalValues.NumberOfStoryRefToCreate, NaturalValues.ProjectAcronymToUse);
             var storyId = resource.listOfStoriesIds.ElementAtOrDefault(NaturalValues.StoryNumberToUse);
             var projectId = resource.listOfProjectIds.FirstOrDefault();
 

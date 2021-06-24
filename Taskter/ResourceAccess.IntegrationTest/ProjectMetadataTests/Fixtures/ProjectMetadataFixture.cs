@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ProjectsMetadataAccessComponent;
-using StoriesAccessComponent;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,7 +43,7 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
             ServiceProvider = services.BuildServiceProvider();
         }
 
-        public IEnumerable<string> PopulateStoriesCollection(int NumberOfProjects) 
+        public IEnumerable<string> PopulateProjectMetadataCollection(int NumberOfProjects) 
         {
             var storiesResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it
@@ -56,13 +55,12 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
                 projectsMetadataCollection.EnsureIndex(story => story.Id);
 
                 ProjectMetadataBuilder projectMetadataBuilder = new ProjectMetadataBuilder();
-                var listOfProjectRequest = projectMetadataBuilder.BuildProjectsOut(NumberOfProjects);
+                var listOfProjectRequest = projectMetadataBuilder.BuildManyProjectsOut(NumberOfProjects);
                 List<string> counter = new List<string>();
                 foreach (var projectRequest in listOfProjectRequest)
                 {
-                    var storyDocument = StoriesRepositoryMapper.MapCreationRequestToStory(projectRequest);
-                    projectsMetadataCollection.Insert(storyDocument);
-                    counter.Add(storyDocument.Id.ToString());
+                    projectsMetadataCollection.Insert(projectRequest);
+                    counter.Add(projectRequest.Id.ToString());
                 }
 
                 return counter;
@@ -71,9 +69,9 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
 
         public void Dispose()
         {
-            var storiesResource = ServiceProvider.GetService<IOptions<StoriesResource>>();
+            var projectMetadataResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
             // delete DB from file system.
-            File.Delete(storiesResource.Value.ConnectionString);
+            File.Delete(projectMetadataResource.Value.ConnectionString);
         }
     }
 }

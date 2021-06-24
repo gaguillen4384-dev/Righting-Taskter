@@ -16,54 +16,48 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
             _projectMetadataToCreate = new ProjectMetadataDocument();
         }
 
-        IProjectMetadataBuilder IProjectMetadataBuilder.BuildStoryWithName(string name)
+        public IProjectMetadataBuilder BuildrojectMetadataWithLatestStoryNumber(int latestStoryNumber)
         {
-            throw new NotImplementedException();
+            _projectMetadataToCreate.LatestStoryNumber = latestStoryNumber;
+            return this;
         }
 
-        IProjectMetadataBuilder IProjectMetadataBuilder.BuildStoryWithStoryNumber(int storyNumber)
+        public IProjectMetadataBuilder BuildrojectMetadataWithNumberOfActiveStories(int numberOfActiveStories)
         {
-            throw new NotImplementedException();
+            _projectMetadataToCreate.NumberOfActiveStories = numberOfActiveStories;
+            return this;
         }
 
-        IProjectMetadataBuilder IProjectMetadataBuilder.BuildStoryWithDetails(int numberOfDetails)
+        public IProjectMetadataBuilder BuildrojectMetadataWithNumberOfStoriesCompleted(int numberOfStoriesCompleted)
         {
-            throw new NotImplementedException();
+            _projectMetadataToCreate.NumberOfStoriesCompleted = numberOfStoriesCompleted;
+            return this;
         }
 
-        IProjectMetadataBuilder IProjectMetadataBuilder.BuildStoryWithIsRecurrant(bool flag)
+        public IProjectMetadataBuilder BuildrojectMetadataWithProjectAcronym(string projectAcronym)
         {
-            throw new NotImplementedException();
-        }
-
-        IProjectMetadataBuilder IProjectMetadataBuilder.UpdateStoryWithName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        IProjectMetadataBuilder IProjectMetadataBuilder.UpdateStoryWithDetails(int numberOfDetails)
-        {
-            throw new NotImplementedException();
-        }
-
-        IProjectMetadataBuilder IProjectMetadataBuilder.UpdateStoryWithIsCompleted(bool flag)
-        {
-            throw new NotImplementedException();
-        }
-
-        IProjectMetadataBuilder IProjectMetadataBuilder.UpdateStoryWithIsRecurrant(bool flag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ProjectMetadataDocument> BuildProjectsOut(int numberOfStories)
-        {
-            return _projectsMetadata;
+            _projectMetadataToCreate.ProjectAcronym = projectAcronym;
+            return this;
         }
 
         public ProjectMetadataDocument BuildCreateRequest()
         {
             return _projectMetadataToCreate;
+        }
+
+        public IEnumerable<ProjectMetadataDocument> BuildManyProjectsOut(int numberOfProjects)
+        {
+            for (int i = 0; i < numberOfProjects; i++)
+            {
+                _projectsMetadata.Add(new ProjectMetadataBuilder()
+                    .BuildrojectMetadataWithProjectAcronym(NaturalValues.ProjectAcronymToUse+i)
+                    .BuildrojectMetadataWithNumberOfStoriesCompleted(NaturalValues.NumberOfCompletedStories+i)
+                    .BuildrojectMetadataWithNumberOfActiveStories(NaturalValues.NumberOfActiveStories+i)
+                    .BuildrojectMetadataWithLatestStoryNumber(NaturalValues.StoryNumbeToUse+i)
+                    .BuildCreateRequest());
+            }
+
+            return _projectsMetadata;
         }
 
         #region Private methods

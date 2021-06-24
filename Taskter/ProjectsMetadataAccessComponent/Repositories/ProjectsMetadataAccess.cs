@@ -132,10 +132,8 @@ namespace ProjectsMetadataAccessComponent
                     projectNumber.NumberOfActiveStories--;
                 }
 
-                if (!projectNumberCollection.Update(projectNumber))
-                {
-                    throw new KeyNotFoundException("The project could not be found.");
-                }
+                //TODO: What if this fails?
+                projectNumberCollection.Update(projectNumber);
             }
         }
 

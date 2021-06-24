@@ -11,12 +11,12 @@ using Utilities.Taskter.Domain;
 
 namespace ResourceAccess.IntegrationTest.StoryAccessTests
 {
-    public class ProjectMetadataFixture : IDisposable
+    public class StoriesResourceFixture : IDisposable
     {
         public IServiceProvider ServiceProvider { get; set; }
         private readonly IConfiguration _configuration;
 
-        public ProjectMetadataFixture()
+        public StoriesResourceFixture()
         {
             // Initialize stuff
             var services = new ServiceCollection();
@@ -37,7 +37,7 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
             services.AddTransient<IStoriesAccess, StoriesAccess>();
 
             // TEST SERVICES
-            services.AddTransient<IStoriesBuilder, ProjectMetadataBuilder>();
+            services.AddTransient<IStoriesBuilder, StoriesBuilder>();
             //services.AddTransient<IProjectNumbersBuilder, ProjectNumbersDetailsBuilder>();
             //services.AddTransient<IProjectUpdateBuilder, ProjectUpdateBuilder>();
 
@@ -55,7 +55,7 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
                 // Ensureindex might need to be called after object creation
                 storiesCollection.EnsureIndex(story => story.Id);
 
-                ProjectMetadataBuilder storiesBuilder = new StoriesBuilder();
+                var storiesBuilder = new StoriesBuilder();
                 var listOfStoriesRequest = storiesBuilder.BuildStoriesOut(NumberOfStories);
                 List<string> counter = new List<string>();
                 foreach (var projectRequest in listOfStoriesRequest)
