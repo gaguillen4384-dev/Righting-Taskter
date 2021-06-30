@@ -22,7 +22,7 @@ namespace ProjectsMetadataAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectsMetadataAccess.CreateProjectMetadataDetails(string)"/>
+        /// Concrete implementation of <see cref="IProjectsMetadataAccess.CreateProjectMetadataDetails"/>
         /// </summary>
         public async Task<ProjectMetadataDetails> CreateProjectMetadataDetails(string projectAcronym)
         {
@@ -46,7 +46,7 @@ namespace ProjectsMetadataAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectsMetadataAccess.GetProjectMetadataDetails(string)"/>
+        /// Concrete implementation of <see cref="IProjectsMetadataAccess.GetProjectMetadataDetails"/>
         /// </summary>
         public async Task<ProjectMetadataDetails> GetProjectMetadataDetails(string projectAcronym)
         {

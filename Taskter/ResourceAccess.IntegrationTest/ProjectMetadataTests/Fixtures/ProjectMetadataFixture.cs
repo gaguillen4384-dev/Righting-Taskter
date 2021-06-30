@@ -43,7 +43,7 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
             ServiceProvider = services.BuildServiceProvider();
         }
 
-        public IEnumerable<string> PopulateProjectMetadataCollection(int NumberOfProjects) 
+        public IEnumerable<string> PopulateProjectMetadataCollection(int NumberOfProjects, ProjectMetadataDocument projectMetadata = null) 
         {
             var storiesResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it
@@ -57,6 +57,14 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
                 ProjectMetadataBuilder projectMetadataBuilder = new ProjectMetadataBuilder();
                 var listOfProjectRequest = projectMetadataBuilder.BuildManyProjectsOut(NumberOfProjects);
                 List<string> counter = new List<string>();
+
+                if (projectMetadata != null) 
+                {
+                    projectsMetadataCollection.Insert(projectMetadata);
+                    counter.Add(projectMetadata.Id.ToString());
+                    return counter;
+                }
+
                 foreach (var projectRequest in listOfProjectRequest)
                 {
                     projectsMetadataCollection.Insert(projectRequest);

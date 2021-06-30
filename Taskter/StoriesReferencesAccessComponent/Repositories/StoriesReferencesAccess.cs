@@ -22,7 +22,7 @@ namespace StoriesReferencesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesReferencesAccess.CreateStoryReferenceForProject(string, string)"/>
+        /// Concrete implementation of <see cref="IStoriesReferencesAccess.StartStoriesReferenceForProject"/>
         /// </summary>
         public async Task StartStoriesReferenceForProject(string projectAcronym, string projectId)
         {
@@ -46,8 +46,9 @@ namespace StoriesReferencesAccessComponent
         }
 
         /// <summary>
-        /// 
+        /// Concrete implementation of <see cref="IStoriesReferencesAccess.MakeReferenceForStoryInProject"/>
         /// </summary>
+        //TODO: Change name to something like TyingStoryToParent()
         public async Task MakeReferenceForStoryInProject(string projectAcronym, int storyNumber, string storyId, string projectId)
         {
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
@@ -71,7 +72,7 @@ namespace StoriesReferencesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesReferencesAccess.GetSingleStoryId(string, int)"/>
+        /// Concrete implementation of <see cref="IStoriesReferencesAccess.GetSingleStoryId"/>
         /// </summary>
         public async Task<string> GetSingleStoryId(string projectAcronym, int storyNumber)
         {
@@ -96,7 +97,7 @@ namespace StoriesReferencesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesReferencesAccess.GetProjectStoriesIds(string)"/>
+        /// Concrete implementation of <see cref="IStoriesReferencesAccess.GetProjectStoriesIds"/>
         /// </summary>
         public async Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
         {
@@ -117,7 +118,7 @@ namespace StoriesReferencesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesReferencesAccess.GetProjectId(string)"/>
+        /// Concrete implementation of <see cref="IStoriesReferencesAccess.GetProjectId"/>
         /// </summary>
         public async Task<string> GetProjectId(string projectAcronym)
         {
@@ -137,7 +138,7 @@ namespace StoriesReferencesAccessComponent
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesReferencesAccess.UpdateStoryReferenceAcronym(string , string )"/>
+        /// Concrete implementation of <see cref="IStoriesReferencesAccess.UpdateStoryReferenceAcronym"/>
         /// </summary>
         public async Task UpdateStoryReferenceAcronym(string updateProjectAcronym, string projectId)
         {
@@ -160,7 +161,7 @@ namespace StoriesReferencesAccessComponent
         }
 
         /// <summary>
-        /// Remove the story reference.
+        /// Concrete implementation of <see cref="IStoriesReferencesAccess.RemoveReferenceOfStory"/>
         /// </summary>
         public Task<bool> RemoveReferenceOfStory(string storyId)
         {

@@ -5,6 +5,7 @@ namespace StoriesReferencesAccessComponent
     /// <summary>
     /// Responsible for keeping a relationship between stories and projects, using project acronym.
     /// </summary>
+    //TODO: CREATE A REQUEST/RESPONSE DOMAIN FOR THIS.
     public class StoryReferenceDocument : BaseDocument
     {
         /// <summary>
@@ -15,6 +16,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Reference to project unique identifier.
         /// </summary>
+        // TODO: change name to Parent ID and add parent type, could be a project could be another story
         public string ProjectId { get; set; } = string.Empty;
 
         /// <summary>
@@ -31,7 +33,6 @@ namespace StoriesReferencesAccessComponent
         /// Flag Indicating if its meant to be deleted only set by projectAccess;
         /// </summary>
         public bool IsDeleted { get; set; } = false;
-        
 
         [BsonConstructor]
         public StoryReferenceDocument() : base() { }
