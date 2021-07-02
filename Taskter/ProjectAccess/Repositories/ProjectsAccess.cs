@@ -14,17 +14,11 @@ namespace ProjectsAccessComponent
     public class ProjectsAccess : IProjectAccess
     {
         private ProjectResource _projectConnection;
-        private ProjectsMetadataResource _projectNumbersConnection;
-        private StoriesReferencesResource _storyReferenceResource;
 
-        public ProjectsAccess(IOptions<ProjectResource> projectConnection,
-            IOptions<ProjectsMetadataResource> projectNumbersConnection,
-            IOptions<StoriesReferencesResource> storyReferenceResource) 
+        public ProjectsAccess(IOptions<ProjectResource> projectConnection) 
         {
             // This needs to be full path to open .db file
             _projectConnection = projectConnection.Value;
-            _projectNumbersConnection = projectNumbersConnection.Value;
-            _storyReferenceResource = storyReferenceResource.Value;
         }
 
         /// <summary>

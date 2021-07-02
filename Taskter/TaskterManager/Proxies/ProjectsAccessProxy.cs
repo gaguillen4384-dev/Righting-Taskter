@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
-using Utilities.Domain;
+﻿using ProjectsAccessComponent;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Utilities.Taskter.Domain;
 
 namespace ProjectManager
 {
@@ -8,28 +10,54 @@ namespace ProjectManager
     /// </summary>
     public class ProjectsAccessProxy : IProjectsAccessProxy
     {
-        /// <summary>
-        /// Concrete implementation of <see cref="IProjectsAccessProxy.DeletionSingleProject(string)">
-        /// </summary>
-        public Task<bool> DeletionSingleProject(string projectAcronym)
+        private IProjectAccess _projectAccess;
+
+        public ProjectsAccessProxy(IProjectAccess projectConnection)
         {
-            throw new System.NotImplementedException();
+
+            _projectAccess = projectConnection;
+            
+        }
+
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectsAccessProxy.OpenProject>
+        /// </summary>
+        public async Task<ProjectResponse> OpenProject(string projectAcronym)
+        {
+            return await _projectAccess.OpenProject(projectAcronym);
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectsAccessProxy.GetSingleProject(string)">
+        /// Concrete implementation of <see cref="IProjectsAccessProxy.OpenProjects>
         /// </summary>
-        public Task<ProjectResponse> GetSingleProject(string projectAcronym)
+        public async Task<IEnumerable<ProjectResponse>> OpenProjects()
         {
-            throw new System.NotImplementedException();
+            return await _projectAccess.OpenProjects();
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectsAccessProxy.UpdateSingleProject(ProjectRequest)">
+        /// Concrete implementation of <see cref="IProjectsAccessProxy.RemoveProject>
         /// </summary>
-        public Task<ProjectResponse> UpdateSingleProject(ProjectRequest projectRequest)
+        public async Task<bool> RemoveProject(string projectAcronym)
         {
-            throw new System.NotImplementedException();
+            return await _projectAccess.RemoveProject(projectAcronym);
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectsAccessProxy.StartProject>
+        /// </summary>
+        public async Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest)
+        {
+            return await _projectAccess.StartProject(projectRequest);
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IProjectsAccessProxy.UpdateProject>
+        /// </summary>
+        public async Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym)
+        {
+            return await _projectAccess.UpdateProject(projectRequest, projectAcronym);
         }
     }
 }

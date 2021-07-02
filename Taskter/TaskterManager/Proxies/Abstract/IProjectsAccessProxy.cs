@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Utilities.Domain;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Utilities.Taskter.Domain;
 
 namespace ProjectManager
 {
@@ -9,19 +10,28 @@ namespace ProjectManager
     public interface IProjectsAccessProxy
     {
         /// <summary>
-        /// Retrieves a single project based on project acronym.
+        /// Retrieves a single project.
         /// </summary>
-        Task<ProjectResponse> GetSingleProject(string projectAcronym);
+        Task<ProjectResponse> OpenProject(string projectAcronym);
 
         /// <summary>
-        /// To 
+        /// Retrieves all projects.
         /// </summary>
-        Task<ProjectResponse> UpdateSingleProject(ProjectRequest projectRequest);
+        Task<IEnumerable<ProjectResponse>> OpenProjects();
 
         /// <summary>
-        /// Based on a project acronym a single project will return. 
+        /// Creates a project.
         /// </summary>
-        Task<bool> DeletionSingleProject(string projectAcronym);
+        Task<ProjectResponse> StartProject(ProjectCreationRequest projectRequest);
 
+        /// <summary>
+        /// Deletes a specific project and all the references.
+        /// </summary>
+        Task<bool> RemoveProject(string projectAcronym);
+
+        /// <summary>
+        /// Update a specific project and its references only if projectAcronym changed.
+        /// </summary>
+        Task<ProjectResponse> UpdateProject(ProjectUpdateRequest projectRequest, string projectAcronym);
     }
 }
