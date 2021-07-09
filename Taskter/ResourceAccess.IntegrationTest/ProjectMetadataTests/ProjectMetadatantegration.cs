@@ -234,7 +234,7 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
             var result = await _projectMetadataAccess.GetProjectMetadataDetails(NaturalValues.ProjectAcronymToUse);
 
             // Assert - descriptive
-            result.Should().BeOfType<EmptyProjectNumbersDetails>();
+            result.Should().BeOfType<EmptyProjectMetadataDetails>();
 
             // Teardown Needs to happen per test so other tests are not affected.
             _fixture.Dispose();
@@ -266,7 +266,7 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
             var result = await _projectMetadataAccess.GetProjectMetadataDetails(NaturalValues.ProjectAcronymToUse);
 
             // Assert - descriptive
-            result.Should().BeOfType<EmptyProjectNumbersDetails>();
+            result.Should().BeOfType<EmptyProjectMetadataDetails>();
 
             // Teardown Needs to happen per test so other tests are not affected.
             _fixture.Dispose();

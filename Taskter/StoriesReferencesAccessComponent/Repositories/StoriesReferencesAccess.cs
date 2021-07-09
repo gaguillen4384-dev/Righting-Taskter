@@ -14,7 +14,7 @@ namespace StoriesReferencesAccessComponent
     public class StoriesReferencesAccess : IStoriesReferencesAccess
     {
         private StoriesReferencesResource _storiesReferenceResource;
-
+        //TODO: Have this be manager logic and have this RA return an actual story reference, Having the actual reference is useful.
         public StoriesReferencesAccess(IOptions<StoriesReferencesResource> storyReferenceResource)
         {
             // This needs to be full path to open .db file
@@ -101,6 +101,7 @@ namespace StoriesReferencesAccessComponent
         /// </summary>
         public async Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
         {
+            //TODO: this gets to change because it could be in a project but the refrence be another story.
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
@@ -122,6 +123,7 @@ namespace StoriesReferencesAccessComponent
         /// </summary>
         public async Task<string> GetProjectId(string projectAcronym)
         {
+            //TODO: this gets to change because it could be in a project but the refrence be another story.
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
@@ -142,6 +144,7 @@ namespace StoriesReferencesAccessComponent
         /// </summary>
         public async Task UpdateStoryReferenceAcronym(string updateProjectAcronym, string projectId)
         {
+            //TODO: This became a bit useless since acronym is not important.
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
                 // this creates or gets collection

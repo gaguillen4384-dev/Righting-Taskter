@@ -34,7 +34,7 @@ namespace ProjectsMetadataAccessComponent
 
         public static ProjectMetadataDetails MapToEmptyProjectMetadataDetails()
         {
-            return new EmptyProjectNumbersDetails();
+            return new EmptyProjectMetadataDetails();
         }
     }
 }

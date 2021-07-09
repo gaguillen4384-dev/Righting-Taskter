@@ -165,21 +165,6 @@ namespace StoriesAccessComponent
         //    UpdateStoryNumberForProject(projectAcronym);
         //}
 
-        //TODO: move to Manager.
-        ///// <summary>
-        ///// Concrete implementation of <see cref="IStoriesAccess.ReadStoriesForAProject(string)">
-        ///// </summary>
-        //public async Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym)
-        //{
-        //    // use stories ID list, filter to find all stories
-        //    var listOfStoriesID = await GetProjectStoriesIds(projectAcronym);
-        //    var result = await GetProjectStoriesFromStoryIds(listOfStoriesID);
-
-        //    // use mapper to return what its needed.
-        //    return StoriesRepositoryMapper.MapToStoriesResponse(result, projectAcronym);
-
-        //}
-
         #endregion
 
     }

@@ -39,5 +39,6 @@ namespace Utilities.Taskter.Domain
         /// The project acronym, used as an identifier.
         /// </summary>
         public string ProjectAcronym = string.Empty;
+
     }
 }

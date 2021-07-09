@@ -19,12 +19,6 @@ namespace StoriesAccessComponent
         /// </summary>
         Task<IEnumerable<StoryResponse>> ReadMultipleStories(IEnumerable<string> storiesID);
 
-        //TODO: move to Manager.
-        ///// <summary>
-        ///// Retrieves all stories for the given project.
-        ///// </summary>
-        //Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym);
-
         /// <summary>
         /// Creates a story for the given project.
         /// </summary>

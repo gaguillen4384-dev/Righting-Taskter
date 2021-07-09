@@ -1,11 +1,8 @@
-﻿using LiteDbDriver;
+﻿using System;
 
-namespace StoriesReferencesAccessComponent
+namespace Utilities.Taskter.Domain
 {
-    /// <summary>
-    /// Responsible for keeping a relationship between stories and projects, using project acronym.
-    /// </summary>
-    public class StoryReferenceDocument : BaseDocument
+    public class StoriesReferenceDetails
     {
         /// <summary>
         /// The Acronym of the project.
@@ -15,7 +12,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Reference to project unique identifier.
         /// </summary>
-        // TODO: change name to Parent ID and add parent type, could be a project could be another story
+        // TODO: change name to Parent ID and add reference type, could be a project could be another story
         public string ProjectId { get; set; } = string.Empty;
 
         /// <summary>
@@ -33,8 +30,14 @@ namespace StoriesReferencesAccessComponent
         /// </summary>
         public bool IsDeleted { get; set; } = false;
 
-        [BsonConstructor]
-        public StoryReferenceDocument() : base() { }
+        /// <summary>
+        /// The date the object got created.
+        /// </summary>
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
+        /// <summary>
+        /// The date the object got updated.
+        /// </summary>
+        public DateTime? DateUpdated { get; set; } = null;
     }
 }

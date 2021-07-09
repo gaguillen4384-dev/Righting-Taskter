@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using StoriesAccessComponent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Utilities.Domain;
+using Utilities.Taskter.Domain;
 
 namespace ProjectManager
 {
@@ -9,29 +10,67 @@ namespace ProjectManager
     /// </summary>
     public class StoriesAccessProxy : IStoriesAccessProxy
     {
-        /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccessProxy.CreateStory(string, StoryCreationRequest)">
-        /// </summary>
-        public Task<StoryResponse> CreateStory(string projectAcronym, StoryCreationRequest storyRequest)
+        private IStoriesAccess _storiesAccess;
+
+        public StoriesAccessProxy(IStoriesAccess projectConnection)
         {
-            throw new System.NotImplementedException();
+
+            _storiesAccess = projectConnection;
+
         }
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccessProxy.GetProjectStories(string)">
+        /// Concrete implementation of <see cref="IStoriesAccessProxy.ReadMultipleStories">
         /// </summary>
-        public Task<IEnumerable<StoryResponse>> GetProjectStories(string projectAcronym)
+        public async Task<IEnumerable<StoryResponse>> ReadMultipleStories(IEnumerable<string> storiesID)
         {
-            throw new System.NotImplementedException();
+            return await _storiesAccess.ReadMultipleStories(storiesID);
         }
 
+        //TODO: this is a service not proxy thing. requires two different RA
+        ///// <summary>
+        ///// Concrete implementation of <see cref="IStoriesAccessProxy.ReadStoriesForAProject">
+        ///// </summary>
+        //public async Task<IEnumerable<StoryResponse>> ReadStoriesForAProject(string projectAcronym)
+        //{
+        //    //    // use stories ID list, filter to find all stories
+        //    var listOfStoriesID = await _storiesAccess.GetProjectStoriesIds(projectAcronym);
+        //    var result = await _storiesAccess.ReadMultipleStories(listOfStoriesID);
+
+        //    // use mapper to return what its needed.
+        //    return StoriesRepositoryMapper.MapToStoriesResponse(result, projectAcronym);
+        //}
 
         /// <summary>
-        /// Concrete implementation of <see cref="IStoriesAccessProxy.GetSingleStory(string, string)">
+        /// Concrete implementation of <see cref="IStoriesAccessProxy.ReadStory">
         /// </summary>
-        Task<StoryResponse> IStoriesAccessProxy.GetSingleStory(string projectAcronym, string storyIdentifier)
+        public async Task<StoryResponse> ReadStory(string storyId)
         {
-            throw new System.NotImplementedException();
+            return await _storiesAccess.ReadStory(storyId);
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IStoriesAccessProxy.RemoveStory">
+        /// </summary>
+        public async Task<bool> RemoveStory(string storyId)
+        {
+            return await _storiesAccess.RemoveStory(storyId);
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IStoriesAccessProxy.StartStory">
+        /// </summary>
+        public async Task<StoryResponse> StartStory(StoryCreationRequest storyRequest)
+        {
+            return await _storiesAccess.StartStory(storyRequest);
+        }
+
+        /// <summary>
+        /// Concrete implementation of <see cref="IStoriesAccessProxy.UpdateStory">
+        /// </summary>
+        public async Task<StoryResponse> UpdateStory(string storyId, StoryUpdateRequest storyRequest)
+        {
+            return await _storiesAccess.UpdateStory(storyId, storyRequest);
         }
     }
 }
