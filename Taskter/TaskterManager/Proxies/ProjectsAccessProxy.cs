@@ -14,9 +14,7 @@ namespace ProjectManager
 
         public ProjectsAccessProxy(IProjectAccess projectConnection)
         {
-
             _projectAccess = projectConnection;
-            
         }
 
 

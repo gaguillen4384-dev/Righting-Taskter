@@ -13,9 +13,9 @@ namespace ProjectsAccessComponent
     // TODO: if users become a thing then this needs change.
     public class ProjectsAccess : IProjectAccess
     {
-        private ProjectResource _projectConnection;
+        private ProjectsResource _projectConnection;
 
-        public ProjectsAccess(IOptions<ProjectResource> projectConnection) 
+        public ProjectsAccess(IOptions<ProjectsResource> projectConnection) 
         {
             // This needs to be full path to open .db file
             _projectConnection = projectConnection.Value;

@@ -1,6 +1,6 @@
 ﻿namespace Utilities.Taskter.Domain
 {
-    public class ProjectResource
+    public class ProjectsResource
     {
         public string ConnectionString { get; set; } = string.Empty;
         //TODO: string for the actual name of the collection.

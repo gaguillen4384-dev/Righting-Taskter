@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Utilities.Domain;
+using Utilities.Taskter.Domain;
 
 namespace ProjectManager
 {
     /// <summary>
     /// Responsible for encapsulating Project Management changes
     /// </summary>
-    public interface IProjectManager
+    public interface IProjectManagerService
     {
         #region Project Management
       
@@ -15,7 +15,7 @@ namespace ProjectManager
         /// Creates a project.
         /// </summary>
         /// <returns>The project ID</returns>
-        Task<string> CreateProject(ProjectRequest project);
+        Task<string> CreateProject(ProjectCreationRequest project);
 
         /// <summary>
         /// Get All projects.
@@ -31,15 +31,16 @@ namespace ProjectManager
         /// Edit Project: atomic operations on the project stories and project own metadata.
         /// </summary>  
         /// <returns>The project ID</returns>
-        Task<string> EditProject(ProjectRequest project);
+        Task<string> EditProject(ProjectUpdateRequest project);
 
         #endregion
 
         #region Project Management
-       
-        //TODO: Interface with the engine here
-        // StoryRequest needs to be a parameter
-        Task CreateStory(string projectAcronym);
+        
+        /// <summary>
+        /// Create story
+        /// </summary>
+        Task CreateStory(string projectAcronym, StoryCreationRequest request);
         
         #endregion
     }

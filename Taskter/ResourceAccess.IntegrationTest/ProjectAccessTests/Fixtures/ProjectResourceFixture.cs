@@ -27,8 +27,8 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 
             // this is by Microsoft.Extensions.Options.ConfigurationExtensions & ConfigurationBinder which allows strongtype 
             // Supposed to fill in IOptions
-            services.Configure<ProjectResource>(options => _configuration
-                .GetSection(nameof(ProjectResource))
+            services.Configure<ProjectsResource>(options => _configuration
+                .GetSection(nameof(ProjectsResource))
                 .Bind(options));
 
             services.AddTransient<IProjectAccess, ProjectsAccess>();
@@ -44,7 +44,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 
         public IEnumerable<string> PopulateProjectCollection(int numberOfProjects) 
         {
-            var projectResource = ServiceProvider.GetService<IOptions<ProjectResource>>();
+            var projectResource = ServiceProvider.GetService<IOptions<ProjectsResource>>();
             // TODO: Bring the inner logic to the litedbdriver and then reference it
             using (var db = new LiteDatabase(projectResource.Value.ConnectionString))
             {
@@ -91,7 +91,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 
         public void Dispose()
         {
-            var projectResource = ServiceProvider.GetService<IOptions<ProjectResource>>();
+            var projectResource = ServiceProvider.GetService<IOptions<ProjectsResource>>();
             //var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
             //var storyReferenceResource = ServiceProvider.GetService<IOptions<StoriesReferencesResource>>();
             // delete DB from file system.

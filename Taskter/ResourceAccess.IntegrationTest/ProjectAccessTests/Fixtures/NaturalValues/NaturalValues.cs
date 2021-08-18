@@ -1,6 +1,6 @@
 ﻿namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 {
-    public static class NaturalValues
+    internal static class NaturalValues
     {
         public static int NumberOfProjectsToBeCreated = 5;
 
