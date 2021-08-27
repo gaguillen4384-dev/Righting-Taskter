@@ -1,6 +1,5 @@
 ﻿using Moq;
 using ProjectManager;
-using System.Collections.Generic;
 using Utilities.Taskter.Domain;
 
 namespace Manager.Tests.ProjectManager
@@ -11,11 +10,14 @@ namespace Manager.Tests.ProjectManager
         public static Mock<IProjectsMetadataAccessProxy> ProjectsMetadataAccessMock = new Mock<IProjectsMetadataAccessProxy>();
         public static Mock<IStoriesAccessProxy> StoriesAccessMock = new Mock<IStoriesAccessProxy>();
         public static Mock<IStoriesReferencesAccessProxy> StoriesReferencesAccessMock = new Mock<IStoriesReferencesAccessProxy>();
+        public static DomainUtilityBuilder domainUtilityBuilder = new DomainUtilityBuilder();
 
-        public static void OpenProjectsSetup(this Mock<IProjectsAccessProxy> mock)
+        //TODO: Create nulls functions for the tests cases
+        #region IProjectsAccessProxy
+        public static void OpenProjectsSetup(this Mock<IProjectsAccessProxy> mock, int numberOfProjects)
         {
-            //TODO: Need a builder for this
-            var response = new List<ProjectResponse>();
+            var response = domainUtilityBuilder.BuildMultipleProjects(numberOfProjects);
+                        
             mock.Setup(resourceAccess => resourceAccess.OpenProjects())
             .ReturnsAsync(response);
         }
@@ -28,6 +30,18 @@ namespace Manager.Tests.ProjectManager
             .ReturnsAsync(response);
         }
 
-        //TODO: Create nulls functions for the tests cases
+        #endregion
+
+        #region IProjectsMetadataAccessProxy
+
+        #endregion
+
+        #region IStoriesAccessProxy
+
+        #endregion
+
+        #region IStoriesReferencesAccessProxy
+
+        #endregion
     }
 }

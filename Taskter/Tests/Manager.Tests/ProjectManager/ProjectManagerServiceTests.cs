@@ -37,7 +37,7 @@ namespace Manager.Tests.ProjectManager
             // Arrange
             // This showcases how extension classes can be used to setup mocks.
             // Within each setup theres a builder call, which takes in parameters.
-            _projectAccessMock.OpenProjectsSetup();
+            _projectAccessMock.OpenProjectsSetup(NaturalValues.numberOfProjectsToUse);
 
             // Act
             var result = await _projectManager.GetProjects();
@@ -46,7 +46,6 @@ namespace Manager.Tests.ProjectManager
             result.Should().NotBeEmpty();
 
             // Teardown Needs to happen per test so other tests are not affected.
-            _fixture.Dispose();
         }
     }
 }

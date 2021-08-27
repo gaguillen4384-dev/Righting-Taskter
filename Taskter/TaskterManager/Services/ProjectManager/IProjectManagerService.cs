@@ -20,7 +20,7 @@ namespace ProjectManager
         /// <summary>
         /// Get All projects.
         /// </summary>
-        Task<IList<ProjectResponse>> GetProjects();
+        Task<IEnumerable<ProjectResponse>> GetProjects();
 
         /// <summary>
         /// Get a project.

@@ -40,7 +40,7 @@ namespace ProjectManager
         /// <summary>
         /// Concrete implementation of <see cref="IProjectManagerService.GetProject"/>
         /// </summary>
-        Task<ProjectResponse> IProjectManagerService.GetProject(string projectAcronym)
+        public Task<ProjectResponse> GetProject(string projectAcronym)
         {
             throw new System.NotImplementedException();
         }
@@ -49,9 +49,9 @@ namespace ProjectManager
         /// <summary>
         /// Concrete implementation of <see cref="IProjectManagerService.GetProjects()"/>
         /// </summary>
-        Task<IList<ProjectResponse>> IProjectManagerService.GetProjects()
+        public async Task<IEnumerable<ProjectResponse>> GetProjects()
         {
-            throw new System.NotImplementedException();
+            return await _projectAccessProxy.OpenProjects();
         }
 
         /// <summary>
