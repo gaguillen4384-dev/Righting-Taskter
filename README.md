@@ -1,4 +1,4 @@
-# Righting-Taskter
+# Taskter-Volatile Decomposition Architecture
 
 This project its an attempt to understand Volatile Decomposition Architecture based out of Righting Software by Juval Lowy
 
