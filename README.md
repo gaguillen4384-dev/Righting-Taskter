@@ -1,6 +1,6 @@
 # Taskter-Volatile Decomposition Architecture
 <p>
-This project it's an attempt to understand Volatile Decomposition Architecture based out of <em><strong>Righting Software<em><strong> by <em><strong>Juval Lowy<em><strong>.<br />
+This project it's an attempt to understand Volatile Decomposition Architecture based out of <em><strong>Righting Software</strong></em> by <em><strong>Juval Lowy</strong></em>.<br />
 I appreciate the simplicity of keeping change within the respective layers,<br />
 being reinforced by contract-based interfaces approach across services that use only what they need.<br />
 </p>
