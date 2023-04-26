@@ -53,7 +53,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         {
             for (int i = 0; i < numberOfReferences; i++) 
             {
-                //TODO: replace with natural values.
+                //GETTO: replace with natural values.
                 _storyReferences.Add(new StoriesReferencesBuilder()
                     .BuildStoryReferenceWithProjectAcronym(NaturalValues.ProjectAcronymToUse + i)
                     .BuildStoryReferenceWithStoryNumber(NaturalValues.StoryNumberToUse + i)
@@ -70,7 +70,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
         {
             for (int i = 0; i < numberOfReferences; i++)
             {
-                //TODO: replace with natural values.
+                //GETTO: replace with natural values.
                 _storyReferences.Add(new StoriesReferencesBuilder()
                     .BuildStoryReferenceWithProjectAcronym(projectAcronym)
                     .BuildStoryReferenceWithStoryNumber(NaturalValues.StoryNumberToUse + i)

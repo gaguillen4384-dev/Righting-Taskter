@@ -5,13 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiteDB" Version="5.0.10" />
+    <Compile Remove="Commands\**" />
+    <Compile Remove="Queries\**" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Commands\**" />
+    <EmbeddedResource Remove="Queries\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Commands\**" />
+    <None Remove="Queries\**" />
+    <None Remove="Services\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Services\" />
-    <Folder Include="Queries\" />
+    <PackageReference Include="LiteDB" Version="5.0.10" />
   </ItemGroup>
 
 </Project>

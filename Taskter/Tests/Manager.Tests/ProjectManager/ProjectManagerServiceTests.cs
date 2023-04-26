@@ -19,7 +19,8 @@ namespace Manager.Tests.ProjectManager
         private Mock<IStoriesAccessProxy> _storiesAccessMock;
         private Mock<IStoriesReferencesAccessProxy> _storiesReferencesAccessMock;
 
-        // TODO: These tests should reflect validation that the manager has.
+        // TODO: These tests get to have negative version where validation is tested
+        //      Validation being the responsability of the manager.
         public ProjectManagerServiceTests() 
         {
             _projectAccessMock = new Mock<IProjectsAccessProxy>();
@@ -30,7 +31,6 @@ namespace Manager.Tests.ProjectManager
             _projectManager = new ProjectManagerService(_projectAccessMock.Object, _storiesAccessMock.Object, _storiesReferencesAccessMock.Object, _projectsMetadataAccessMock.Object);
         }
 
-        //TODO: Finish this test, on doing so TODOS will disapper.
         [Fact]
         public async void ProjectManager_GetAllProjects_Success()
         {
@@ -40,6 +40,7 @@ namespace Manager.Tests.ProjectManager
             _projectAccessMock.OpenProjectsSetup(NaturalValues.numberOfProjectsToUse);
 
             // Act
+            //GETTO: test out the sqllitedriver and see if it works since its missing a lot of stuff.
             var result = await _projectManager.GetProjects();
 
             // Assert - descriptive
@@ -47,5 +48,10 @@ namespace Manager.Tests.ProjectManager
 
             // Teardown Needs to happen per test so other tests are not affected.
         }
+
+        //GETTO: CreateProject
+        //GETTO: GetProject
+        //GETTO: EditProject
+        //GETTO: CreateStory
     }
 }

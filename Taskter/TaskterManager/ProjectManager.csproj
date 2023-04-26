@@ -6,16 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\StoryService\**" />
+    <EmbeddedResource Remove="Services\StoryService\**" />
+    <None Remove="Services\StoryService\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ProjectAccess\ProjectsAccessComponent.csproj" />
     <ProjectReference Include="..\ProjectsMetadataAccessComponent\ProjectsMetadataAccessComponent.csproj" />
     <ProjectReference Include="..\ResourceAccess.IntegrationTest\ResourceAccess.IntegrationTests.csproj" />
     <ProjectReference Include="..\StoriesAccess\StoriesAccessComponent.csproj" />
     <ProjectReference Include="..\StoriesReferencesAccessComponent\StoriesReferencesAccessComponent.csproj" />
     <ProjectReference Include="..\Utilities\Domain\Taskter.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\StoryService\" />
   </ItemGroup>
 
   <ItemGroup>

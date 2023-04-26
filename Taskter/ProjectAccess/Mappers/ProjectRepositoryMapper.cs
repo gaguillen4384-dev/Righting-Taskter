@@ -105,7 +105,7 @@ namespace ProjectsAccessComponent
             return !string.IsNullOrWhiteSpace(projectRequest.Name);
         }
 
-        //TODO: Move to Manger.
+        //GETTO: Move to Manger.
         ///// <summary>
         ///// Uses nested loops based on projectAcronym.
         ///// </summary>

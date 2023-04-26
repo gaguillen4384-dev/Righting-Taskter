@@ -27,7 +27,7 @@ namespace ProjectManager
             return await _storiesAccess.ReadMultipleStories(storiesID);
         }
 
-        //TODO: this is a service not proxy thing. requires two different RA
+        //GETTO: this is a service not proxy thing. requires two different RA
         ///// <summary>
         ///// Concrete implementation of <see cref="IStoriesAccessProxy.ReadStoriesForAProject">
         ///// </summary>

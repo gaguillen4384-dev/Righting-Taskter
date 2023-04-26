@@ -4,6 +4,6 @@
     {
         public string ConnectionString { get; set; } = string.Empty;
 
-        //TODO: string for the actual name of the collection.
+        //GETTO: string for the actual name of the collection.
     }
 }

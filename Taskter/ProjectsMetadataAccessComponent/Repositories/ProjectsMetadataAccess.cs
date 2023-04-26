@@ -132,7 +132,7 @@ namespace ProjectsMetadataAccessComponent
                     projectNumber.NumberOfActiveStories--;
                 }
 
-                //TODO: What if this fails?
+                //GETTO: What if this fails?
                 projectNumberCollection.Update(projectNumber);
             }
         }

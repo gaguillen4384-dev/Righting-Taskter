@@ -118,7 +118,7 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: Create more update test with each property to update.
+        //GETTO: Create more update test with each property to update.
 
         #endregion
 
@@ -146,7 +146,7 @@ namespace ResourceAccess.IntegrationTest.StoryAccessTests
 
         #endregion
 
-        //TODO: Manager logic.
+        //GETTO: Manager logic.
         ///// <summary>
         ///// Reads a story from a project.
         ///// </summary>

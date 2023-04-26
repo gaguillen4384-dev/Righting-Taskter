@@ -16,7 +16,7 @@ namespace ProjectManager
         /// </summary>
         Task<IEnumerable<StoryResponse>> ReadMultipleStories(IEnumerable<string> storiesID);
 
-        //TODO: this is a service not proxy thing. requires two different RA
+        //GETTO: this is a service not proxy thing. requires two different RA
         ///// <summary>
         ///// Retrieves all stories for the given project.
         ///// </summary>

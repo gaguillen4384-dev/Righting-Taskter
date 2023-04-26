@@ -2,6 +2,6 @@
 {
     public class EmptyProjectMetadataDetails : ProjectMetadataDetails
     {
-        //TODO: null pattern.
+        //GETTO: null pattern.
     }
 }

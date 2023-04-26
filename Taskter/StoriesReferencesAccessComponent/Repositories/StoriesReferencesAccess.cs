@@ -14,7 +14,6 @@ namespace StoriesReferencesAccessComponent
     public class StoriesReferencesAccess : IStoriesReferencesAccess
     {
         private StoriesReferencesResource _storiesReferenceResource;
-        //TODO: Have this be manager logic and have this RA return an actual story reference, Having the actual reference is useful.
         public StoriesReferencesAccess(IOptions<StoriesReferencesResource> storyReferenceResource)
         {
             // This needs to be full path to open .db file
@@ -48,7 +47,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Concrete implementation of <see cref="IStoriesReferencesAccess.MakeReferenceForStoryInProject"/>
         /// </summary>
-        //TODO: Change name to something like TyingStoryToParent()
+        //GETTO: Change name to something like TyingStoryToParent()
         public async Task MakeReferenceForStoryInProject(string projectAcronym, int storyNumber, string storyId, string projectId)
         {
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
@@ -101,7 +100,7 @@ namespace StoriesReferencesAccessComponent
         /// </summary>
         public async Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
         {
-            //TODO: this gets to change because it could be in a project but the refrence be another story.
+            //GETTO: this gets to change because it could be in a project but the refrence be another story.
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
@@ -123,7 +122,7 @@ namespace StoriesReferencesAccessComponent
         /// </summary>
         public async Task<string> GetProjectId(string projectAcronym)
         {
-            //TODO: this gets to change because it could be in a project but the refrence be another story.
+            //GETTO: this gets to change because it could be in a project but the refrence be another story.
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
                 // this creates or gets collection
@@ -144,7 +143,7 @@ namespace StoriesReferencesAccessComponent
         /// </summary>
         public async Task UpdateStoryReferenceAcronym(string updateProjectAcronym, string projectId)
         {
-            //TODO: This became a bit useless since acronym is not important.
+            //GETTO: This became a bit useless since acronym is not important.
             using (var db = new LiteDatabase(_storiesReferenceResource.ConnectionString))
             {
                 // this creates or gets collection

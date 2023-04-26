@@ -67,7 +67,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
             }
         }
 
-        //TODO: move to ProjectMetadataRA
+        //GETTO: move to ProjectMetadataRA
         //// TODO: PRIVATE Create a Builder for ProjectNumbers
         //private void PopulateProjectDetail(string projectAcronym)
         //{

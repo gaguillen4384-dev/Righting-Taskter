@@ -43,13 +43,13 @@ namespace StoriesAccessComponent
                 // Map from request to story
                 var story = StoriesRepositoryMapper.MapCreationRequestToStory(storyRequest);
 
-                //TODO: Copy to Manager.
+                //GETTO: Transfer to Manager.
                 //var latestStoryNumber = await GetLatestStoryNumberForProject(projectAcronym);
                 //var storyNumber = latestStoryNumber++;
 
                 storiesCollection.Insert(story);
 
-                //TODO: Copy to Manager.
+                //GETTO: Transfer to Manager.
                 //await UpdateStoryReferences(projectAcronym, storyNumber, story.Id);
 
                 return StoriesRepositoryMapper.MapToStoryResponse(story);
@@ -86,7 +86,7 @@ namespace StoriesAccessComponent
                 // this creates or gets collection
                 var storiesCollection = db.GetCollection<StoryDocument>("Stories");
 
-                //TODO: this needs to be seperated by driver.
+                //GETTO: this needs to be seperated by driver.
                 var Id = new ObjectId(storyId);
                 var story = storiesCollection.FindById(Id);
 
@@ -118,7 +118,7 @@ namespace StoriesAccessComponent
 
                 var updated = storiesCollection.Update(storyUpdated);
 
-                //TODO: move to ProjectMetadataRA
+                //GETTO: move to ProjectMetadataRA or manager?
                 //if (storyUpdated.IsCompleted)
                 //    UpdateStoryNumberForProject(projectAcronym, storyUpdated.IsCompleted);
 
@@ -145,7 +145,7 @@ namespace StoriesAccessComponent
                 if (!storiesCollection.Delete(Id))
                     return false;
 
-                //TODO: this needs to be moved to manager
+                //GETTO: this needs to be moved to manager
                 //if (!DeleteReferenceForStory(storyId))
                 //    return false;
 
@@ -155,7 +155,7 @@ namespace StoriesAccessComponent
 
         #region Private Methods
 
-        //TODO: Copy to Manager
+        //GETTO: Transfer to Manager
         //private async Task UpdateStoryReferences(string projectAcronym, int storyNumber, ObjectId storyId)
         //{
         //    var projectId = await GetProjectId(projectAcronym);

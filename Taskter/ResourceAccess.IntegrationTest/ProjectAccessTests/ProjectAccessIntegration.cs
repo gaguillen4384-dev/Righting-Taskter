@@ -115,9 +115,9 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: CREATE PROJECT WITH EXPECTED FAILURE WITH WRONG PROPERTY
+        //GETTO: CREATE PROJECT WITH EXPECTED FAILURE WITH WRONG PROPERTY
 
-        //TODO: CREATE ALREADY CREATED PROJECT
+        //GETTO: CREATE ALREADY CREATED PROJECT
 
         #endregion
 
@@ -150,11 +150,11 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         }
 
 
-        //TODO: REMOVE MULTIPLE PROJECTS.
+        //GETTO: REMOVE MULTIPLE PROJECTS.
 
-        //TODO: TRY REMOVING PROJECT THAT AINT THERE.
+        //GETTO: TRY REMOVING PROJECT THAT AINT THERE.
 
-        //TODO: Remove Stories reference that get created.
+        //GETTO: Remove Stories reference that get created.
 
         #endregion
 

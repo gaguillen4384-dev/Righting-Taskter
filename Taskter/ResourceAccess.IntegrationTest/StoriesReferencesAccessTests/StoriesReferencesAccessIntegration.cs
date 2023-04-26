@@ -115,7 +115,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: Try to get story with wrong ProjectAcronym
+        //GETTO: Try to get story with wrong ProjectAcronym
         #endregion
 
         #region Remove a Reference
@@ -139,7 +139,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: Remove something not there.
+        //GETTO: Remove something not there.
 
         #endregion
 
@@ -163,7 +163,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: test for a projectAcronym not being there, Should manager be validating this or RA?
+        //GETTO: test for a projectAcronym not being there, Should manager be validating this or RA?
 
         #endregion
 
@@ -192,7 +192,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: One where we see if we can find previous prj acronym assert for empty
+        //GETTO: One where we see if we can find previous prj acronym assert for empty
 
         #endregion
 
@@ -218,7 +218,7 @@ namespace ResourceAccess.IntegrationTest.StoriesReferencesAccessTests
             _fixture.Dispose();
         }
 
-        //TODO: Make sure I can still find other porjects even if created another one.
+        //GETTO: Make sure I can still find other porjects even if created another one.
 
         #endregion
     }

@@ -12,7 +12,7 @@ namespace Manager.Tests.ProjectManager
         public static Mock<IStoriesReferencesAccessProxy> StoriesReferencesAccessMock = new Mock<IStoriesReferencesAccessProxy>();
         public static DomainUtilityBuilder domainUtilityBuilder = new DomainUtilityBuilder();
 
-        //TODO: Create nulls functions for the tests cases
+        //GETTO: Create nulls functions for the tests cases
         #region IProjectsAccessProxy
         public static void OpenProjectsSetup(this Mock<IProjectsAccessProxy> mock, int numberOfProjects)
         {
@@ -24,11 +24,13 @@ namespace Manager.Tests.ProjectManager
 
         public static void OpenProjectsWithProjAcrSetup(this Mock<IProjectsAccessProxy> mock, string projectAcronym)
         {
-            //TODO: Need a builder for this
+            //GETTO: Need a domain builder function to follow the appropriate testing pattern.
             var response = new ProjectResponse();
             mock.Setup(resourceAccess => resourceAccess.OpenProject(projectAcronym))
             .ReturnsAsync(response);
         }
+
+
 
         #endregion
 
