@@ -7,8 +7,8 @@ being reinforced by contract-based interfaces approach across services that use 
 
 <h5>Architecture Decomposition</h5>
 <p>
-Volotile Decomposition breaks down as follow, in system accessibility in descending order<br/>
-Where the top is what Clients must use to encapsulate change and the components that follow can only be accessed by preceding components.
+Volatile Decomposition breaks down as follow, in system accessibility in descending order<br/>
+Where the top is Clients to encapsulate change and the components that follow can only be accessed by preceding components.
 </p>
 <ol>
 <li>Client => currently a console application, but it could be an API or an actual UI</li>
@@ -22,7 +22,7 @@ Where the top is what Clients must use to encapsulate change and the components 
 <ul> 
 <li>Testing suite follows a Builder pattern</li>
 <li>Testing suite uses moq library for testing mocks</li>
-<li>Testing suite only tests the Manager services since it has proxies to their respective ResourceAccessors</li>
-<li>Volotile Decomposition</li>
-<li>All third party or domain interfaces are part of the Utilities components and can be used by any component in the architecture</li>
+<li>Testing suite only test the Manager services since it has proxies to their respective ResourceAccessors</li>
+<li>Volatile Decomposition</li>
+<li>All third party or domain interfaces are part of the Utilities component and can be used by any component in the architecture</li>
 </ul>
