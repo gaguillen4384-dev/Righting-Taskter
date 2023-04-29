@@ -32,7 +32,7 @@ namespace ProjectManager
         /// <summary>
         /// Concrete implementation of <see cref="IProjectManagerService.CreateProject"/>
         /// </summary>
-        public Task<string> CreateProject(ProjectCreationRequest project)
+        public async Task<string> CreateProject(ProjectCreationRequest project)
         {
             throw new System.NotImplementedException();
         }
@@ -40,9 +40,9 @@ namespace ProjectManager
         /// <summary>
         /// Concrete implementation of <see cref="IProjectManagerService.GetProject"/>
         /// </summary>
-        public Task<ProjectResponse> GetProject(string projectAcronym)
+        public async Task<ProjectResponse> GetProject(string projectAcronym)
         {
-            throw new System.NotImplementedException();
+            return await _projectAccessProxy.OpenProject(projectAcronym);
         }
 
 
@@ -57,7 +57,7 @@ namespace ProjectManager
         /// <summary>
         /// Concrete implementation of <see cref="IProjectManagerService.EditProject"/>
         /// </summary>
-        public Task<string> EditProject(ProjectUpdateRequest project)
+        public async Task<string> EditProject(ProjectUpdateRequest project)
         {
             throw new System.NotImplementedException();
         }
@@ -69,7 +69,7 @@ namespace ProjectManager
         /// <summary>
         /// Concrete implementation of <see cref="IProjectManagerService.CreateStory"/>
         /// </summary>
-        public Task CreateStory(string projectAcronym, StoryCreationRequest request)
+        public async Task CreateStory(string projectAcronym, StoryCreationRequest request)
         {
             throw new System.NotImplementedException();
         }
