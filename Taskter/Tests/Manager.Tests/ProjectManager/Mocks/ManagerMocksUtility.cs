@@ -6,10 +6,7 @@ namespace Manager.Tests.ProjectManager
 {
     public static class ManagerMocksUtility
     {
-        public static Mock<IProjectsAccessProxy> ProjectAccessMock = new Mock<IProjectsAccessProxy>();
-        public static Mock<IProjectsMetadataAccessProxy> ProjectsMetadataAccessMock = new Mock<IProjectsMetadataAccessProxy>();
-        public static Mock<IStoriesAccessProxy> StoriesAccessMock = new Mock<IStoriesAccessProxy>();
-        public static Mock<IStoriesReferencesAccessProxy> StoriesReferencesAccessMock = new Mock<IStoriesReferencesAccessProxy>();
+
         public static DomainUtilityBuilder domainUtilityBuilder = new DomainUtilityBuilder();
 
         //GETTO: Create nulls functions for the tests cases

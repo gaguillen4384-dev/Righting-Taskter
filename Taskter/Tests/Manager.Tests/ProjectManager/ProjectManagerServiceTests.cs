@@ -19,7 +19,7 @@ namespace Manager.Tests.ProjectManager
         private Mock<IStoriesAccessProxy> _storiesAccessMock;
         private Mock<IStoriesReferencesAccessProxy> _storiesReferencesAccessMock;
 
-        // TODO: These tests get to have negative version where validation is tested
+        // GETTO: These tests get to have negative version where validation is tested
         //      Validation being the responsability of the manager.
         public ProjectManagerServiceTests() 
         {
