@@ -4,6 +4,10 @@
     {
         public static string AppsettingsLocation = @"C:\WorkSpace\Righting-Taskter\Taskter\Manager.Tests\ProjectManager\appsettings.json";
 
-        public static int numberOfProjectsToUse = 5;
+        public static int NumberOfProjectsToUse = 5;
+
+        public static int Single = 1;
+
+        public static string PrjAcronymToUse = "projectAcronym";
     }
 }

@@ -16,6 +16,7 @@ namespace Manager.Tests.ProjectManager
             _projects = new List<ProjectResponse>();
         }
 
+        #region Builder methods
         public DomainUtilityBuilder BuildProjectWithName(string name)
         {
             this._project.Name = name;
@@ -37,13 +38,23 @@ namespace Manager.Tests.ProjectManager
             return this;
         }
 
-        public IEnumerable<ProjectResponse> BuildMultipleProjects(int numberOfProjects)
+        public ProjectResponse BuildProject()
         {
+            return _project;
+        }
+
+        #endregion
+
+        #region Setup Methods
+
+        public IEnumerable<ProjectResponse> BuildMultipleProjects(int numberOfProjects, string optionalAcronym = null)
+        {
+
             for (int i = 0; i < numberOfProjects; i++)
             {
                 var random = new Random();
                 _projects.Add(new DomainUtilityBuilder()
-                    .BuildProjectWithProjectAcronym($"PJT{i}")
+                    .BuildProjectWithProjectAcronym(string.IsNullOrWhiteSpace(optionalAcronym) ? $"PJT{i}" : optionalAcronym)
                     .BuildProjectWithName($"Project{i}")
                     .BuildProjectWithNumberOfCompletedStories(random.Next(i+ random.Next(i)))
                     .BuildProjectWithNumberOfActiveStories(random.Next(i + random.Next(i)))
@@ -53,10 +64,8 @@ namespace Manager.Tests.ProjectManager
             return _projects;
         }
 
-        public ProjectResponse BuildProject() 
-        {
-            return _project;
-        }
 
+
+        #endregion
     }
 }

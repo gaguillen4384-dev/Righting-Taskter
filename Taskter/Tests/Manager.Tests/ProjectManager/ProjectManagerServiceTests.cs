@@ -31,13 +31,14 @@ namespace Manager.Tests.ProjectManager
             _projectManager = new ProjectManagerService(_projectAccessMock.Object, _storiesAccessMock.Object, _storiesReferencesAccessMock.Object, _projectsMetadataAccessMock.Object);
         }
 
+        #region Get Projects
         [Fact]
         public async void ProjectManager_GetAllProjects_Success()
         {
             // Arrange
             // This showcases how extension classes can be used to setup mocks.
             // Within each setup theres a builder call, which takes in parameters.
-            _projectAccessMock.OpenProjectsSetup(NaturalValues.numberOfProjectsToUse);
+            _projectAccessMock.OpenProjectsSetup(NaturalValues.NumberOfProjectsToUse);
 
             // Act
             //GETTO: test out the sqllitedriver and see if it works since its missing a lot of stuff.
@@ -46,11 +47,26 @@ namespace Manager.Tests.ProjectManager
             // Assert - descriptive
             result.Should().NotBeEmpty();
 
-            // Teardown Needs to happen per test so other tests are not affected.
+            // Teardown Needs to happen per test so other tests are not affected. This is relevant for integration tests.
+            // Or mocks gets reset per setup method.
         }
 
+        [Fact]
+        public async void ProjectManager_GetSingleProjects_Success()
+        {
+            // Arrange
+            _projectAccessMock.OpenProjectWithProjAcrSetup(NaturalValues.PrjAcronymToUse);
+
+            // Act
+            var result = await _projectManager.GetProject(NaturalValues.PrjAcronymToUse);
+
+            // Assert - descriptive
+            result.Should().NotBeNull();
+            result.ProjectAcronym.Should().Be(NaturalValues.PrjAcronymToUse);
+        }
+
+        #endregion
         //GETTO: CreateProject
-        //GETTO: GetProject
         //GETTO: EditProject
         //GETTO: CreateStory
     }
