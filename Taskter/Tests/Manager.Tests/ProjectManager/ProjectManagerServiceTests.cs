@@ -58,6 +58,7 @@ namespace Manager.Tests.ProjectManager
             _projectAccessMock.OpenProjectWithProjAcrSetup(NaturalValues.PrjAcronymToUse);
 
             // Act
+            //GETTO: missing validation for metadata stuff that the response has.
             var result = await _projectManager.GetProject(NaturalValues.PrjAcronymToUse);
 
             // Assert - descriptive
@@ -67,7 +68,9 @@ namespace Manager.Tests.ProjectManager
 
         #endregion
         //GETTO: CreateProject
-        //GETTO: EditProject
         //GETTO: CreateStory
+
+        //GETTO: EditProject
+        //GETTO: RemoveProject
     }
 }

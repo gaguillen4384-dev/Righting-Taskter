@@ -23,7 +23,7 @@ namespace TaskterTesterConsoleClient
 
             //do the actual work here
             var StoriesAccess = serviceProvider.GetService<StoriesAccess>();
-            var story = StoriesAccess.ReadStory("TST", 15);
+            //var story = StoriesAccess.ReadStory("TST", 15);
         }
     }
 }

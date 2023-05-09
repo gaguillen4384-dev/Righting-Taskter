@@ -27,6 +27,7 @@ namespace ProjectManager
             _projectsMetadataAccessProxy = projectsMetadataAccessProxy;
         }
 
+        //Managers should split up in action oriented manner.
         #region Project Management
 
         /// <summary>
@@ -34,6 +35,7 @@ namespace ProjectManager
         /// </summary>
         public async Task<string> CreateProject(ProjectCreationRequest project)
         {
+            //GETTO: should have validation and appropriate response.
             throw new System.NotImplementedException();
         }
 
@@ -42,6 +44,8 @@ namespace ProjectManager
         /// </summary>
         public async Task<ProjectResponse> GetProject(string projectAcronym)
         {
+            //GETTO: This should return metadata with the project.
+            //          After getting project get metadata.
             return await _projectAccessProxy.OpenProject(projectAcronym);
         }
 
