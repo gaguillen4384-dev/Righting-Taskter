@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
 
@@ -45,7 +46,7 @@ namespace ProjectManager
         public async Task<ProjectResponse> GetProject(string projectAcronym)
         {
             //GETTO: This should return metadata with the project.
-            //          After getting project get metadata.
+            //GETTO:          After getting project get metadata.
             return await _projectAccessProxy.OpenProject(projectAcronym);
         }
 
@@ -55,6 +56,15 @@ namespace ProjectManager
         /// </summary>
         public async Task<IEnumerable<ProjectResponse>> GetProjects()
         {
+            var projects = await _projectAccessProxy.OpenProjects();
+            var projectList = projects.ToList();
+
+            var projectsMetadata = await _projectsMetadataAccessProxy.GetAllProjectsMetadataDetails();
+            var projectMetadataList = projectsMetadata.ToList();
+
+            //GETTO: get all the metadata combines with the projects. 
+            //GETTO: See if I need a combiner services just to help this thing. Might be a static boy.
+
             return await _projectAccessProxy.OpenProjects();
         }
 

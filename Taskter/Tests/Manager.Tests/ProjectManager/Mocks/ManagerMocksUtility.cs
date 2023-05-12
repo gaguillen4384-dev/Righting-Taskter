@@ -8,13 +8,13 @@ namespace Manager.Tests.ProjectManager
     public static class ManagerMocksUtility
     {
 
-        public static DomainUtilityBuilder domainUtilityBuilder = new DomainUtilityBuilder();
+        public static DomainUtilityProjectBuilder domainUtilityBuilder = new DomainUtilityProjectBuilder();
 
         //GETTO: Create nulls functions for the tests cases
         #region IProjectsAccessProxy
         public static void OpenProjectsSetup(this Mock<IProjectsAccessProxy> mock, int numberOfProjects)
         {
-            domainUtilityBuilder = new DomainUtilityBuilder();
+            domainUtilityBuilder = new DomainUtilityProjectBuilder();
             var response = domainUtilityBuilder.BuildMultipleProjects(numberOfProjects);
                         
             mock.Setup(resourceAccess => resourceAccess.OpenProjects())
@@ -23,7 +23,7 @@ namespace Manager.Tests.ProjectManager
 
         public static void OpenProjectWithProjAcrSetup(this Mock<IProjectsAccessProxy> mock, string projectAcronym)
         {
-            domainUtilityBuilder = new DomainUtilityBuilder();
+            domainUtilityBuilder = new DomainUtilityProjectBuilder();
             var response = domainUtilityBuilder.BuildMultipleProjects(NaturalValues.Single, projectAcronym);
 
             mock.Setup(resourceAccess => resourceAccess.OpenProject(projectAcronym))

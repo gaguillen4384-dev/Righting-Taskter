@@ -66,6 +66,8 @@ namespace Manager.Tests.ProjectManager
             result.ProjectAcronym.Should().Be(NaturalValues.PrjAcronymToUse);
         }
 
+        //GETTO: test metadata in a predictiable way, may not just null but also numeric or if want to naturalvalues.
+
         #endregion
         //GETTO: CreateProject
         //GETTO: CreateStory

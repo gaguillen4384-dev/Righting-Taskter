@@ -36,6 +36,11 @@ namespace Utilities.Taskter.Domain
         public int NumberOfCompletedStories = 0;
 
         /// <summary>
+        /// The number of the story in the project its on. Sequential.
+        /// </summary>
+        public int LatestStoryNumber { get; set; } = 0;
+
+        /// <summary>
         /// The project acronym, used as an identifier.
         /// </summary>
         public string ProjectAcronym = string.Empty;

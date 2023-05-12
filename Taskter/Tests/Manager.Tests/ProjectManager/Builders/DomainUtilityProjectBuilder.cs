@@ -5,44 +5,49 @@ using Utilities.Taskter.Domain;
 namespace Manager.Tests.ProjectManager
 {
     //GETTO: Split this up for the different responses/request. 
-    public  class DomainUtilityBuilder
+    public  class DomainUtilityProjectBuilder
     {
         private List<ProjectResponse> _projects;
         private ProjectResponse _project;
 
-        public DomainUtilityBuilder()
+        public DomainUtilityProjectBuilder()
         {
             _project = new ProjectResponse();
             _projects = new List<ProjectResponse>();
         }
 
         #region Builder methods
-        public DomainUtilityBuilder BuildProjectWithName(string name)
+        #region Project Building
+        public DomainUtilityProjectBuilder BuildProjectWithName(string name)
         {
             this._project.Name = name;
             return this;
         }
-        public DomainUtilityBuilder BuildProjectWithProjectAcronym(string name)
+        public DomainUtilityProjectBuilder BuildProjectWithProjectAcronym(string acronym)
         {
-            this._project.ProjectAcronym = name;
+            this._project.ProjectAcronym = acronym;
             return this;
         }
-        public DomainUtilityBuilder BuildProjectWithNumberOfActiveStories(int numberOfActiveStories)
+        public DomainUtilityProjectBuilder BuildProjectWithNumberOfActiveStories(int numberOfActiveStories)
         {
             this._project.NumberOfActiveStories = numberOfActiveStories;
             return this;
         }
-        public DomainUtilityBuilder BuildProjectWithNumberOfCompletedStories(int numberOfCompletedStories)
+        public DomainUtilityProjectBuilder BuildProjectWithNumberOfCompletedStories(int numberOfCompletedStories)
         {
             this._project.NumberOfCompletedStories = numberOfCompletedStories;
             return this;
         }
-
+        public DomainUtilityProjectBuilder BuildProjectWithLatestStoryNumber(int latestStoryNumber)
+        {
+            this._project.NumberOfActiveStories = latestStoryNumber;
+            return this;
+        }
         public ProjectResponse BuildProject()
         {
             return _project;
         }
-
+        #endregion
         #endregion
 
         #region Setup Methods
@@ -53,11 +58,12 @@ namespace Manager.Tests.ProjectManager
             for (int i = 0; i < numberOfProjects; i++)
             {
                 var random = new Random();
-                _projects.Add(new DomainUtilityBuilder()
+                _projects.Add(new DomainUtilityProjectBuilder()
                     .BuildProjectWithProjectAcronym(string.IsNullOrWhiteSpace(optionalAcronym) ? $"PJT{i}" : optionalAcronym)
                     .BuildProjectWithName($"Project{i}")
                     .BuildProjectWithNumberOfCompletedStories(random.Next(i+ random.Next(i)))
                     .BuildProjectWithNumberOfActiveStories(random.Next(i + random.Next(i)))
+                    .BuildProjectWithLatestStoryNumber(i)
                     .BuildProject());
             }
 
