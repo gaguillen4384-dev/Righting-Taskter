@@ -33,5 +33,10 @@ namespace Utilities.Taskter.Domain
         /// The date the object got updated.
         /// </summary>
         public DateTime? DateUpdated { get; set; } = null;
+
+        /// <summary>
+        /// Last date the project got worked on.
+        /// </summary>
+        public DateTime LastWorkedOn = DateTime.UtcNow;
     }
 }

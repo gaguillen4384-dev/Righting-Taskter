@@ -39,6 +39,7 @@ namespace Manager.Tests.ProjectManager
             // This showcases how extension classes can be used to setup mocks.
             // Within each setup theres a builder call, which takes in parameters.
             _projectAccessMock.OpenProjectsSetup(NaturalValues.NumberOfProjectsToUse);
+            _projectsMetadataAccessMock.GetCurrentMetadataForProjects();
 
             // Act
             //GETTO: test out the sqllitedriver and see if it works since its missing a lot of stuff.
@@ -56,6 +57,7 @@ namespace Manager.Tests.ProjectManager
         {
             // Arrange
             _projectAccessMock.OpenProjectWithProjAcrSetup(NaturalValues.PrjAcronymToUse);
+            _projectsMetadataAccessMock.GetCurrentMetadataForProject(NaturalValues.PrjAcronymToUse);
 
             // Act
             //GETTO: missing validation for metadata stuff that the response has.

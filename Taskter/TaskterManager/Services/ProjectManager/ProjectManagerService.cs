@@ -46,8 +46,19 @@ namespace ProjectManager
         public async Task<ProjectResponse> GetProject(string projectAcronym)
         {
             //GETTO: This should return metadata with the project.
-            //GETTO:          After getting project get metadata.
-            return await _projectAccessProxy.OpenProject(projectAcronym);
+            var project = await _projectAccessProxy.OpenProject(projectAcronym);
+            var projectList = new List<ProjectResponse>
+            {
+                project
+            }; //GETTO: Could make this into a static function so it can be reused.
+
+            var projectsMetadata = await _projectsMetadataAccessProxy.GetProjectMetadataDetails(projectAcronym);
+            var projectsMetadataList = new List<ProjectMetadataDetails>
+            {
+                projectsMetadata
+            };
+            var result = await CombineProjectsAndMetadata(projectList, projectsMetadataList);
+            return result.FirstOrDefault();
         }
 
 
@@ -62,10 +73,29 @@ namespace ProjectManager
             var projectsMetadata = await _projectsMetadataAccessProxy.GetAllProjectsMetadataDetails();
             var projectMetadataList = projectsMetadata.ToList();
 
-            //GETTO: get all the metadata combines with the projects. 
-            //GETTO: See if I need a combiner services just to help this thing. Might be a static boy.
+            return await CombineProjectsAndMetadata(projectList, projectMetadataList);
+        }
 
-            return await _projectAccessProxy.OpenProjects();
+        //GETTO: See if I need a combiner services just to help this thing. Might be a static boy.
+        private async Task<IEnumerable<ProjectResponse>> CombineProjectsAndMetadata(List<ProjectResponse> projectResponses, List<ProjectMetadataDetails> projectMetadataList) 
+        {
+            var result = new List<ProjectResponse>();
+            foreach (var projectResponse in projectResponses) 
+            {
+                var localMetadata = projectMetadataList.FirstOrDefault(x => x.ProjectAcronym == projectResponse.ProjectAcronym);
+                if(localMetadata is null)
+                    continue;
+
+                projectResponse.LatestStoryNumber = localMetadata.LatestStoryNumber;
+                projectResponse.DateCreated = localMetadata.DateCreated;
+                projectResponse.DateUpdated = localMetadata.DateUpdated;
+                projectResponse.NumberOfActiveStories = localMetadata.NumberOfActiveStories;
+                projectResponse.NumberOfCompletedStories = localMetadata.NumberOfStoriesCompleted;
+                projectResponse.LastWorkedOn = localMetadata.LastWorkedOn;
+                result.Add(projectResponse);
+            }
+
+            return result;
         }
 
         /// <summary>
