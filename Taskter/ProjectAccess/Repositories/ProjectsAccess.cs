@@ -39,11 +39,6 @@ namespace ProjectsAccessComponent
                 // TODO: what to do if it fails? -upto the API that recieves it.
                 projectsCollection.Insert(projectDocument);
 
-                // TODO: move to Manager.
-                //var projectDetailsDocument = await CreateProjectMetadataDetails(projectDocument.ProjectAcronym);
-                //await CreateStoryReferenceForProject(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
-                //var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
-
                 // use mapper to return what its needed.
                 return ProjectRepositoryMapper.MapToProjectResponse(projectDocument);
             }
@@ -142,12 +137,7 @@ namespace ProjectsAccessComponent
 
         #region Private Methods
 
-        //GETTO: move to Manger.
-        //private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
-        //{
-        //    await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
-        //    return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
-        //}
+
 
         #endregion
     }

@@ -72,6 +72,20 @@ namespace Manager.Tests.ProjectManager
 
         #endregion
         //GETTO: CreateProject
+        #region Create Project
+        public async void ProjectManager_CreateProject_Success()
+        {
+            // Arrange
+            //GETTO: Uses project access, prject metadata and stories reference.
+            //GETTO: Needs a DTO builder of sorts.
+
+            // Act
+            _projectManager.CreateProject();
+
+            // Assert - descriptive
+
+        }
+        #endregion
         //GETTO: CreateStory
 
         //GETTO: EditProject

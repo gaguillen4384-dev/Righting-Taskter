@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Taskter.Domain;
@@ -36,8 +37,16 @@ namespace ProjectManager
         /// </summary>
         public async Task<string> CreateProject(ProjectCreationRequest project)
         {
-            //GETTO: should have validation and appropriate response.
-            throw new System.NotImplementedException();
+            //GETTO: should have validation and appropriate response. a Validator is needed.
+            //GETTO: things should instantiate with its own id.
+            //GETTO: If these doesnt return the ID then its an issue because then I got to call into repo for it.
+            var newProjectId = await _projectAccessProxy.StartProject(project); 
+
+            var projectDetailsDocument = await _projectsMetadataAccessProxy.CreateProjectMetadataDetails(project.ProjectAcronym);
+            await _storiesReferencesAccessProxy.StartStoriesReferenceForProject(project.ProjectAcronym, newProjectId);
+            //var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument); GETTO: figure out what this is.
+
+            return newProjectId;
         }
 
         /// <summary>
@@ -76,27 +85,6 @@ namespace ProjectManager
             return await CombineProjectsAndMetadata(projectList, projectMetadataList);
         }
 
-        //GETTO: See if I need a combiner services just to help this thing. Might be a static boy.
-        private async Task<IEnumerable<ProjectResponse>> CombineProjectsAndMetadata(List<ProjectResponse> projectResponses, List<ProjectMetadataDetails> projectMetadataList) 
-        {
-            var result = new List<ProjectResponse>();
-            foreach (var projectResponse in projectResponses) 
-            {
-                var localMetadata = projectMetadataList.FirstOrDefault(x => x.ProjectAcronym == projectResponse.ProjectAcronym);
-                if(localMetadata is null)
-                    continue;
-
-                projectResponse.LatestStoryNumber = localMetadata.LatestStoryNumber;
-                projectResponse.DateCreated = localMetadata.DateCreated;
-                projectResponse.DateUpdated = localMetadata.DateUpdated;
-                projectResponse.NumberOfActiveStories = localMetadata.NumberOfActiveStories;
-                projectResponse.NumberOfCompletedStories = localMetadata.NumberOfStoriesCompleted;
-                projectResponse.LastWorkedOn = localMetadata.LastWorkedOn;
-                result.Add(projectResponse);
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// Concrete implementation of <see cref="IProjectManagerService.EditProject"/>
@@ -118,6 +106,38 @@ namespace ProjectManager
             throw new System.NotImplementedException();
         }
 
+        #endregion
+
+        #region Mrivate methods
+
+        //GETTO: See if I need a mapper services just to help this thing. Might be a static boy.
+        private async Task<IEnumerable<ProjectResponse>> CombineProjectsAndMetadata(List<ProjectResponse> projectResponses, List<ProjectMetadataDetails> projectMetadataList)
+        {
+            var result = new List<ProjectResponse>();
+            foreach (var projectResponse in projectResponses)
+            {
+                var localMetadata = projectMetadataList.FirstOrDefault(x => x.ProjectAcronym == projectResponse.ProjectAcronym);
+                if (localMetadata is null)
+                    continue;
+
+                projectResponse.LatestStoryNumber = localMetadata.LatestStoryNumber;
+                projectResponse.DateCreated = localMetadata.DateCreated;
+                projectResponse.DateUpdated = localMetadata.DateUpdated;
+                projectResponse.NumberOfActiveStories = localMetadata.NumberOfActiveStories;
+                projectResponse.NumberOfCompletedStories = localMetadata.NumberOfStoriesCompleted;
+                projectResponse.LastWorkedOn = localMetadata.LastWorkedOn;
+                result.Add(projectResponse);
+            }
+
+            return result;
+        }
+
+        //GETTO: move to Manger.
+        //private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
+        //{
+        //    await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
+        //    return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
+        //}
         #endregion
     }
 }
