@@ -38,15 +38,13 @@ namespace ProjectManager
         public async Task<string> CreateProject(ProjectCreationRequest project)
         {
             //GETTO: should have validation and appropriate response. a Validator is needed.
-            //GETTO: things should instantiate with its own id.
             //GETTO: If these doesnt return the ID then its an issue because then I got to call into repo for it.
-            var newProjectId = await _projectAccessProxy.StartProject(project); 
+            var newProject = await _projectAccessProxy.StartProject(project); 
 
-            var projectDetailsDocument = await _projectsMetadataAccessProxy.CreateProjectMetadataDetails(project.ProjectAcronym);
-            await _storiesReferencesAccessProxy.StartStoriesReferenceForProject(project.ProjectAcronym, newProjectId);
-            //var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument); GETTO: figure out what this is.
+            await _projectsMetadataAccessProxy.CreateProjectMetadataDetails(project.ProjectAcronym);
+            await _storiesReferencesAccessProxy.StartStoriesReferenceForProject(project.ProjectAcronym, newProject.Id);
 
-            return newProjectId;
+            return newProject.Id;
         }
 
         /// <summary>

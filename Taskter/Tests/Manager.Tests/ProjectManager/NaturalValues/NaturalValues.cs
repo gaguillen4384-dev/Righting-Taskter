@@ -1,4 +1,6 @@
-﻿namespace Manager.Tests.ProjectManager
+﻿using System;
+
+namespace Manager.Tests.ProjectManager
 {
     internal static class NaturalValues
     {
@@ -9,5 +11,9 @@
         public static int Single = 1;
 
         public static string PrjAcronymToUse = "projectAcronym";
+
+        public static string PrjName = "Project";
+
+        public static Guid PrjGuid = new Guid("05ec1a69-e74a-4c74-9067-0980056bc033");
     }
 }

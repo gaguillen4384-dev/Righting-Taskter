@@ -1,12 +1,6 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ProjectManager;
-using ProjectsAccessComponent;
-using ProjectsMetadataAccessComponent;
-using StoriesAccessComponent;
-using StoriesReferencesAccessComponent;
-using System;
 using Xunit;
 
 namespace Manager.Tests.ProjectManager
@@ -73,17 +67,20 @@ namespace Manager.Tests.ProjectManager
         #endregion
         //GETTO: CreateProject
         #region Create Project
+        [Fact]
         public async void ProjectManager_CreateProject_Success()
         {
+            //GETTO: figure out how to test prject metadata and stories reference. without making it integration test.
             // Arrange
-            //GETTO: Uses project access, prject metadata and stories reference.
-            //GETTO: Needs a DTO builder of sorts.
+            var domainUtilityBuilder = new DomainUtilityDTOBuilder();
+            var newProjectRequest = domainUtilityBuilder.BuildNewProjectRequest();
+            _projectAccessMock.CreateProjectWithGuid(newProjectRequest, NaturalValues.PrjGuid);
 
             // Act
-            _projectManager.CreateProject();
+            var result = await _projectManager.CreateProject(newProjectRequest);
 
             // Assert - descriptive
-
+            result.Should().NotBeNull().And.Be(NaturalValues.PrjGuid.ToString());
         }
         #endregion
         //GETTO: CreateStory

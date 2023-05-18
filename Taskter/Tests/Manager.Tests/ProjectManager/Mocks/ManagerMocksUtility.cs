@@ -1,5 +1,6 @@
 ﻿using Moq;
 using ProjectManager;
+using System;
 using System.Linq;
 using Utilities.Taskter.Domain;
 
@@ -30,7 +31,14 @@ namespace Manager.Tests.ProjectManager
             .ReturnsAsync(response.First());
         }
 
+        public static void CreateProjectWithGuid(this Mock<IProjectsAccessProxy> mock, ProjectCreationRequest projectCreationRequest, Guid guid) 
+        {
+            domainUtilityBuilder = new DomainUtilityProjectBuilder();
+            var response = domainUtilityBuilder.BuildProjectWithGuidSetup(guid.ToString());
 
+            mock.Setup(resourceAccess => resourceAccess.StartProject(projectCreationRequest))
+            .ReturnsAsync(response.First());
+        }
 
         #endregion
 

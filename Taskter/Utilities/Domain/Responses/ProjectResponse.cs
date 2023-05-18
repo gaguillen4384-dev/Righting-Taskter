@@ -4,6 +4,9 @@ namespace Utilities.Taskter.Domain
 {
     public class ProjectResponse
     {
+        //GETTO: this is temporary. I want the RA to return an ID so this is happening temporarily to now change a lot of stuff.
+        public string Id { get; set; }
+
         /// <summary>
         /// The name of the project.
         /// </summary>

@@ -21,7 +21,6 @@ namespace Manager.Tests.ProjectManager
         }
 
         #region Builder methods
-        #region Project Building
         public DomainUtilityProjectBuilder BuildProjectWithName(string name)
         {
             this._project.Name = name;
@@ -32,12 +31,17 @@ namespace Manager.Tests.ProjectManager
             this._project.ProjectAcronym = acronym;
             return this;
         }
-
+        public DomainUtilityProjectBuilder BuildProjectWithGUID(string guid)
+        {
+            this._project.Id = guid;
+            return this;
+        }
         public DomainUtilityProjectBuilder BuildProjectMetadataWithProjectAcronym(string acronym) 
         {
             this._metadata.ProjectAcronym = acronym;
             return this;
         }
+
         public DomainUtilityProjectBuilder BuildProjectWithNumberOfActiveStories(int numberOfActiveStories)
         {
             this._metadata.NumberOfActiveStories = numberOfActiveStories;
@@ -63,7 +67,6 @@ namespace Manager.Tests.ProjectManager
             return _metadata;
         }
         #endregion
-        #endregion
 
         #region Setup Methods
 
@@ -79,7 +82,7 @@ namespace Manager.Tests.ProjectManager
                 var random = new Random();
                 _projects.Add(new DomainUtilityProjectBuilder()
                     .BuildProjectWithProjectAcronym(currentAcronym)
-                    .BuildProjectWithName($"Project{i}")
+                    .BuildProjectWithName(NaturalValues.PrjName+i)
                     .BuildProject());
 
                 _projectMetadataDetails.Add(new DomainUtilityProjectBuilder()
@@ -88,6 +91,20 @@ namespace Manager.Tests.ProjectManager
                     .BuildProjectWithNumberOfActiveStories(random.Next(i + random.Next(i)))
                     .BuildProjectWithLatestStoryNumber(i)
                     .BuildProjectMetadata());
+            }
+
+            return _projects;
+        }
+
+        public IEnumerable<ProjectResponse> BuildProjectWithGuidSetup(string guid)
+        {
+            for (int i = 0; i < 1; i++) 
+            {
+                _projects.Add(new DomainUtilityProjectBuilder()
+                    .BuildProjectWithProjectAcronym(NaturalValues.PrjAcronymToUse)
+                    .BuildProjectWithName(NaturalValues.PrjName)
+                    .BuildProjectWithGUID(guid)
+                    .BuildProject());
             }
 
             return _projects;
