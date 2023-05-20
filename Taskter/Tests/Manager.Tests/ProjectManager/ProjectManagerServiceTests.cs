@@ -84,6 +84,7 @@ namespace Manager.Tests.ProjectManager
         }
 
         #endregion
+
         //GETTO: CreateStory
 
         //GETTO: EditProject
