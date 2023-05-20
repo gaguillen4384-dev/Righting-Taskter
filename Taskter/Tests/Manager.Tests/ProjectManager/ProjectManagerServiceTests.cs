@@ -65,8 +65,8 @@ namespace Manager.Tests.ProjectManager
         //GETTO: test metadata in a predictiable way, may not just null but also numeric or if want to naturalvalues.
 
         #endregion
-        //GETTO: CreateProject
         #region Create Project
+
         [Fact]
         public async void ProjectManager_CreateProject_Success()
         {
@@ -82,6 +82,7 @@ namespace Manager.Tests.ProjectManager
             // Assert - descriptive
             result.Should().NotBeNull().And.Be(NaturalValues.PrjGuid.ToString());
         }
+
         #endregion
         //GETTO: CreateStory
 
