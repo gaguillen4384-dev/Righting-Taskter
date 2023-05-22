@@ -14,6 +14,10 @@ namespace Manager.Tests.ProjectManager
 
         public static string PrjName = "Project";
 
+        public static string NewPrjAcronymToUse = "NewProjectAcronym";
+
+        public static string NewPrjName = "NewProject";
+
         public static Guid PrjGuid = new Guid("05ec1a69-e74a-4c74-9067-0980056bc033");
     }
 }

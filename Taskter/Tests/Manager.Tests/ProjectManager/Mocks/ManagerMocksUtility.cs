@@ -31,14 +31,17 @@ namespace Manager.Tests.ProjectManager
             .ReturnsAsync(response.First());
         }
 
-        public static void CreateProjectWithGuid(this Mock<IProjectsAccessProxy> mock, ProjectCreationRequest projectCreationRequest, Guid guid) 
+        public static void CreateProjectWithGuid(this Mock<IProjectsAccessProxy> mock, ProjectCreationRequest projectCreationRequest) 
         {
+            //GETTO: What needs to be return is not the guid but the project acronym passed in. 
             domainUtilityBuilder = new DomainUtilityProjectBuilder();
             var response = domainUtilityBuilder.BuildProjectWithGuidSetup(guid.ToString());
 
             mock.Setup(resourceAccess => resourceAccess.StartProject(projectCreationRequest))
             .ReturnsAsync(response.First());
         }
+
+        //GETTO: Figure out how to test the update of project and metadata.
 
         #endregion
 

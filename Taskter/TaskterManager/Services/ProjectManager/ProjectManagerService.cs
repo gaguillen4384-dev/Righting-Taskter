@@ -38,13 +38,12 @@ namespace ProjectManager
         public async Task<string> CreateProject(ProjectCreationRequest project)
         {
             //GETTO: should have validation and appropriate response. a Validator is needed.
-            //GETTO: If these doesnt return the ID then its an issue because then I got to call into repo for it.
             var newProject = await _projectAccessProxy.StartProject(project); 
 
             await _projectsMetadataAccessProxy.CreateProjectMetadataDetails(project.ProjectAcronym);
             await _storiesReferencesAccessProxy.StartStoriesReferenceForProject(project.ProjectAcronym, newProject.Id);
 
-            return newProject.Id;
+            return newProject.ProjectAcronym;
         }
 
         /// <summary>
@@ -89,6 +88,17 @@ namespace ProjectManager
         /// </summary>
         public async Task<string> EditProject(ProjectUpdateRequest project)
         {
+            //GETTO: Figure out how to test the update of project and metadata.
+
+            //ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
+            //// GETTO: If acronym is the same no changes.
+            //if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
+            //{
+            //    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
+            //    // return a null object if failed to update.
+            //    if (projectDetails is EmptyProjectNumbersDetails)
+            //        return ProjectRepositoryMapper.MapToEmptyProjectResponse();
+            //}
             throw new System.NotImplementedException();
         }
 

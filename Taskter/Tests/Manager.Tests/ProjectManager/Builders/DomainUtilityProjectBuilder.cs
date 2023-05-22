@@ -96,14 +96,13 @@ namespace Manager.Tests.ProjectManager
             return _projects;
         }
 
-        public IEnumerable<ProjectResponse> BuildProjectWithGuidSetup(string guid)
+        public IEnumerable<ProjectResponse> BuildProjectWithGuidSetup()
         {
             for (int i = 0; i < 1; i++) 
             {
                 _projects.Add(new DomainUtilityProjectBuilder()
                     .BuildProjectWithProjectAcronym(NaturalValues.PrjAcronymToUse)
                     .BuildProjectWithName(NaturalValues.PrjName)
-                    .BuildProjectWithGUID(guid)
                     .BuildProject());
             }
 

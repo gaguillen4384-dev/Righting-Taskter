@@ -80,14 +80,32 @@ namespace Manager.Tests.ProjectManager
             var result = await _projectManager.CreateProject(newProjectRequest);
 
             // Assert - descriptive
+            result.Should().NotBeNull().And.Be(NaturalValues.PrjAcronymToUse);
+        }
+
+        #endregion
+
+        #region Edit Project
+
+        [Fact]
+        public async void ProjectManager_EditProject_Success()
+        {
+            //GETTO: figure out how to test prject metadata and stories reference. without making it integration test.
+            // Arrange
+            var domainUtilityBuilder = new DomainUtilityDTOBuilder();
+            var newProjectRequest = domainUtilityBuilder.BuildNewProjectRequest();
+            _projectAccessMock.CreateProjectWithGuid(newProjectRequest, NaturalValues.PrjGuid);
+
+            // Act
+            var result = await _projectManager.CreateProject(newProjectRequest);
+
+            // Assert - descriptive
             result.Should().NotBeNull().And.Be(NaturalValues.PrjGuid.ToString());
         }
 
         #endregion
 
-        //GETTO: CreateStory
-
-        //GETTO: EditProject
         //GETTO: RemoveProject
+        //GETTO: CreateStory
     }
 }

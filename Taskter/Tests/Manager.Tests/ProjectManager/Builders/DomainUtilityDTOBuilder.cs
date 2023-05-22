@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Utilities.Taskter.Domain;
+﻿using Utilities.Taskter.Domain;
 
 namespace Manager.Tests.ProjectManager
 {
@@ -42,6 +41,12 @@ namespace Manager.Tests.ProjectManager
             return this;
         }
 
+        public DomainUtilityDTOBuilder BuildUpdateProjectWithExistingProjectAcronym(string acronym)
+        {
+            this._projectUpdateRequest.ExistingProjectAcronym = acronym;
+            return this;
+        }
+
         public ProjectUpdateRequest BuildUpdateProject()
         {
             return _projectUpdateRequest;
@@ -62,8 +67,9 @@ namespace Manager.Tests.ProjectManager
         public ProjectUpdateRequest BuildUpdateProjectRequest()
         {
             _projectUpdateRequest = new DomainUtilityDTOBuilder()
-                    .BuildUpdateProjectWithProjectAcronym(NaturalValues.PrjAcronymToUse)
-                    .BuildUpdateProjectWithName(NaturalValues.PrjName)
+                    .BuildUpdateProjectWithProjectAcronym(NaturalValues.NewPrjAcronymToUse)
+                    .BuildUpdateProjectWithName(NaturalValues.NewPrjName)
+                    .BuildUpdateProjectWithExistingProjectAcronym (NaturalValues.PrjAcronymToUse)
                     .BuildUpdateProject();
 
             return _projectUpdateRequest;

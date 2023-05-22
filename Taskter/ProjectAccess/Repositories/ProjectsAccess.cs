@@ -119,17 +119,6 @@ namespace ProjectsAccessComponent
                 if (!updated)
                     return ProjectRepositoryMapper.MapToEmptyProjectResponse();
 
-                // TODO: Move to Managers.
-                //ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
-                //// TODO: If acronym is the same no changes.
-                //if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
-                //{
-                //    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
-                //    // return a null object if failed to update.
-                //    if (projectDetails is EmptyProjectNumbersDetails)
-                //        return ProjectRepositoryMapper.MapToEmptyProjectResponse();
-                //}
-
                 // use mapper to return what its needed.
                 return ProjectRepositoryMapper.MapToProjectResponse(projectUpdated);
             }
