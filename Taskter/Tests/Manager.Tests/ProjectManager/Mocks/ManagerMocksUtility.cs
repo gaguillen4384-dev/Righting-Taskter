@@ -35,7 +35,7 @@ namespace Manager.Tests.ProjectManager
         {
             //GETTO: What needs to be return is not the guid but the project acronym passed in. 
             domainUtilityBuilder = new DomainUtilityProjectBuilder();
-            var response = domainUtilityBuilder.BuildProjectWithGuidSetup(guid.ToString());
+            var response = domainUtilityBuilder.BuildProjectWithGuidSetup();
 
             mock.Setup(resourceAccess => resourceAccess.StartProject(projectCreationRequest))
             .ReturnsAsync(response.First());

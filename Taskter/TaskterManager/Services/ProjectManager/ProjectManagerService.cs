@@ -63,7 +63,7 @@ namespace ProjectManager
             {
                 projectsMetadata
             };
-            var result = await CombineProjectsAndMetadata(projectList, projectsMetadataList);
+            var result = await ManagerMapper.CombineProjectsAndMetadata(projectList, projectsMetadataList);
             return result.FirstOrDefault();
         }
 
@@ -79,7 +79,7 @@ namespace ProjectManager
             var projectsMetadata = await _projectsMetadataAccessProxy.GetAllProjectsMetadataDetails();
             var projectMetadataList = projectsMetadata.ToList();
 
-            return await CombineProjectsAndMetadata(projectList, projectMetadataList);
+            return await ManagerMapper.CombineProjectsAndMetadata(projectList, projectMetadataList);
         }
 
 
@@ -88,17 +88,11 @@ namespace ProjectManager
         /// </summary>
         public async Task<string> EditProject(ProjectUpdateRequest project)
         {
-            //GETTO: Figure out how to test the update of project and metadata.
+            // Before I was expecting the RA layer to do the check if needs to update or not, because I was using local resource 
+            // Now Since I don't have local resource I get to leverage the Client, It got to know existing and new to use
+            //GETTO: Figure out how to test the update of project and metadata. if projectacronym changes.
+            //GETTO: Update the project given, it could be 1 or the other or both. but exisiting 
 
-            //ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
-            //// GETTO: If acronym is the same no changes.
-            //if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
-            //{
-            //    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
-            //    // return a null object if failed to update.
-            //    if (projectDetails is EmptyProjectNumbersDetails)
-            //        return ProjectRepositoryMapper.MapToEmptyProjectResponse();
-            //}
             throw new System.NotImplementedException();
         }
 
@@ -118,34 +112,6 @@ namespace ProjectManager
 
         #region Mrivate methods
 
-        //GETTO: See if I need a mapper services just to help this thing. Might be a static boy.
-        private async Task<IEnumerable<ProjectResponse>> CombineProjectsAndMetadata(List<ProjectResponse> projectResponses, List<ProjectMetadataDetails> projectMetadataList)
-        {
-            var result = new List<ProjectResponse>();
-            foreach (var projectResponse in projectResponses)
-            {
-                var localMetadata = projectMetadataList.FirstOrDefault(x => x.ProjectAcronym == projectResponse.ProjectAcronym);
-                if (localMetadata is null)
-                    continue;
-
-                projectResponse.LatestStoryNumber = localMetadata.LatestStoryNumber;
-                projectResponse.DateCreated = localMetadata.DateCreated;
-                projectResponse.DateUpdated = localMetadata.DateUpdated;
-                projectResponse.NumberOfActiveStories = localMetadata.NumberOfActiveStories;
-                projectResponse.NumberOfCompletedStories = localMetadata.NumberOfStoriesCompleted;
-                projectResponse.LastWorkedOn = localMetadata.LastWorkedOn;
-                result.Add(projectResponse);
-            }
-
-            return result;
-        }
-
-        //GETTO: move to Manger.
-        //private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
-        //{
-        //    await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
-        //    return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
-        //}
         #endregion
     }
 }

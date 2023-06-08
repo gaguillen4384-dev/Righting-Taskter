@@ -65,16 +65,17 @@ namespace Manager.Tests.ProjectManager
         //GETTO: test metadata in a predictiable way, may not just null but also numeric or if want to naturalvalues.
 
         #endregion
+
+        //GETTO: figure out how to test prject metadata and stories reference. without making it integration test.
         #region Create Project
 
         [Fact]
         public async void ProjectManager_CreateProject_Success()
         {
-            //GETTO: figure out how to test prject metadata and stories reference. without making it integration test.
             // Arrange
             var domainUtilityBuilder = new DomainUtilityDTOBuilder();
             var newProjectRequest = domainUtilityBuilder.BuildNewProjectRequest();
-            _projectAccessMock.CreateProjectWithGuid(newProjectRequest, NaturalValues.PrjGuid);
+            _projectAccessMock.CreateProjectWithGuid(newProjectRequest);
 
             // Act
             var result = await _projectManager.CreateProject(newProjectRequest);
@@ -90,17 +91,19 @@ namespace Manager.Tests.ProjectManager
         [Fact]
         public async void ProjectManager_EditProject_Success()
         {
-            //GETTO: figure out how to test prject metadata and stories reference. without making it integration test.
             // Arrange
             var domainUtilityBuilder = new DomainUtilityDTOBuilder();
-            var newProjectRequest = domainUtilityBuilder.BuildNewProjectRequest();
-            _projectAccessMock.CreateProjectWithGuid(newProjectRequest, NaturalValues.PrjGuid);
+            //GETTO: setup for update project. Make a requestobject to change with a particula prjtacr
+            //var newProjectRequest = domainUtilityBuilder.BuildNewProjectRequest();
+            //_projectAccessMock.CreateProjectWithGuid(newProjectRequest);
 
             // Act
-            var result = await _projectManager.CreateProject(newProjectRequest);
+            //GETTO: use the updateproject method.
+            //var result = await _projectManager.CreateProject(newProjectRequest);
 
             // Assert - descriptive
-            result.Should().NotBeNull().And.Be(NaturalValues.PrjGuid.ToString());
+            //GETTO: See if metadata and other ish also got updated?
+            //result.Should().NotBeNull().And.Be(NaturalValues.PrjGuid.ToString());
         }
 
         #endregion
