@@ -12,8 +12,7 @@ namespace ProjectsAccessComponent
         /// <summary>
         /// Maps a project document to a project response.
         /// </summary>
-        public static ProjectResponse MapToProjectResponse(ProjectDocument project
-            ) 
+        public static ProjectResponse MapToProjectResponse(ProjectDocument project) 
         {
             if (project == null)
                 return new EmptyProjectResponse();
@@ -21,6 +20,7 @@ namespace ProjectsAccessComponent
             return new ProjectResponse()
             {
                 Name = project.Name,
+                Id = project.Id.ToString(),
                 LastWorkedOn = project.LastWorkedOn,
                 DateCreated = project.DateCreated,
                 DateUpdated = project.DateUpdated,

@@ -1,40 +1,67 @@
 ﻿using Moq;
 using ProjectManager;
+using System;
+using System.Linq;
 using Utilities.Taskter.Domain;
 
 namespace Manager.Tests.ProjectManager
 {
     public static class ManagerMocksUtility
     {
-        public static Mock<IProjectsAccessProxy> ProjectAccessMock = new Mock<IProjectsAccessProxy>();
-        public static Mock<IProjectsMetadataAccessProxy> ProjectsMetadataAccessMock = new Mock<IProjectsMetadataAccessProxy>();
-        public static Mock<IStoriesAccessProxy> StoriesAccessMock = new Mock<IStoriesAccessProxy>();
-        public static Mock<IStoriesReferencesAccessProxy> StoriesReferencesAccessMock = new Mock<IStoriesReferencesAccessProxy>();
-        public static DomainUtilityBuilder domainUtilityBuilder = new DomainUtilityBuilder();
+
+        public static DomainUtilityProjectBuilder domainUtilityBuilder = new DomainUtilityProjectBuilder();
 
         //GETTO: Create nulls functions for the tests cases
         #region IProjectsAccessProxy
         public static void OpenProjectsSetup(this Mock<IProjectsAccessProxy> mock, int numberOfProjects)
         {
-            var response = domainUtilityBuilder.BuildMultipleProjects(numberOfProjects);
+            domainUtilityBuilder = new DomainUtilityProjectBuilder();
+            var response = domainUtilityBuilder.BuildMultipleProjectsAndMetadata(numberOfProjects);
                         
             mock.Setup(resourceAccess => resourceAccess.OpenProjects())
             .ReturnsAsync(response);
         }
 
-        public static void OpenProjectsWithProjAcrSetup(this Mock<IProjectsAccessProxy> mock, string projectAcronym)
+        public static void OpenProjectWithProjAcrSetup(this Mock<IProjectsAccessProxy> mock, string projectAcronym)
         {
-            //GETTO: Need a domain builder function to follow the appropriate testing pattern.
-            var response = new ProjectResponse();
+            domainUtilityBuilder = new DomainUtilityProjectBuilder();
+            var response = domainUtilityBuilder.BuildMultipleProjectsAndMetadata(NaturalValues.Single, projectAcronym);
+
             mock.Setup(resourceAccess => resourceAccess.OpenProject(projectAcronym))
-            .ReturnsAsync(response);
+            .ReturnsAsync(response.First());
         }
 
+        public static void CreateProjectWithGuid(this Mock<IProjectsAccessProxy> mock, ProjectCreationRequest projectCreationRequest) 
+        {
+            //GETTO: What needs to be return is not the guid but the project acronym passed in. 
+            domainUtilityBuilder = new DomainUtilityProjectBuilder();
+            var response = domainUtilityBuilder.BuildProjectWithGuidSetup();
 
+            mock.Setup(resourceAccess => resourceAccess.StartProject(projectCreationRequest))
+            .ReturnsAsync(response.First());
+        }
+
+        //GETTO: Figure out how to test the update of project and metadata.
 
         #endregion
 
         #region IProjectsMetadataAccessProxy
+
+        public static void GetCurrentMetadataForProjects(this Mock<IProjectsMetadataAccessProxy> mock) 
+        {
+            var response = domainUtilityBuilder.GetMultipleProjectsWithMetadata();
+
+            mock.Setup(resourceAccess => resourceAccess.GetAllProjectsMetadataDetails())
+            .ReturnsAsync(response);
+        }
+
+        public static void GetCurrentMetadataForProject(this Mock<IProjectsMetadataAccessProxy> mock, string projectAcronym)
+        {
+            var response = domainUtilityBuilder.GetMultipleProjectsWithMetadata();
+
+            mock.Setup(resourceAccess => resourceAccess.GetProjectMetadataDetails(projectAcronym))
+            .ReturnsAsync(response.First());
+        }
 
         #endregion
 

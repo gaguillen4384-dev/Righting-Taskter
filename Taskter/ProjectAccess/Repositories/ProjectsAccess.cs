@@ -39,11 +39,6 @@ namespace ProjectsAccessComponent
                 // TODO: what to do if it fails? -upto the API that recieves it.
                 projectsCollection.Insert(projectDocument);
 
-                // TODO: move to Manager.
-                //var projectDetailsDocument = await CreateProjectMetadataDetails(projectDocument.ProjectAcronym);
-                //await CreateStoryReferenceForProject(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
-                //var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
-
                 // use mapper to return what its needed.
                 return ProjectRepositoryMapper.MapToProjectResponse(projectDocument);
             }
@@ -124,17 +119,6 @@ namespace ProjectsAccessComponent
                 if (!updated)
                     return ProjectRepositoryMapper.MapToEmptyProjectResponse();
 
-                // TODO: Move to Managers.
-                //ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
-                //// TODO: If acronym is the same no changes.
-                //if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
-                //{
-                //    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());
-                //    // return a null object if failed to update.
-                //    if (projectDetails is EmptyProjectNumbersDetails)
-                //        return ProjectRepositoryMapper.MapToEmptyProjectResponse();
-                //}
-
                 // use mapper to return what its needed.
                 return ProjectRepositoryMapper.MapToProjectResponse(projectUpdated);
             }
@@ -142,12 +126,7 @@ namespace ProjectsAccessComponent
 
         #region Private Methods
 
-        //GETTO: move to Manger.
-        //private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
-        //{
-        //    await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
-        //    return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
-        //}
+
 
         #endregion
     }

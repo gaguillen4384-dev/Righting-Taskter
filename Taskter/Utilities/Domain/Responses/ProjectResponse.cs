@@ -4,6 +4,9 @@ namespace Utilities.Taskter.Domain
 {
     public class ProjectResponse
     {
+        //GETTO: this is temporary. I want the RA to return an ID so this is happening temporarily to now change a lot of stuff.
+        public string Id { get; set; }
+
         /// <summary>
         /// The name of the project.
         /// </summary>
@@ -34,6 +37,11 @@ namespace Utilities.Taskter.Domain
         /// The number of completed stories in the project.
         /// </summary>
         public int NumberOfCompletedStories = 0;
+
+        /// <summary>
+        /// The number of the story in the project its on. Sequential.
+        /// </summary>
+        public int LatestStoryNumber { get; set; } = 0;
 
         /// <summary>
         /// The project acronym, used as an identifier.
