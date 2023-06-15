@@ -25,7 +25,8 @@ namespace Manager.Tests.ProjectManager
         public static void OpenProjectsWithProjAcrSetup(this Mock<IProjectsAccessProxy> mock, string projectAcronym)
         {
             //GETTO: Need a domain builder function to follow the appropriate testing pattern.
-            var response = new ProjectResponse();
+            var response = domainUtilityBuilder.BuildSingleProject();
+
             mock.Setup(resourceAccess => resourceAccess.OpenProject(projectAcronym))
             .ReturnsAsync(response);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Utilities.Taskter.Domain;
 
 namespace Manager.Tests.ProjectManager
@@ -43,7 +44,7 @@ namespace Manager.Tests.ProjectManager
             {
                 var random = new Random();
                 _projects.Add(new DomainUtilityBuilder()
-                    .BuildProjectWithProjectAcronym($"PJT{i}")
+                    .BuildProjectWithProjectAcronym($"PJT-{i}")
                     .BuildProjectWithName($"Project{i}")
                     .BuildProjectWithNumberOfCompletedStories(random.Next(i+ random.Next(i)))
                     .BuildProjectWithNumberOfActiveStories(random.Next(i + random.Next(i)))
@@ -51,6 +52,20 @@ namespace Manager.Tests.ProjectManager
             }
 
             return _projects;
+        }
+
+        public ProjectResponse BuildSingleProject()
+        {
+            int i = 2;
+            var random = new Random();
+            _projects.Add(new DomainUtilityBuilder()
+                .BuildProjectWithProjectAcronym(NaturalValues.ProjectAcronymToUse)
+                .BuildProjectWithName($"Project")
+                .BuildProjectWithNumberOfCompletedStories(random.Next(i + random.Next(i)))
+                .BuildProjectWithNumberOfActiveStories(random.Next(i + random.Next(i)))
+                .BuildProject());
+
+            return _projects.FirstOrDefault();
         }
 
         public ProjectResponse BuildProject() 
