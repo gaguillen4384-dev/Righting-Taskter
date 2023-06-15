@@ -20,7 +20,7 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
             // Initialize stuff
             var services = new ServiceCollection();
 
-            // TODO: programtically get the appsettingslocation by directory and file classes.
+            // GETTO: programtically get the appsettingslocation by directory and file classes.
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile(NaturalValues.AppsettingsLocation, false)
                 .Build();
@@ -46,7 +46,7 @@ namespace ResourceAccess.IntegrationTest.ProjectMetadataTests
         public IEnumerable<string> PopulateProjectMetadataCollection(int NumberOfProjects, ProjectMetadataDocument projectMetadata = null) 
         {
             var storiesResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
-            // TODO: Bring the inner logic to the litedbdriver and then reference it
+            // GETTO: Bring the inner logic to the litedbdriver and then reference it
             using (var db = new LiteDatabase(storiesResource.Value.ConnectionString))
             {
                 var projectsMetadataCollection = db.GetCollection<ProjectMetadataDocument>("ProjectsMetadata");

@@ -12,7 +12,7 @@ namespace Utilities.Taskter.Domain
         /// <summary>
         /// Reference to project unique identifier.
         /// </summary>
-        // TODO: change name to Parent ID and add reference type, could be a project could be another story
+        // GETTO: change name to Parent ID and add reference type, could be a project could be another story
         public string ProjectId { get; set; } = string.Empty;
 
         /// <summary>

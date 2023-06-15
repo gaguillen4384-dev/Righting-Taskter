@@ -40,7 +40,7 @@ namespace StoriesReferencesAccessComponent
 
                 storiesReferenceCollection.Insert(storyReference);
 
-                // TODO: What to do if insert fails?
+                // GETTO: What to do if insert fails?
             }
         }
 

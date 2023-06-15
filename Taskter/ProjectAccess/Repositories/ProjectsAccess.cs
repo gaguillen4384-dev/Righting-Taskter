@@ -10,7 +10,7 @@ namespace ProjectsAccessComponent
     /// <summary>
     /// Concrete implementation of <see cref="IProjectAccess"/>
     /// </summary>
-    // TODO: if users become a thing then this needs change.
+    // GETTO: if users become a thing then this needs change.
     public class ProjectsAccess : IProjectAccess
     {
         private ProjectsResource _projectConnection;
@@ -36,10 +36,10 @@ namespace ProjectsAccessComponent
 
                 var projectDocument = ProjectRepositoryMapper.MapToProjectDocumentFromCreationRequest(projectRequest);
 
-                // TODO: what to do if it fails? -upto the API that recieves it.
+                // GETTO: what to do if it fails? -upto the API that recieves it.
                 projectsCollection.Insert(projectDocument);
 
-                // TODO: move to Manager.
+                // GETTO: move to Manager.
                 //var projectDetailsDocument = await CreateProjectMetadataDetails(projectDocument.ProjectAcronym);
                 //await CreateStoryReferenceForProject(projectDocument.ProjectAcronym, projectDocument.Id.ToString());
                 //var projectDetails = ProjectRepositoryMapper.MapToProjectNumbersDetails(projectDetailsDocument);
@@ -124,9 +124,9 @@ namespace ProjectsAccessComponent
                 if (!updated)
                     return ProjectRepositoryMapper.MapToEmptyProjectResponse();
 
-                // TODO: Move to Managers.
+                // GETTO: Move to Managers.
                 //ProjectMetadataDetails projectDetails = new EmptyProjectNumbersDetails();
-                //// TODO: If acronym is the same no changes.
+                //// GETTO: If acronym is the same no changes.
                 //if (ProjectRepositoryMapper.IsProjectAcronymUpdated(projectRequest, projectAcronym)) 
                 //{
                 //    projectDetails = await UpdateProjectAcronymReference(projectRequest.ProjectAcronym, projectAcronym, project.Id.ToString());

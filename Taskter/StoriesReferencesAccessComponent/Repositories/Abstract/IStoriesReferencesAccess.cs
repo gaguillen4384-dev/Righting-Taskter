@@ -16,7 +16,7 @@ namespace StoriesReferencesAccessComponent
         /// <summary>
         /// Creates a story reference for the given project.
         /// </summary>
-        // TODO: Make the four parameters an object. 
+        // GETTO: Make the four parameters an object. 
         Task MakeReferenceForStoryInProject(string projectAcronym, int storyNumber, string storyId, string projectId);
 
         /// <summary>

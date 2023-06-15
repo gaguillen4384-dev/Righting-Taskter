@@ -31,7 +31,7 @@ namespace Manager.Tests.ProjectManager
             _projectManager = new ProjectManagerService(_projectAccessMock.Object, _storiesAccessMock.Object, _storiesReferencesAccessMock.Object, _projectsMetadataAccessMock.Object);
         }
 
-        #region Get Projects
+        #region Gets
         [Fact]
         public async void ProjectManager_GetAllProjects_Success()
         {
@@ -68,11 +68,35 @@ namespace Manager.Tests.ProjectManager
             // Teardown Needs to happen per test so other tests are not affected.
         }
 
+        //GETTO: Get single story 
+        //GETTO: Get all stories for a project
+
+        //GETTO: Negative test: Things that dont exist.
+        //GETTO: Negative test: Validation
         #endregion
 
+        #region Creates
+
         //GETTO: CreateProject
-        //GETTO: EditProject
         //GETTO: CreateStory
+
+        //GETTO: Negative test: create project with existing acronym
+        //GETTO: Negative test: validation
+        #endregion
+
+        #region Edit Project
+
+        //GETTO: EditProject
+        //GETTO: Negative test: update project that doesnt exist
+        //GETTO: Negative test: Validation
+        #endregion
+
+        #region Deletes
+
         //GETTO: delete project & stories
+
+        //GETTO: Negative test: Things that dont exist
+        //GETTO: Negative test: Validation
+        #endregion
     }
 }

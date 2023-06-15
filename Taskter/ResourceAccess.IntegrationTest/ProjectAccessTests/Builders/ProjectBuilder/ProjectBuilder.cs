@@ -42,13 +42,13 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         }
 
 
-        //// TODO: Their own builder in ProjectMetadataRA
+        //// GETTO: Their own builder in ProjectMetadataRA
         //public void BuildProjectWithNumberOfActiveStories(int numberOfActiveStories)
         //{
         //    throw new NotImplementedException();
         //}
 
-        //// TODO:  Their own builder in ProjectMetadataRA
+        //// GETTO:  Their own builder in ProjectMetadataRA
         //public void BuildProjectWithNumberOfCompletedStories(int numberOfCompletedStories)
         //{
         //    throw new NotImplementedException();

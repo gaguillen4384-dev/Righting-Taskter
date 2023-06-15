@@ -45,7 +45,7 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         public IEnumerable<string> PopulateProjectCollection(int numberOfProjects) 
         {
             var projectResource = ServiceProvider.GetService<IOptions<ProjectsResource>>();
-            // TODO: Bring the inner logic to the litedbdriver and then reference it
+            // GETTO: Bring the inner logic to the litedbdriver and then reference it
             using (var db = new LiteDatabase(projectResource.Value.ConnectionString))
             {
                 var projectsCollection = db.GetCollection<ProjectDocument>("Projects");
@@ -68,11 +68,11 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
         }
 
         //GETTO: move to ProjectMetadataRA
-        //// TODO: PRIVATE Create a Builder for ProjectNumbers
+        //// GETTO: PRIVATE Create a Builder for ProjectNumbers
         //private void PopulateProjectDetail(string projectAcronym)
         //{
         //    var projectDetailsResource = ServiceProvider.GetService<IOptions<ProjectsMetadataResource>>();
-        //    // TODO: Bring the inner logic to the litedbdriver and then reference it
+        //    // GETTO: Bring the inner logic to the litedbdriver and then reference it
         //    using (var db = new LiteDatabase(projectDetailsResource.Value.ConnectionString))
         //    {
         //        // this creates or gets collection

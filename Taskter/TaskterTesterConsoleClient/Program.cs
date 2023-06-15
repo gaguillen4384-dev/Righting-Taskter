@@ -6,14 +6,14 @@ namespace TaskterTesterConsoleClient
 {
     public class Program
     {
-        // TODO: Get DI out of program into startup
+        // GETTO: Get DI out of program into startup
         private readonly static IServiceProvider _serviceProvider;
 
         private readonly static IStoriesAccess _storiesAccess;
 
         public static void Main(string[] args)
         {
-            // TODO: Integrate App-v/next Polly for resiliance in the CLients 
+            // GETTO: Integrate App-v/next Polly for resiliance in the CLients 
             // Clients should have Caching specially mobile clients SQLlite net
             // Akavache helps with caching -UserAccount -Secure -InMemory
             //setup our DI

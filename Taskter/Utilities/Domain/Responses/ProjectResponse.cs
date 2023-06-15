@@ -27,7 +27,7 @@ namespace Utilities.Taskter.Domain
         /// <summary>
         /// The number of active stories in the project.
         /// </summary>
-        // TODO: Theres a need for having the IDS not just the count of active.
+        // GETTO: Theres a need for having the IDS not just the count of active.
         public int NumberOfActiveStories = 0;
 
         /// <summary>

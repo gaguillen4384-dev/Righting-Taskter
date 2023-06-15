@@ -9,7 +9,7 @@ namespace ProjectManager
     /// </summary>
     public class ProjectManagerService : IProjectManagerService
     {
-        // TODO: Validation is reponsability of this Layer.
+        // GETTO: Validation is reponsability of this Layer.
         private readonly IProjectsAccessProxy _projectAccessProxy;
         private readonly IStoriesAccessProxy _storiesAccessProxy;
         private readonly IStoriesReferencesAccessProxy _storiesReferencesAccessProxy;

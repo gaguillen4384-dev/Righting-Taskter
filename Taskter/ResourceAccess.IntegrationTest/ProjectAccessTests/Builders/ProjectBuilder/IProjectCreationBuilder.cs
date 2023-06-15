@@ -13,11 +13,11 @@ namespace ResourceAccess.IntegrationTest.ProjectAccessTests
 
         IProjectCreationBuilder BuildProjectWithProjectAcronym(string projectAcronym);
 
-        // TODO: Their own builder in ProjectMetadataRA
-        //// TODO: maybe own projectdetails builder?
+        // GETTO: Their own builder in ProjectMetadataRA
+        //// GETTO: maybe own projectdetails builder?
         //void BuildProjectWithNumberOfActiveStories(int numberOfActiveStories);
 
-        //// TODO: maybe own projectdetails builder?
+        //// GETTO: maybe own projectdetails builder?
         //void BuildProjectWithNumberOfCompletedStories(int numberOfCompletedStories);
 
         IEnumerable<ProjectCreationRequest> BuildManyProjects(int numberOfProjects);

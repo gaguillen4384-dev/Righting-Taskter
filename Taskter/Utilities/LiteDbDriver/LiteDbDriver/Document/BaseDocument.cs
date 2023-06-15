@@ -8,7 +8,7 @@ namespace LiteDbDriver
         /// <summary>
         /// The unique identifier for the object.
         /// </summary>
-        // TODO: This bleeds litedb calling to clients of this code, how can I move it? 
+        // GETTO: This bleeds litedb calling to clients of this code, how can I move it? 
         public ObjectId Id { get; set; } = ObjectId.NewObjectId();
 
         /// <summary>

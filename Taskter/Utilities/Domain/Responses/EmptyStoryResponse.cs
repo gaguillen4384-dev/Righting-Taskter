@@ -5,6 +5,6 @@
     /// </summary>
     public class EmptyStoryResponse : StoryResponse
     {
-        // TODO : Implement null object pattern 
+        // GETTO : Implement null object pattern 
     }
 }
