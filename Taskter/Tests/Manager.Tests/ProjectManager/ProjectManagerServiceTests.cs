@@ -1,12 +1,6 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ProjectManager;
-using ProjectsAccessComponent;
-using ProjectsMetadataAccessComponent;
-using StoriesAccessComponent;
-using StoriesReferencesAccessComponent;
-using System;
 using Xunit;
 
 namespace Manager.Tests.ProjectManager
@@ -14,6 +8,7 @@ namespace Manager.Tests.ProjectManager
     public class ProjectManagerServiceTests 
     {
         private IProjectManagerService _projectManager;
+        private RequestUtilityBuilder _requestUtilityBuilder;
         private Mock<IProjectsAccessProxy> _projectAccessMock;
         private Mock<IProjectsMetadataAccessProxy> _projectsMetadataAccessMock;
         private Mock<IStoriesAccessProxy> _storiesAccessMock;
@@ -56,7 +51,7 @@ namespace Manager.Tests.ProjectManager
             // Arrange
             // This showcases how extension classes can be used to setup mocks.
             // Within each setup theres a builder call, which takes in parameters.
-            _projectAccessMock.OpenProjectsWithProjAcrSetup(NaturalValues.ProjectAcronymToUse);
+            _projectAccessMock.OpenProjectsWithProjAcrSetup();
 
             // Act
             //GETTO: test out the sqllitedriver and see if it works since its missing a lot of stuff.
@@ -77,7 +72,21 @@ namespace Manager.Tests.ProjectManager
 
         #region Creates
 
-        //GETTO: CreateProject
+        [Fact]
+        public async void ProjectManager_CreateProject_Success()
+        {
+            // Arrange
+            _requestUtilityBuilder = new RequestUtilityBuilder();
+            _projectAccessMock.OpenProjectsSetup(NaturalValues.numberOfProjectsToUse);
+            var request = _requestUtilityBuilder.BuildProjectRequest();
+
+            // Act
+            var result = await _projectManager.StartProject(request);
+
+            // Assert - descriptive
+            result.Should().NotBeEmpty();
+            result.Should().Be(NaturalValues.ProjectAcronymToUse);
+        }
         //GETTO: CreateStory
 
         //GETTO: Negative test: create project with existing acronym

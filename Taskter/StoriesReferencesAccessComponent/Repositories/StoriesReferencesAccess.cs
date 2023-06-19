@@ -38,6 +38,7 @@ namespace StoriesReferencesAccessComponent
                     ProjectId = projectId
                 };
 
+                //GETTO: this should start a new document for the project?
                 storiesReferenceCollection.Insert(storyReference);
 
                 // GETTO: What to do if insert fails?

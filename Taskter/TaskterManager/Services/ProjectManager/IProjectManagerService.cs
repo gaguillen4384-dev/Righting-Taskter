@@ -15,7 +15,7 @@ namespace ProjectManager
         /// Creates a project.
         /// </summary>
         /// <returns>The project ID</returns>
-        Task<string> CreateProject(ProjectCreationRequest project);
+        Task<string> StartProject(ProjectCreationRequest project);
 
         /// <summary>
         /// Get All projects.
@@ -35,7 +35,7 @@ namespace ProjectManager
 
         #endregion
 
-        #region Project Management
+        #region Story Management
         
         /// <summary>
         /// Create story

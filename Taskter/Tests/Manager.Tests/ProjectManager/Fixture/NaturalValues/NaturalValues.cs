@@ -6,6 +6,8 @@
 
         public static int numberOfProjectsToUse = 5;
 
-        public static string ProjectAcronymToUse = "PJT-0";
+        public static string ProjectAcronymToUse = "PJT-";
+
+        public static string ProjectNameToUse = "Project";
     }
 }

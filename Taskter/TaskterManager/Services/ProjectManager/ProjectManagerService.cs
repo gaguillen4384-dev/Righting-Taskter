@@ -30,11 +30,19 @@ namespace ProjectManager
         #region Project Management
 
         /// <summary>
-        /// Concrete implementation of <see cref="IProjectManagerService.CreateProject"/>
+        /// Concrete implementation of <see cref="IProjectManagerService.StartProject"/>
         /// </summary>
-        public async Task<string> CreateProject(ProjectCreationRequest project)
+        public async Task<string> StartProject(ProjectCreationRequest project)
         {
-            throw new System.NotImplementedException();
+            //GETTO: Same acronym is a no-no.
+            //GETTO: Validate that the projectAcronym and name are present
+
+            var result = await _projectAccessProxy.StartProject(project);
+
+            //GETTO: start project reference and story reference. 
+
+            return result.ProjectAcronym;
+
         }
 
         /// <summary>

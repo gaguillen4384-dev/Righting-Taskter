@@ -22,16 +22,22 @@ namespace Manager.Tests.ProjectManager
             .ReturnsAsync(response);
         }
 
-        public static void OpenProjectsWithProjAcrSetup(this Mock<IProjectsAccessProxy> mock, string projectAcronym)
+        public static void OpenProjectsWithProjAcrSetup(this Mock<IProjectsAccessProxy> mock)
         {
             //GETTO: Need a domain builder function to follow the appropriate testing pattern.
             var response = domainUtilityBuilder.BuildSingleProject();
 
-            mock.Setup(resourceAccess => resourceAccess.OpenProject(projectAcronym))
+            mock.Setup(resourceAccess => resourceAccess.OpenProject(It.IsAny<string>()))
             .ReturnsAsync(response);
         }
 
+        public static void CreateProjectSetup(this Mock<IProjectsAccessProxy> mock) 
+        {
+            var response = domainUtilityBuilder.BuildSingleProject();
 
+            mock.Setup(resourceAccess => resourceAccess.StartProject(It.IsAny<ProjectCreationRequest>()))
+            .ReturnsAsync(response);
+        }
 
         #endregion
 

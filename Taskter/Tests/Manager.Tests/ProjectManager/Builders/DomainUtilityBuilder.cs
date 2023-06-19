@@ -44,8 +44,8 @@ namespace Manager.Tests.ProjectManager
             {
                 var random = new Random();
                 _projects.Add(new DomainUtilityBuilder()
-                    .BuildProjectWithProjectAcronym($"PJT-{i}")
-                    .BuildProjectWithName($"Project{i}")
+                    .BuildProjectWithProjectAcronym($"{NaturalValues.ProjectAcronymToUse}{i}")
+                    .BuildProjectWithName($"{NaturalValues.ProjectNameToUse}{i}")
                     .BuildProjectWithNumberOfCompletedStories(random.Next(i+ random.Next(i)))
                     .BuildProjectWithNumberOfActiveStories(random.Next(i + random.Next(i)))
                     .BuildProject());
@@ -58,14 +58,14 @@ namespace Manager.Tests.ProjectManager
         {
             int i = 2;
             var random = new Random();
-            _projects.Add(new DomainUtilityBuilder()
+            _project = new DomainUtilityBuilder()
                 .BuildProjectWithProjectAcronym(NaturalValues.ProjectAcronymToUse)
-                .BuildProjectWithName($"Project")
+                .BuildProjectWithName($"{NaturalValues.ProjectNameToUse}")
                 .BuildProjectWithNumberOfCompletedStories(random.Next(i + random.Next(i)))
                 .BuildProjectWithNumberOfActiveStories(random.Next(i + random.Next(i)))
-                .BuildProject());
+                .BuildProject();
 
-            return _projects.FirstOrDefault();
+            return _project;
         }
 
         public ProjectResponse BuildProject() 
