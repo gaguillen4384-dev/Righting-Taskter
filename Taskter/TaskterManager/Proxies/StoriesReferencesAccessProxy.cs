@@ -1,43 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using StoriesReferencesAccessComponent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProjectManager
 {
     public class StoriesReferencesAccessProxy : IStoriesReferencesAccessProxy
     {
-        public Task<string> GetProjectId(string projectAcronym)
+        private IStoriesReferencesAccess _storiesReferenceAccess;
+
+        public StoriesReferencesAccessProxy(IStoriesReferencesAccess projectConnection)
         {
-            throw new System.NotImplementedException();
+            _storiesReferenceAccess = projectConnection;
         }
 
-        public Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
+        public async Task<string> GetProjectId(string projectAcronym)
         {
-            throw new System.NotImplementedException();
+            return await _storiesReferenceAccess.GetProjectId(projectAcronym);
         }
 
-        public Task<string> GetSingleStoryId(string projectAcronym, int storyNumber)
+        public async Task<IEnumerable<string>> GetProjectStoriesIds(string projectAcronym)
         {
-            throw new System.NotImplementedException();
+            return await _storiesReferenceAccess.GetProjectStoriesIds(projectAcronym);
         }
 
-        public Task MakeReferenceForStoryInProject(string projectAcronym, int storyNumber, string storyId, string projectId)
+        public async Task<string> GetSingleStoryId(string projectAcronym, int storyNumber)
         {
-            throw new System.NotImplementedException();
+            return await _storiesReferenceAccess.GetSingleStoryId(projectAcronym, storyNumber);
         }
 
-        public Task<bool> RemoveReferenceOfStory(string storyId)
+        public async Task MakeReferenceForStoryInProject(string projectAcronym, int storyNumber, string storyId, string projectId)
         {
-            throw new System.NotImplementedException();
+            await _storiesReferenceAccess.MakeReferenceForStoryInProject(projectAcronym, storyNumber, storyId, projectId);
         }
 
-        public Task StartStoriesReferenceForProject(string projectAcronym, string projectId)
+        public async Task<bool> RemoveReferenceOfStory(string storyId)
         {
-            throw new System.NotImplementedException();
+            return await _storiesReferenceAccess.RemoveReferenceOfStory(storyId);
         }
 
-        public Task UpdateStoryReferenceAcronym(string updateProjectAcronym, string projectId)
+        public async Task StartStoriesReferenceForProject(string projectAcronym, string projectId)
         {
-            throw new System.NotImplementedException();
+            await _storiesReferenceAccess.StartStoriesReferenceForProject(projectAcronym, projectId);
+        }
+
+        public async Task UpdateStoryReferenceAcronym(string updateProjectAcronym, string projectId)
+        {
+            await _storiesReferenceAccess.UpdateStoryReferenceAcronym(updateProjectAcronym, projectId);
         }
     }
 }

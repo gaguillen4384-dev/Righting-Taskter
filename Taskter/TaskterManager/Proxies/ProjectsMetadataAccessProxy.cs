@@ -14,9 +14,7 @@ namespace ProjectManager
 
         public ProjectsMetadataAccessProxy(IProjectsMetadataAccess projectConnection)
         {
-
             _projectsMetadataAccess = projectConnection;
-
         }
 
         /// <summary>

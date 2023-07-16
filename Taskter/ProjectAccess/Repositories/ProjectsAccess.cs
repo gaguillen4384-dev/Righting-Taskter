@@ -142,12 +142,7 @@ namespace ProjectsAccessComponent
 
         #region Private Methods
 
-        //GETTO: move to Manger.
-        //private async Task<ProjectMetadataDetails> UpdateProjectAcronymReference(string updatedProjectAcronym, string projectAcronym, string projectId) 
-        //{
-        //    await UpdateStoryReferenceAcronym(updatedProjectAcronym, projectId);
-        //    return await UpdateProjectMetadataAcronym(projectAcronym, updatedProjectAcronym);
-        //}
+
 
         #endregion
     }
